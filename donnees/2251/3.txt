@@ -1,5 +1,3 @@
-XY
-	Lactation 3 Production quotidienne
 1	9,65
 2	14,54
 3	15,60

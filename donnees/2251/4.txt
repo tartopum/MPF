@@ -1,5 +1,3 @@
-XY
-	Lactation 4 Production quotidienne
 1	9,91
 2	13,30
 3	12,39

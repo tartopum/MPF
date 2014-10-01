@@ -1,5 +1,3 @@
-XY
-	Lactation 5 Production quotidienne
 1	6,95
 2	15,81
 3	14,83
