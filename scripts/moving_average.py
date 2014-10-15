@@ -2,7 +2,7 @@
 
 import os.path
 import sys
-from globals import draw, get_filename, get_values
+from globals import draw, ensure_dir, get_filename, get_values
 
 def average(amounts, n):
     amounts_average = []
@@ -36,9 +36,10 @@ def main(args):
     for i in range(count):
         days = days[n:len(days)-n]     
         amounts = average(amounts, n)
-         
-    filename = os.path.splitext(path)[0] + ".moving-average_" + str(count) + "_" + str(n)
-    draw(days, amounts, filename, "Moving average " + str(count) + " " + str(n))
+     
+    filename = get_filename(path, "moving-average_" + str(count) + "x_" + str(n))
+    title = filename
+    draw(days, amounts, filename, title=title)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
