@@ -2,6 +2,7 @@
 
 import os.path
 import sys
+import matplotlib.pyplot as plt
 from globals import draw, ensure_dir, get_filename, get_values
 
 def average(amounts, n):
@@ -39,7 +40,8 @@ def main(args):
      
     filename = get_filename(path, "moving-average_" + str(count) + "x_" + str(n))
     title = filename
-    draw(days, amounts, filename, title=title)
+    plt.plot(days, amounts)
+    draw(filename, title=title)
 
 if __name__ == "__main__":
     main(sys.argv[1:])

@@ -11,9 +11,10 @@ def main(args):
     with open(path, "r") as f:
         days, amounts = get_values(f)
     
-    filename = get_filename(path, "crude_values")
+    filename = get_filename(path, "crude-values")
     title = filename
-    draw(days, amounts, filename, title=title)
+    plt.plot(days, amounts)
+    draw(filename, title=title)
     
 if __name__ == "__main__":
     main(sys.argv[1:])

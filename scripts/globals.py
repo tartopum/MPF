@@ -6,17 +6,15 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
-def draw(x, y, filename, title=""):
-    plt.plot(x, y)
-    plt.xlabel("Days")
-    plt.ylabel("Production (L)")
+def draw(filename, title="", xlabel="Days", ylabel="Production (L)"):
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
     plt.title(title)
     plt.grid(True)
     
-    plt.ylim([0, 40])
-    
     ensure_dir(filename)
     plt.savefig(filename + ".png")
+    plt.clf()
 
 def ensure_dir(path):
     d = os.path.dirname(path)
