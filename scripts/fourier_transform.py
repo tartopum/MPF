@@ -18,18 +18,16 @@ def main(args):
     timestep = 1
     freq = np.fft.fftfreq(len(spectrum), d=timestep)
     freq = np.fft.fftshift(freq)
-    spectrum = np.fft.fftshift(spectrum)
     
-    filename = get_filename(path, "fourier-transform_re")
+    filename = get_filename(path, "fourier-transform_re_fft")
     title = filename
     plt.plot(freq, np.real(spectrum))
-    draw(filename, title=title, xlabel="Frequencies (Hz)", ylabel="Spectrum (Re)")
+    draw(filename, title=title, xlabel="Frequencies (1/day)", ylabel="Spectrum (Re)")
     
-    filename = get_filename(path, "fourier-transform_im")
+    filename = get_filename(path, "fourier-transform_im_fft")
     title = filename
     plt.plot(freq, np.imag(spectrum))
-    draw(filename, title=title, xlabel="Frequencies (Hz)", ylabel="Spectrum (Im)")
-    
+    draw(filename, title=title, xlabel="Frequencies (1/day)", ylabel="Spectrum (Im)")
     
 if __name__ == "__main__":
     main(sys.argv[1:])
