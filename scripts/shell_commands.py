@@ -2,8 +2,10 @@
 from path import path
 from subprocess import call
 
+from globals import get_filenames
+
 def main():
-    filenames = [filename for filename in path("../data/").walkfiles()]
+    filenames = get_filenames()
     for filename in filenames:
         if "data.txt" in filename:
             dirname = path.dirname(filename)
@@ -18,7 +20,7 @@ def main():
             
             # Moving average
             moving_average_rep = "1"
-            moving_average_step = "5"
+            moving_average_step = "7"
             moving_average = path.joinpath(dirname, 
                                            "moving-average_" + 
                                            moving_average_rep + "x_" + 
@@ -31,8 +33,8 @@ def main():
                 print command
             
             # Fourier transform
-            ft_re = path.joinpath(dirname, "fourier-transform_re.png")
-            ft_im = path.joinpath(dirname, "fourier-transform_im.png")
+            ft_re = path.joinpath(dirname, "fourier-transform_re_rfft.png")
+            ft_im = path.joinpath(dirname, "fourier-transform_im_rfft.png")
             
             if not (ft_re in filenames and ft_im in filenames):
                 command = "python fourier_transform.py " + filename

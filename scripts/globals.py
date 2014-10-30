@@ -2,6 +2,7 @@
 
 import glob
 import os.path
+from path import path
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
@@ -24,9 +25,8 @@ def ensure_dir(path):
 def get_filename(path, name):
     return os.path.join(os.path.dirname(os.path.splitext(path)[0]), name)
 
-def get_filenames(folder):
-    for root, dirnames, filenames in os.walk(folder):
-        print os.path.join(folder, filenames)
+def get_filenames():
+    return [filename for filename in path("../data/").walkfiles()]
     
 def get_values(f):
     x = []
