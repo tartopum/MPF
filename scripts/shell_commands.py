@@ -13,10 +13,10 @@ def main():
             # Crude values
             crude_values = path.joinpath(dirname, "crude-values.png")
             
-            # if not crude_values in filenames:    
-            command = "python crude_values.py " + filename
-            print command
-            call(command.split(" "))
+            if not crude_values in filenames:    
+                command = "python crude_values.py " + filename
+                print command
+                call(command.split(" "))
             
             # Moving average
             moving_average_reps = ["1"]
@@ -29,11 +29,11 @@ def main():
                                                    moving_average_rep + "x_" + 
                                                    moving_average_step + ".png")
                     
-                    # if not moving_average in filenames:
-                    command = ("python moving_average.py " + filename + " " + 
-                               moving_average_rep + " " + moving_average_step)
-                    print command
-                    call(command.split(" "))
+                    if not moving_average in filenames:
+                        command = ("python moving_average.py " + filename + " " + 
+                                   moving_average_rep + " " + moving_average_step)
+                        print command
+                        call(command.split(" "))
             
             
             
@@ -41,10 +41,10 @@ def main():
             ft_re = path.joinpath(dirname, "fourier-transform_re.png")
             ft_im = path.joinpath(dirname, "fourier-transform_im.png")
             
-            # if not (ft_re in filenames and ft_im in filenames):
-            command = "python fourier_transform.py " + filename
-            print command
-            call(command.split(" "))
+            if not (ft_re in filenames and ft_im in filenames):
+                command = "python fourier_transform.py " + filename
+                print command
+                call(command.split(" "))
             
 
 if __name__ == "__main__":
