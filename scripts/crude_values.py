@@ -14,6 +14,7 @@ def main(args):
     filename = get_filename(path, "crude-values")
     title = filename
     plt.plot(days, amounts)
+    plt.ylim([0, max(40, max(amounts))])
     draw(filename, title=title)
     
 if __name__ == "__main__":
