@@ -39,10 +39,9 @@ def main(args):
         amounts = average(amounts, n)
      
     filename = get_filename(path, "moving-average_" + str(count) + "x_" + str(n))
-    title = filename
     plt.plot(days, amounts)
     plt.ylim([0, max(40, max(amounts))])
-    draw(filename, title=title)
+    draw(filename)
 
 if __name__ == "__main__":
     main(sys.argv[1:])

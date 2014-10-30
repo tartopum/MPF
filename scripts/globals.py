@@ -1,17 +1,19 @@
 # -*-coding: utf-8 -*-
 
-import glob
-import os.path
+import os
 from path import path
-import sys
+import re
 import numpy as np
 import matplotlib.pyplot as plt
 
 def draw(filename, title="", xlabel="Days", ylabel="Production (L)"):
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-    plt.title(title)
     plt.grid(True)
+    
+    if title == "":
+        title = "/".join(split_filename(filename))
+        plt.title(title)
     
     ensure_dir(filename)
     plt.savefig(filename + ".png")
@@ -27,6 +29,16 @@ def get_filename(path, name):
 
 def get_filenames():
     return [filename for filename in path("../data/").walkfiles()]
+
+def get_graph_names():
+    num = get_numeros()[0]
+    folder = os.listdir("../data/" + num)[0]
+    path_ = "../data/" + num + "/" + folder
+    
+    return [os.path.basename(f) for f in path(path_).walkfiles() if ".png" in f]
+
+def get_numeros():
+    return os.listdir("../data")
     
 def get_values(f):
     x = []
@@ -41,5 +53,7 @@ def get_values(f):
             
     return x, y
 
-if __name__ == "__main__":
-    print get_filenames(sys.argv[1])
+def split_filename(filename):
+    search = re.search(".+/data/([0-9]+)/([0-9]+)/(.+)$", filename)
+    return search.group(1), search.group(2), search.group(3)     
+
