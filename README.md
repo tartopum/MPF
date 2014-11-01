@@ -1,32 +1,17 @@
-# TIPE
-
-## Thème 
-
-Ressources : partage, répartition, distribution. À l'ordre des mots près. 
-
-## Sujet 
-
-**Prévision de production laitière**
+# MPF - Milk Production Forecast
 
 L'objectif est de prévoir la production d'un troupeau de vaches laitières afin 
-de distribuer les aliments en quantités adéquates - pour le respect des quotas.
+de distribuer les aliments en quantités adéquates *i.e.* juste assez pour 
+correspondre avec les quotas.
 
-**Rapport au thème :** cette prévision a pour objectif de **distribuer** 
-judicieusement les ressources alimentaires.
+## Pistes
 
-Le sujet semble particulièrement personnel et original. En outre, avoir un 
-oncle agriculteur pouvant fournir un nombre considérable de données 
-statistiques est un atout indéniable.
+Tout est [ici](http://zestedesavoir.com/forums/sujet/1514/prevoir-une-evolution-a-partir-de-courbes/).
 
 ## Sources
 
 * Mathématiques
-    * http://drupal.mgi.polymtl.ca/?q=book/export/html/19
-    * http://fr.wikipedia.org/wiki/Corr%C3%A9lation_%28statistiques%29
-    * http://www.jybaudot.fr/Correlations/r.html
-    * http://www.google.fr/url?sa=t&rct=j&q=&esrc=s&source=web&cd=7&ved=0CEgQFjAG&url=http%3A%2F%2Ftel.archives-ouvertes.fr%2Fdocs%2F00%2F48%2F73%2F27%2FPDF%2Fmemoire.pdf&ei=K7ciVJOGF7LCsATFtoCAAg&usg=AFQjCNHGMFSK_FkEAtFzC48unlGfagrZog&cad=rja
-    * http://fr.wikipedia.org/wiki/Moyenne_glissante
-* Prévision de production laitière
-    * http://lait.reussir.fr/actualites/predire-plus-finement-la-production-du-troupeau:QWSDTEM2.html
+    * [Méthodes de prévision](http://drupal.mgi.polymtl.ca/?q=book/export/html/19)
+    * [Corrélation](http://fr.wikipedia.org/wiki/Corr%C3%A9lation_%28statistiques%29)
 * Excel
-    * http://www.lokad.com/fr/methodes-previsions-et-formules-excel
+    * [Méthodes de prévision](http://www.lokad.com/fr/methodes-previsions-et-formules-excel)
