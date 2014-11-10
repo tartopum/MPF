@@ -15,6 +15,13 @@ def average(amounts, n):
             
     return amounts_average
 
+def get_data(days, amounts, count, n):
+    for i in range(count):
+        days = days[n:len(days)-n]     
+        amounts = average(amounts, n)
+        
+    return days, amounts
+
 def main(args):
     path = args[0]
     with open(path, "r") as f:
@@ -34,13 +41,12 @@ def main(args):
     else:
         n = int(n)
     
-    for i in range(count):
-        days = days[n:len(days)-n]     
-        amounts = average(amounts, n)
+    days, amounts = get_data(days, amounts, count, n)
      
     filename = get_filename(path, "moving-average_" + str(count) + "x_" + str(n))
     plt.plot(days, amounts)
     plt.ylim([0, max(40, max(amounts))])
+    plt.show()
     draw(filename)
 
 if __name__ == "__main__":
