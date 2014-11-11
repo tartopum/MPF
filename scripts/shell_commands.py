@@ -45,6 +45,14 @@ def main():
                 command = "python fourier_transform.py " + filename
                 print command
                 call(command.split(" "))
+                
+            
+            # Least squares
+            least_squares = path.joinpath(dirname, "least-squares_thresh50.png")
+            if not least_squares in filenames:    
+                command = "python least_squares.py " + filename + " 50"
+                print command
+                call(command.split(" "))
             
 
 if __name__ == "__main__":

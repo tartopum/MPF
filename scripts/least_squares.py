@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
-from globals import get_values
+from globals import draw, get_filename, get_values
 
 def get_a_b(x, y):  
     x_average = sum(x)/len(x)
@@ -26,7 +26,7 @@ def main(args):
     
     plt.plot(days, amounts)
     
-    threshold = 50
+    threshold = int(args[1])
     
     # Rising during 50 days
     rising_days = days[:threshold]
@@ -44,11 +44,11 @@ def main(args):
     a, b = get_a_b(falling_days, falling_amounts)
     
     x = np.array(falling_days)
-    plt.plot(x, a*x + b, "r", lw=2)  
-    plt.show()
+    plt.plot(x, a*x + b, "r", lw=2)
     
-    # filename = get_filename(path, "least-squares")
-    # draw(filename, xlabel="Days", ylabel="Production (L)")
+    filename = get_filename(path, "least-squares_thresh" + str(threshold))
+    plt.ylim([0, max(40, max(amounts))])
+    draw(filename)
     
 
 if __name__ == "__main__":
