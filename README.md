@@ -19,7 +19,7 @@ lactation jusqu'à aujourd'hui.
 Pour information, sans compter les aléas tels que les maladies, une 
 vache suit le cycle suivant, qu'on appelle *lactation* :
 
-* **Vêlage :** oh ! un veau ! 
+* **Vêlage :** la vache donne naissance.
 * **Production :** la vache est traite.
 * **Insémination :** la vache est inséminée. Il est parfois nécessaire de répéter 
 cette étape.
