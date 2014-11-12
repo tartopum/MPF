@@ -29,15 +29,9 @@ vêlage.
 
 ## Organisation
 
-Dans un premier temps, les facteurs influençant la production ne seront pas 
-pris en compte pour des raisons de simplicité. Peut-être l'insémination 
-induit-elle une baisse de la production, peut-être pas. Ici, seules les 
-données de production passées seront considérées.
+Le dépôt, se partagera en plusieurs parties :
 
-Le dépôt, quant à lui, se partagera en plusieurs parties :
-
-* **Les données :** les productions quotidiennes de chaque vache, illustrées 
-par des courbes.
+* **Les données :** les productions quotidiennes de chaque vache.
 * **Les scripts :** les morceaux de code permettant d'analyser les données. 
 Python 3 sera utilisé pour cela.
 * **Les analyses :** l'étude des premières, générées par les seconds.
@@ -45,16 +39,18 @@ Python 3 sera utilisé pour cela.
 D'autre part, comme, accessoirement, ce projet constitue mon TIPE d'année de 
 Spé, il faudra veiller à rester simple et concis, de manière à pouvoir 
 présenter une soutenance potable à la fin de l'année. Le plus dur sera donc 
-de dénicher des outils compréhensibles permettant de produire un résultat 
+d'utiliser des outils compréhensibles permettant de produire un résultat 
 satisfaisant.
+
+En outre, dans un premier temps, seuls le temps et l'alimentation seront 
+considérés : les autres facteurs pouvant influencer la production ne seront pas 
+pris en compte pour des raisons de simplicité.
 
 ## Pistes
 
-Suite à quelques recherches, plusieurs pistes se dégagent :
+Suite à quelques recherches, deux pistes principales se dégagent :
 
-* Droite des moindres carrés
-* Transformée de Fourier
-* *Machine learning*
+* Régression
 * Modèle ARMA
 
 Plus de détails 
@@ -63,7 +59,11 @@ Plus de détails
 Dans tous les cas, il semble nécessaire de partager les données en deux : 
 
 * Certaines permettant de générer un modèle ;
-* D'autres, et pourquoi pas les précédentes également, pour le vérifier.
+* D'autres pour le vérifier.
+
+Cela peut se faire en considérant différentes lactations ou vaches, mais 
+également en supprimant des points au hasard lors de la génération du modèle et 
+en vérifiant ce dernier sur les points mis de côté.
 
 En outre, il faudra au préalable éliminer le bruit des données, c'est-à-dire 
 faire en sorte que les évènements aléatoires et peu représentatifs - 
@@ -72,8 +72,10 @@ les courbes - avec une moyenne mobile notamment - semble être judicieux.
 
 ## Sources
 
-* Mathématiques
+* Global
     * [Méthodes de prévision](http://drupal.mgi.polymtl.ca/?q=book/export/html/19)
-    * [Corrélation](http://fr.wikipedia.org/wiki/Corr%C3%A9lation_%28statistiques%29)
-* Excel
-    * [Méthodes de prévision](http://www.lokad.com/fr/methodes-previsions-et-formules-excel)
+    * [Notions de base](http://unt-ori2.crihan.fr/unspf/2010_Limoges_Vignoles_StatsDescriptives/co/03-4-4%20interpolation-extrapolation.html)
+* Régression
+    * [Présentation](http://fr.wikipedia.org/wiki/R%C3%A9gression_%28statistiques%29)
+* ARMA
+    * [Présentation](http://fr.wikipedia.org/wiki/ARMA)
