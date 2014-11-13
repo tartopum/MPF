@@ -10,7 +10,7 @@ class FourierTransform:
         self.real = real
         self.timestep = timestep
     
-    def process(self, data):
+    def work(self, data):
         # Prepare data
         data = np.asarray(data)
         
@@ -26,47 +26,32 @@ class LeastSquares:
     def __init__(self):
         pass
     
-    def process(self, x, y):
-        _x = sum(x)/len(x)
-        _y = sum(y)/len(y)
-        
-        a_num = 0
-        a_den = 0
-        for i in range(len(x)):
-            a_num += (x[i] - _x) * (y[i] - _y)
-            a_den += (x[i] - _x)**2
-        
-        a = a_num/a_den
-        b = _y - a * _x
-        
-        x = np.array(x)
-        
-        return x, a*x + b
+    def work(self, A, B):
+        # B = AX
+        return np.linalg.lstsq(A, B)[0] # X
     
 
 class MovingAverage:
-    def __init__(self, step, rep):
+    def __init__(self, step):
         self.step = step
-        self.rep = rep
     
-    def process(self, x, y):
+    def work(self, x, y):
         # Not to alter args
         x = x + []
         y = y + []
         
-        for i in range(self.rep):
-            x = x[self.step:len(x) - self.step]     
+        x = x[self.step:len(x) - self.step]
+        average_y = []
+        
+        for k in range(self.step, len(y)-self.step):
+            # Sum 'step' y before and after the current one,
+            # which is y[k]
+            s = sum(y[k-self.step:k+self.step+1])
             
-            average_y = []
-            for k in range(self.step, len(y)-self.step):
-                # Sum 'step' y before and after the current one,
-                # which is y[k]
-                s = sum(y[k-self.step:k+self.step+1])
-                
-                average = float(s) / (2*self.step + 1)
-                average_y.append(average) 
-                
-            y = average_y
+            average = float(s) / (2*self.step + 1)
+            average_y.append(average) 
+            
+        y = average_y
         
         return x, y
     
