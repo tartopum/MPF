@@ -32,7 +32,7 @@ def gallery(x_list, y_list, title="", titles=[], xlabels=[], ylabels=[]):
     
     n = int(ceil(sqrt(l)))
     
-    fig = plt.figure(1)
+    fig = plt.figure(num=1, figsize=(10, 8))
     fig.suptitle(title)
     
     for k in range(l):
@@ -60,11 +60,9 @@ def show_gallery(x, y, title, titles=[], xlabels=[], ylabels=[]):
 
 
 if __name__ == "__main__":
-    """
     x = [1, 2, 3]
     y = [2, 5, 3]
     show(x, y)
-    """
     
     x = [[0, 1, 2], [0, 1, 2]]
     y = [[10, 11, 12], [0, 1, 2]]
@@ -74,13 +72,11 @@ if __name__ == "__main__":
     x = [[0, 1, 2], [0, 1, 2], [0, 1, 2]]
     y = [[10, 11, 12], [0, 1, 2], [0, 1, 2]]
     titles = ["1", "2", "3"]
-    show_gallery(x, y, titles)
+    show_gallery(x, y, "TITLEEEEE", titles)
 
-    """
     x = [[0, 1, 2], [0, 1, 2], [0, 1, 2], [0, 1, 2]]
     y = [[10, 11, 12], [0, 1, 2], [0, 1, 2], [0, 1, 2]]
     titles = ["1", "2", "3", "4"]
-    show_gallery(x, y, titles)
-    """
+    show_gallery(x, y, "TITLEEEEE", titles)
     
     

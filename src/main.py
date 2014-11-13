@@ -1,25 +1,32 @@
-import os.path
+import sqlite3
 
-from file_manager import FileManager
-from drawer import Drawer
-from processor import Processor
+from config import DATABASE_PATH
+from drawer import draw, gallery
+from manager import Manager
+from processor import FourierTransform, LeastSquares, MovingAverage
+from selector import Selector
 
-drawer = Drawer()
-file_manager = FileManager("../data/", "../processing/")
-processor = Processor()
+manager = Manager()
+selector = Selector(sqlite3.connect(DATABASE_PATH))
 
-
-
-def least_squares(filenames):
-    path = os.path.join(file_manager.dest, "least-squares")
-    file_manager.ensure_dir(path)
-
-    for cow, filenames in :
+def moving_average(x, y):
+    step = 3
+    obj = MovingAverage(step)
+    dest = ""
+    
+    x, y = manager.work(dest, obj, (x, y))
+    
+    # Draw
+        
+def main():
+    cows = selector.get_cows()
+    
+    for cow in cows:
+        lactations = selector.get_lactations(cow)
+        
+        for lactation in lactations:
+            pass
         
 
-def main():
-    for cow in file_manager.get_cows():
-        data = file_manager.get_cow_data(cow)
-
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()
