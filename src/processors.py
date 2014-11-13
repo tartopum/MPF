@@ -1,5 +1,17 @@
 import numpy as np
 
+class Difference:
+    def __init__(self):
+        pass
+        
+    def work(self, x, y):
+        diffs = []
+        
+        for i in range(len(x) - 1):
+            diffs.append(y[i+1] - y[i])
+
+        return x[:-1], diffs
+
 class FourierTransform:
     def __init__(self, real=True, timestep=1):
         # Define helpers
@@ -22,9 +34,12 @@ class FourierTransform:
         return freq, np.real(spectrum), np.imag(spectrum)
     
 
-class LeastSquares:
+class LinearRegression:
     def __init__(self):
         pass
+    
+    def compare(self, A, X, B):
+        return np.linalg.norm(B-A*X)
     
     def work(self, A, B):
         # B = AX
