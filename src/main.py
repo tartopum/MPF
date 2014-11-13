@@ -1,23 +1,22 @@
+from os.path import join
 import sqlite3
 
-import managers
-import savers
+from manager import Manager
 from selector import Selector
 
 from config import DATABASE_PATH
-
-selector = Selector(sqlite3.connect(DATABASE_PATH))
         
 def main():
-    cows = selector.get_cows()
+    db_selector = Selector(sqlite3.connect(DATABASE_PATH))
+    db_manager = Manager(db_selector)
     
-    moving_average_2 = managers.MovingAverage(selector, savers.BasicSaver(), 2)
+    cows = db_selector.get_cows()
     
     for cow in cows:
-        moving_average_2.work(cow)
-        
-    moving_average_2.save()
-        
+        db_manager.production_by_cons(cow)
+        db_manager.production_by_day(cow)
+        db_manager.production_diff(cow)
+
 
 if __name__ == "__main__":
     main()
