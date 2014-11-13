@@ -1,6 +1,6 @@
 import sqlite3
 
-class SQLQuery():
+class SQLManager():
     def __init__(self, connection):
         self.connection = connection
         

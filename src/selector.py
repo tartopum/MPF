@@ -1,14 +1,17 @@
+from sql import SQLManager
+
 class Selector:
     def __init__(self, connection):
-        self.connection = connection
+        self.sql_manager = SQLManager(connection)
         
     def query(self, q, params=()):
-        cursor = self.connection.cursor()
-        data = [row for row in cursor.execute(q, params)]
+        return self.sql_manager.execute(q, params)
+    
+    def get_cons(self, cow, lact):
+        q = "SELECT cons FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY lact_day" 
+        data = self.query(q, (cow, lact))
         
-        self.connection.commit()
-        
-        return data
+        return [line[0] for line in data]
         
     def get_cows(self):
         q = "SELECT DISTINCT cow FROM CrudeData"
@@ -24,7 +27,7 @@ class Selector:
         
     def get_lacts(self, cow):
         # We only work on the whole lactation
-        q = "SELECT DISTINCT lact FROM CrudeData WHERE cow = ? AND lact_day = 1"
+        q = "SELECT DISTINCT lact FROM CrudeData WHERE cow = ?"
         data = self.query(q, (cow,))
         
         return [line[0] for line in data]
