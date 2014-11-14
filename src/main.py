@@ -1,8 +1,8 @@
 from os.path import join
 
-from drawer import Drawer
-from managers import Factory
-from selectors import DBSelector
+from lib.drawer import Drawer
+from lib.managers import Factory
+from lib.selectors import DBSelector
 
 db = DBSelector()
 factory = Factory()
@@ -80,7 +80,7 @@ def production_by_cons(cow):
 def main():
     for cow in db.cows():
         production_by_day(cow)
-        # production_by_cons(cow)
+        production_by_cons(cow)
 
 
 if __name__ == "__main__":
