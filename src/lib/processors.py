@@ -1,5 +1,16 @@
+from random import randint
 import numpy as np
 
+#
+# ARMA
+#
+class ARMA:
+    def __init__(self):
+        pass
+
+#
+# Difference
+#
 class Difference:
     def __init__(self):
         pass
@@ -12,6 +23,9 @@ class Difference:
 
         return x[:-1], diffs
 
+#
+# Fourier Transform
+#
 class FourierTransform:
     def __init__(self, real=True, timestep=1):
         # Define helpers
@@ -33,6 +47,27 @@ class FourierTransform:
         
         return freq, np.real(spectrum), np.imag(spectrum)
 
+class ImFourierTransform(FourierTransform):
+    def __init__(self, real=True, timestep=1):
+        FourierTransform.__init__(self, real=True, timestep=1)
+        
+    def work(self, data):
+        freq, real, imag = FourierTransform.work(self, data)
+        
+        return freq, imag
+
+class ReFourierTransform(FourierTransform):
+    def __init__(self, real=True, timestep=1):
+        FourierTransform.__init__(self, real=True, timestep=1)
+        
+    def work(self, data):
+        freq, real, imag = FourierTransform.work(self, data)
+        
+        return freq, real
+
+#
+# Identity
+#
 class Identity:
     def __init__(self):
         pass
@@ -40,6 +75,38 @@ class Identity:
     def work(self, x, y):
         return x, y        
 
+#
+# Linear regression
+#
+class AleaValues:
+    def __init__(self, percentage):
+        self.percentage = percentage
+    
+    def alea_indexes(self, begin, end, nb):
+        indexes = []
+        i = 0
+        
+        while i < nb:
+            k = randint(begin, end-1)
+            
+            if k in indexes:
+                continue
+                
+            indexes.append(k)
+            i += 1
+            
+        return indexes
+        
+    def work(self, x, y):
+        l = len(x)
+        nb = int(l * self.percentage / 100)
+        indexes = self.alea_indexes(0, l, nb)
+        
+        x = [x[i] for i in range(l) if not i in indexes]
+        y = [y[i] for i in range(l) if not i in indexes]  
+        
+        return x, y 
+    
 class LinearRegression:
     def __init__(self):
         pass
@@ -51,7 +118,9 @@ class LinearRegression:
         # B = AX
         return np.linalg.lstsq(A, B)[0] # X
     
-
+#
+# Moving average
+#
 class MovingAverage:
     def __init__(self, step):
         self.step = step
@@ -76,4 +145,13 @@ class MovingAverage:
         
         return x, y
     
+
+if __name__ == "__main__":
+    alea_values = AleaValues(20)
     
+    x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    y = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] 
+    
+    x, y = alea_values.work(x, y)
+    print(x)
+    print(y)   

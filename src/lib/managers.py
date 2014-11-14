@@ -50,6 +50,15 @@ class Difference(Manager):
         
         self.processor = processors.Difference()
 
+class LinearRegression(Manager):
+    def __init__(self, dest):
+        Manager.__init__(self, dest)
+        
+        self.processor = processors.LinearRegression()
+        
+    def work(self):
+        pass
+
 class MovingAverage(Manager):
     def __init__(self, step, dest):
         Manager.__init__(self, dest)
