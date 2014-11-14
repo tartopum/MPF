@@ -2,19 +2,20 @@ from math import sqrt, ceil
 import matplotlib.pyplot as plt
 
 class Drawer:
-    def __init__(self, title="", plot_style=""):
+    def __init__(self, title="", xlabel="x", ylabel="y", plot_style=""):
         self.title = title
         self.plot_style = plot_style
+        self.xlabel = xlabel
+        self.ylabel = ylabel
+        
         self.clear()
         
         self.X_INDEX = 0
         self.Y_INDEX = 1
         self.TITLE_INDEX = 2
-        self.XLABEL_INDEX = 3
-        self.YLABEL_INDEX = 4
         
-    def add(self, x, y, title="", xlabel="x", ylabel="y"):
-        self.data.append((x, y, title, xlabel, ylabel))
+    def add(self, x, y, title=""):
+        self.data.append((x, y, title))
     
     def clear(self):
         plt.close()
@@ -24,28 +25,32 @@ class Drawer:
     def draw(self):
         l = len(self.data)
         
-        fig, axarr = plt.subplots(l, figsize=(5, 3*l), squeeze=False)
+        fig = plt.figure(figsize=(5, 3*l))
+        
+        plt.subplot(l+1, 1, 1)
+        plt.text(0.5, 0.5, self.title, ha="center", va="center", fontweight="bold")
+        plt.axis('off')
         
         for k in range(l):
             x = self.data[k][self.X_INDEX]
             y = self.data[k][self.Y_INDEX]
             title = self.data[k][self.TITLE_INDEX]
-            xlabel = self.data[k][self.XLABEL_INDEX]
-            ylabel = self.data[k][self.YLABEL_INDEX]
-             
-            axarr[k, 0].plot(x, y, self.plot_style)
-            axarr[k, 0].grid(True)
-            axarr[k, 0].set_xlabel(xlabel)
-            axarr[k, 0].set_ylabel(ylabel)
-            axarr[k, 0].set_title(title)
+            
+            plt.subplot(l+1, 1, k+2) 
+            plt.plot(x, y, self.plot_style)
+            plt.grid(True)
+            plt.xlabel(self.xlabel)
+            plt.ylabel(self.ylabel)
+            plt.title(title, fontstyle="italic")
         
         fig.tight_layout() # To space subplots
+        fig.subplots_adjust(top = 0.975)
     
     def save(self, dest):
         plt.clf()
         
         self.draw()
-        plt.savefig(dest, dpi=250)
+        plt.savefig(dest + ".png", dpi=250)
         
         self.clear()
         
