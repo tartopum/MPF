@@ -32,7 +32,13 @@ class FourierTransform:
         freq = self.shift(freq)
         
         return freq, np.real(spectrum), np.imag(spectrum)
-    
+
+class Identity:
+    def __init__(self):
+        pass
+        
+    def work(self, x, y):
+        return x, y        
 
 class LinearRegression:
     def __init__(self):

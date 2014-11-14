@@ -27,11 +27,20 @@ class Manager:
         self.saver = Saver(self.dest)
         
     def __rshift__(self, next):
-        data = deepcopy(self.data)
-        next.work(data)
+        next.data = deepcopy(self.data)
+        next.work()
         
     def work(self):
-        raise RuntimeError("'work' method must be implemented.")
+        # Cache
+        # TODO
+        
+        for series in self.data.series:
+            series.x, series.y = self.processor.work(series.x, series.y)
+            
+            self.data.drawer.add(series.x, series.y, series.name)
+            
+        self.data.drawer.save(self.dest)
+        self.saver.save(self.data)
 
 class WorkingGroup(Manager):
     class Series:
@@ -48,40 +57,24 @@ class WorkingGroup(Manager):
         
         self.data = self # To make __rshift__ work
         self.drawer = drawer
+        self.processor = processors.Identity()
         
     def fill(self, name_getter, x_getter, y_getter):
-        names = name_getter(self.cow)
+        names = name_getter["fn"](self.cow)
         
         for name in names:
             series = WorkingGroup.Series()
-            series.name = name
+            series.name = name_getter["prefix"] + str(name) + name_getter["suffix"]
             series.x = x_getter(self.cow, name)
             series.y = y_getter(self.cow, name)
             
             self.series.append(series)
-            
-    def work(self):
-        for series in self.series:
-            self.drawer.add(series.x, series.y, series.name)
-        
-        self.drawer.show()
 
 class Difference(Manager):
     def __init__(self, dest):
         Manager.__init__(self, dest)
         
         self.processor = processors.Difference()
-        
-    def work(self, data):
-        self.data = data
-        
-        for series in self.data.series:
-            series.x, series.y = self.processor.work(series.x, series.y)
-            
-            self.data.drawer.add(series.x, series.y, series.name)
-            
-        self.data.drawer.show()
-        self.saver.save(self.data)
 
 class MovingAverage(Manager):
     def __init__(self, step, dest):
@@ -90,18 +83,4 @@ class MovingAverage(Manager):
         self.step = max(1, int(step)) # 'step' is an integer greater than 1
         
         self.processor = processors.MovingAverage(self.step)
-        
-    def work(self, data):
-        self.data = data
-        
-        # Cache
-        # TODO
-        
-        for series in self.data.series:
-            series.x, series.y = self.processor.work(series.x, series.y)
-            
-            self.data.drawer.add(series.x, series.y, series.name)
-        
-        self.data.drawer.show()
-        self.saver.save(self.data)
         

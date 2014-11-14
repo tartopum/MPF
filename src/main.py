@@ -1,64 +1,86 @@
 from os.path import join
 
-# from drawer import Drawer
+from drawer import Drawer
 from managers import Factory
 from selectors import DBSelector
-
-class Drawer:
-    def __init__(self, title, plot_style=""):
-        pass
-        
-    def show(self):
-        print("show")
-        
-    def add(self, x, y, title="", xlab="", ylab=""):
-        pass
 
 db = DBSelector()
 factory = Factory()
 
-def productions(cow):
-    # 1. Production by day
-    dest = join("productions", "by-day")
-    drawer = Drawer("Production by day of " + str(cow))
+def production_by_day(cow):
+    # Crude data
+    dest = join("productions", "by-day", str(cow))
+    title = str(cow) + "\n\n"
+    title += "prod = f(day)"
+    xlabel="day"
+    ylabel="production (L)"
+    drawer = Drawer(title, xlabel, ylabel)
     
     group = factory.WorkingGroup(cow, dest, drawer)
-    group.fill(db.lacts, db.lact_days, db.prods)
+    group.fill(
+        {
+            "prefix": "lactation ",
+            "suffix": "",
+            "fn": db.lacts
+        }, 
+        db.lact_days,
+        db.prods
+    )
     group.work()
     
-    ## 1.1 Difference
-    dest = join("productions", "diff")
-    drawer = Drawer("Production difference of " + str(cow))
+    ## Difference
+    dest = join("productions", "diff", str(cow))
+    title = str(cow) + "\n\n"
+    title += "y = prod(day + 1) - prod(day)"
+    xlabel = "day"
+    ylabel = "diff (L)"
+    drawer = Drawer(title, xlabel, ylabel)
     
     group.dest = dest
     group.drawer = drawer
     
     group >> factory.Difference(dest)
     
-    ## 1.2 With MA
+    ## With MA
     step = 2
-    dest = join("productions", "by-day", "moving-average", "step-" + str(step))
-    title = "Production by day of " + str(cow) + "\n"
-    title += "with moving average\n"
-    title += "step = " + str(step)"
-    drawer = Drawer(title)
+    dest = join("productions", "by-day", "moving-average", "step-" + str(step), str(cow))
+    title = str(cow) + "\n\n"
+    title += "prod = f(day)" + "\n\n"
+    title += "MA: step = " + str(step)
+    xlabel = "day"
+    ylabel = "production (L)"
+    drawer = Drawer(title, xlabel, ylabel)
     
     group.dest = dest
     group.drawer = drawer
     
     group >> factory.MovingAverage(step, dest)
-    
-    # 2. Production by cons
-    dest = join("productions", "by-cons")
-    drawer = Drawer("Production by consumption of " + str(cow), plot_style="bo")
+
+def production_by_cons(cow):    
+    # Crude data
+    dest = join("productions", "by-cons", str(cow))
+    title = str(cow) + "\n\n"
+    title += "prod = f(cons)"
+    xlabel = "consumption (kg)"
+    ylabel = "production (L)"
+    drawer = Drawer(title, xlabel, ylabel, plot_style="bo")
     
     group = factory.WorkingGroup(cow, dest, drawer)
-    group.fill(db.lacts, db.lact_days, db.cons)
+    group.fill(
+        {
+            "prefix": "lactation ",
+            "suffix": "",
+            "fn": db.lacts
+        }, 
+        db.cons,
+        db.prods
+    )
     group.work()
     
 def main():
     for cow in db.cows():
-        productions(cow)
+        production_by_day(cow)
+        # production_by_cons(cow)
 
 
 if __name__ == "__main__":
