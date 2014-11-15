@@ -1,7 +1,5 @@
-import pickle
-
 from utils.sql import ORM
-from config import DATA_PATH, DATABASE_PATH
+from config import DATABASE_PATH
 
 class DBSelector:
     def __init__(self):
@@ -39,28 +37,4 @@ class DBSelector:
         data = self.query(q, (cow, lact))
         
         return [line[0] for line in data]
-        
-class FileSelector:
-    def __init__(self):
-        pass
-    
-    def load(self, src):
-        src += ".data"
-        
-        try:    
-            f = open(src, "rb")
-            contents = pickle.load(f)
-        except:
-            contents = None
-        else:
-            f.close()
-            
-        return contents
-        
-    def save(self, data, dest):
-        dest += ".data"
-        
-        with open(dest, "wb") as f:
-            pickle.dump(data, f)
-            
-        print(dest + " saved.")
+       
