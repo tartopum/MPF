@@ -10,7 +10,7 @@ class DBSelector:
     
     def cons(self, cow, lact):
         q = "SELECT cons FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY lact_day" 
-        data = self.query(q, (cow, lact))
+        data = self.query(q, (int(cow), lact))
         
         return [line[0] for line in data]
         
@@ -22,19 +22,19 @@ class DBSelector:
     
     def lact_days(self, cow, lact):
         q = "SELECT lact_day FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY lact_day" 
-        data = self.query(q, (cow, lact))
+        data = self.query(q, (int(cow), lact))
         
         return [line[0] for line in data]
         
     def lacts(self, cow):
         q = "SELECT DISTINCT lact FROM CrudeData WHERE cow = ?"
-        data = self.query(q, (cow,))
+        data = self.query(q, (int(cow),))
         
         return [line[0] for line in data]
         
     def prods(self, cow, lact):
         q = "SELECT prod FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY lact_day" 
-        data = self.query(q, (cow, lact))
+        data = self.query(q, (int(cow), lact))
         
         return [line[0] for line in data]
        
