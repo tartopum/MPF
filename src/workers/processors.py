@@ -1,10 +1,13 @@
 from random import randint
 import numpy as np
 
+
+
 #
 # ARMA
 #
 class ARMA:
+
     def __init__(self):
         pass
 
@@ -12,6 +15,7 @@ class ARMA:
 # Difference
 #
 class Difference:
+
     def __init__(self):
         pass
         
@@ -27,6 +31,7 @@ class Difference:
 # Fourier Transform
 #
 class FourierTransform:
+
     def __init__(self, real=True, timestep=1):
         # Define helpers
         self.fft = np.fft.rfft if real else np.fft.fft
@@ -47,7 +52,9 @@ class FourierTransform:
         
         return freq, np.real(spectrum), np.imag(spectrum)
 
+
 class ImFourierTransform(FourierTransform):
+
     def __init__(self, real=True, timestep=1):
         FourierTransform.__init__(self, real=True, timestep=1)
         
@@ -56,7 +63,9 @@ class ImFourierTransform(FourierTransform):
         
         return freq, imag
 
+
 class ReFourierTransform(FourierTransform):
+
     def __init__(self, real=True, timestep=1):
         FourierTransform.__init__(self, real=True, timestep=1)
         
@@ -69,6 +78,7 @@ class ReFourierTransform(FourierTransform):
 # Identity
 #
 class Identity:
+
     def __init__(self):
         pass
         
@@ -79,6 +89,7 @@ class Identity:
 # Linear regression
 #
 class AleaValues:
+
     def __init__(self, percentage):
         self.percentage = percentage
     
@@ -96,16 +107,20 @@ class AleaValues:
             i += 1
             
         return indexes
+    
+    def data_from_indexes(self, data, indexes):
+        l = len(data[0])
         
-    def work(self, x, y):
-        l = len(x)
+        return [[line[i] for i in range(l) if i in indexes] for line in data]
+        
+    def work(self, data):
+        l = len(data[0])
         nb = int(l * self.percentage / 100)
         indexes = self.alea_indexes(0, l, nb)
         
-        x = [x[i] for i in range(l) if not i in indexes]
-        y = [y[i] for i in range(l) if not i in indexes]  
+        data = self.data_from_indexes(data, indexes)
         
-        return x, y 
+        return data
     
 class LinearRegression:
     # http://adventuresinoptimization.blogspot.fr/2011/02/data-fitting-part-2-very-very-simple.html
@@ -114,16 +129,25 @@ class LinearRegression:
         pass
     
     def compare(self, A, X, B):
-        return np.linalg.norm(B-A*X)
+        # ||B - AX||
+        B = np.array(B)
+        A = np.vstack(A)
+        X = np.array(X)
+        
+        return np.linalg.norm(B - A.dot(X)).tolist()
     
     def work(self, A, B):
         # B = AX
-        return np.linalg.lstsq(A, B)[0] # X
+        B = np.array(B)
+        A = np.vstack(A)
+        
+        return np.linalg.lstsq(A, B)[0].tolist() # X
     
 #
 # Moving average
 #
 class MovingAverage:
+
     def __init__(self, step):
         self.step = step
     
@@ -149,24 +173,26 @@ class MovingAverage:
     
 
 if __name__ == "__main__":
-    alea_values = AleaValues(20)
+    alea = AleaValues(100)
     
-    x = [[1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8], [8, 9], [9, 10], [10, 11]]
-    y = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] 
+    A = [
+        [1, 9, 9**2, 4, 4**2, 9, 9**2],
+        [1, 8, 8**2, 6, 6**2, 4, 4**2],
+        [1, 9, 9**2, 4, 4**2, 8, 8**2],
+        [1, 3, 3**2, 7, 7**2, 9, 9**2],
+        [1, 6, 6**2, 8, 8**2, 5, 5**2],
+        [1, 4, 4**2, 5, 5**2, 3, 3**2]
+    ]
+    B = [9, 10, 2, 4, 2, 10]
     
-    x, y = alea_values.work(x, y)
+    A_alea, B_alea = alea.work([A, B])
     
     linear_reg = LinearRegression()
-    A = np.vstack([
-        [9, 4, 9],
-        [8, 6, 4],
-        [9, 4, 8],
-        [3, 7, 9],
-        [6, 8, 5],
-        [4, 5, 3]
-    ])
-    B = np.array([2,5,8,1,3,4])
     
-    X = linear_reg.work(A, B)
+    X = linear_reg.work(A_alea, B_alea)
     print(X)
+    print("")
+    
+    diff = linear_reg.compare(A, X, B)
+    print(diff)
      
