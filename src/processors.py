@@ -45,10 +45,9 @@ class LeastSquares:
     
 
 class MovingAverage:
-    def __init__(self, step, rep=1):
-        # 'step' and 'rep' are integers greater than 1
-        self.step = max(1, int(step))
-        self.rep = max(1, int(rep))
+    def __init__(self, step, rep):
+        self.step = step
+        self.rep = rep
     
     def process(self, x, y):
         # Not to alter args

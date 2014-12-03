@@ -15,9 +15,22 @@ class Selector:
         data = self.query(q)
         
         return [line[0] for line in data]
+    
+    def get_lact_days(self, cow, lact):
+        q = "SELECT lact_day FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY lact_day" 
+        data = self.query(q, (cow, lact))
         
-    def get_lactations(self, cow):
-        q = "SELECT DISTINCT lac FROM CrudeData WHERE cow = ?"
+        return [line[0] for line in data]
+        
+    def get_lacts(self, cow):
+        # We only work on the whole lactation
+        q = "SELECT DISTINCT lact FROM CrudeData WHERE cow = ? AND lact_day = 1"
         data = self.query(q, (cow,))
+        
+        return [line[0] for line in data]
+        
+    def get_prods(self, cow, lact):
+        q = "SELECT prod FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY lact_day" 
+        data = self.query(q, (cow, lact))
         
         return [line[0] for line in data]
