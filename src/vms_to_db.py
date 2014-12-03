@@ -1,6 +1,7 @@
 import sys
 import sqlite3
 from sql import SQLQuery
+from config import DATABASE_PATH
 
 def sanitize(line):
     line = line.replace(",", ".")
@@ -21,7 +22,7 @@ def check(line):
         return (cow, date, prod, cons, lac, lac_day)
 
 def main():
-    query = SQLQuery(sqlite3.connect("../data/database/database.db"))
+    query = SQLQuery(sqlite3.connect(DATABASE_PATH))
     q = "INSERT INTO CrudeData VALUES (?, ?, ?, ?, ?, ?)"
     
     lines = sys.stdin.read().split("\n")
@@ -31,7 +32,12 @@ def main():
         data = check(data)
         
         if data is not None:
-            query.execute(q, data)
+            try:
+                query.execute(q, data)
+            except sqlite3.IntegrityError: # If the line already exists
+                pass
+            else:
+                print(data)
 
 if __name__ == "__main__":
     main()

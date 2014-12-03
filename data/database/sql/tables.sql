@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS CrudeData(
     date DATE NOT NULL,
     prod REAL NOT NULL, -- L
     cons REAL NOT NULL, -- kg
-    lac INTEGER NOT NULL,
-    lac_day INTEGER NOT NULL,
+    lact INTEGER NOT NULL,
+    lact_day INTEGER NOT NULL,
     PRIMARY KEY (cow, date)
 );
