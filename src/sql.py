@@ -1,8 +1,8 @@
 import sqlite3
 
-class SQLManager():
-    def __init__(self, connection):
-        self.connection = connection
+class ORM():
+    def __init__(self, path):
+        self.connection = sqlite3.connect(path)
         
     def execute(self, q, params=()):
         cursor = self.connection.cursor()

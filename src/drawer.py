@@ -59,34 +59,6 @@ class Drawer:
 
 
 if __name__ == "__main__":
-    """
-    drawer = Drawer("TITLE")
-    
-    n = 6
-    for i in range(n):
-        drawer.add(list(range(i+2)), list(range(i+2)), str(i), "x" + str(i), "y" + str(i))
-    drawer.show()
-    """
-    
-    import sqlite3
-    from selector import Selector
-    from config import DATABASE_PATH
-    from workers import Productions
-    
-    selector = Selector(sqlite3.connect(DATABASE_PATH))
-    
-    for cow in [3138, 3129, 14]:
-        drawer = Drawer(cow)
-        
-        worker = Productions(selector, selector.get_lact_days)
-        data = worker.work(cow)
-        
-        for line in data:
-            x = line["x"]
-            y = line["y"]
-            title = "lactation {}".format(line["lact"])
-            drawer.add(x, y, title, xlabel="day", ylabel="production (L)")
-            
-        drawer.save("./{}.png".format(cow))
+    pass
     
     
