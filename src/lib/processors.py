@@ -108,6 +108,8 @@ class AleaValues:
         return x, y 
     
 class LinearRegression:
+    # http://adventuresinoptimization.blogspot.fr/2011/02/data-fitting-part-2-very-very-simple.html
+    
     def __init__(self):
         pass
     
@@ -149,9 +151,22 @@ class MovingAverage:
 if __name__ == "__main__":
     alea_values = AleaValues(20)
     
-    x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    x = [[1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8], [8, 9], [9, 10], [10, 11]]
     y = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] 
     
     x, y = alea_values.work(x, y)
-    print(x)
-    print(y)   
+    
+    linear_reg = LinearRegression()
+    A = np.vstack([
+        [9, 4, 9],
+        [8, 6, 4],
+        [9, 4, 8],
+        [3, 7, 9],
+        [6, 8, 5],
+        [4, 5, 3]
+    ])
+    B = np.array([2,5,8,1,3,4])
+    
+    X = linear_reg.work(A, B)
+    print(X)
+     

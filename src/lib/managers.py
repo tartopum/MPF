@@ -13,6 +13,9 @@ class Factory:
     def Difference(self, dest):
         return Difference(join(self.root, dest))
 
+    def LinearRegression(self, dest):
+        return LinearRegression(dest)
+
     def MovingAverage(self, step, dest):
         return MovingAverage(step, join(self.root, dest))
         
@@ -37,9 +40,9 @@ class Manager:
             self.data = data
         else:
             for series in self.data.series:
-                series.x, series.y = self.processor.work(series.x, series.y)
+                series.x(), series.y() = self.processor.work(series.x(), series.y())
                 
-                self.data.drawer.add(series.x, series.y, series.name)
+                self.data.drawer.add(series.x(), series.y(), series.name)
             
             self.data.drawer.save(self.dest)
             self.file_selector.save(self.data, self.dest)
@@ -70,11 +73,16 @@ class MovingAverage(Manager):
 class Series:
     def __init__(self):
         self.name = []
-        self.x = []
-        self.y = []
+        self.data = []
+        
+    def x(self):
+        return self.data[0]
+        
+    def y(self):
+        return self.data[1]
         
 class WorkingGroup(Manager):
-    def __init__(self, cow, dest, drawer):
+    def __init__(self, cow, dest, drawer=None):
         Manager.__init__(self, dest)
         
         self.cow = cow
@@ -84,14 +92,15 @@ class WorkingGroup(Manager):
         self.drawer = drawer
         self.processor = processors.Identity()
         
-    def fill(self, name_getter, x_getter, y_getter):
+    def fill(self, name_getter, data_getters):
         names = name_getter["fn"](self.cow)
         
         for name in names:
             series = Series()
             series.name = name_getter["prefix"] + str(name) + name_getter["suffix"]
-            series.x = x_getter(self.cow, name)
-            series.y = y_getter(self.cow, name)
+            
+            for getter in data_getters:
+                series.data.append(getter(self.cow, name))
             
             self.series.append(series)        
     

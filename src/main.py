@@ -26,8 +26,7 @@ def production_by_day(cow):
             "suffix": "",
             "fn": db.lacts
         }, 
-        db.lact_days,
-        db.prods
+        [db.lact_days, db.prods]
     )
     
     data.work() # Draw and save crude data
@@ -50,7 +49,7 @@ def production_by_day(cow):
     # Moving average
     step = 2
     
-    dest = join("productions", "by-day", "moving-average", "step-" + str(step), str(cow))
+    dest = join("productions", "by-day", "moving-averaging", "step-" + str(step), str(cow))
     data.dest = dest
     
     title = str(cow) + "\n\n"
@@ -84,16 +83,33 @@ def production_by_cons(cow):
             "suffix": "",
             "fn": db.lacts
         }, 
-        db.cons,
-        db.prods
+        [db.prods, db.lact_days, db.cons]
     )
     
     data.work()
+
+def linear_regression(cow):
+    dest = join("linear-regression", str(cow))
+    
+    data = factory.WorkingGroup(cow, dest)
+    data.fill(
+        {
+            "prefix": "lactation ",
+            "suffix": "",
+            "fn": db.lacts
+        }, 
+        [db.cons, db.prods]
+    )
+    
+    linear_regression = factory.LinearRegression(dest)
+    
+    data >> linear_regression
     
 def main():
     for cow in db.cows():
         production_by_day(cow)
         production_by_cons(cow)
+        linear_regression(cow)
 
 
 if __name__ == "__main__":
