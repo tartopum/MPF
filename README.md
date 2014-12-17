@@ -71,3 +71,4 @@ les courbes - avec une moyenne mobile notamment - semble être judicieux.
     * [Présentation](http://fr.wikipedia.org/wiki/R%C3%A9gression_%28statistiques%29)
 * ARMA
     * [Présentation](http://fr.wikipedia.org/wiki/ARMA)
+    * [Séries temporelles](http://www.itl.nist.gov/div898/handbook/pmc/section4/pmc4.htm)
