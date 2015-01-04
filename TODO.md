@@ -1,5 +1,8 @@
-# TODO
+# TODO list
 
-* Markdown view
-* Régression linéaire
+* JSON view
+* Statistiques régression linéaire
 * ARMA
+* Docstrings
+* docs
+* src/docs
