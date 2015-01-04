@@ -5,25 +5,19 @@ import workers.processors as processors
 
 class Difference(XYWorker):
 
-    def __init__(self, dest, force):
-        XYWorker.__init__(self, dest, force)
-        
+    def __init__(self):
         self.processor = processors.Difference()
 
 
 class Identity(XYWorker):
 
-    def __init__(self, dest, force):
-        XYWorker.__init__(self, dest, force)
-        
+    def __init__(self):
         self.processor = processors.Identity()
 
 
 class LinearRegression(Worker):
 
-    def __init__(self, percentage, dest, force):
-        Worker.__init__(self, dest, force)
-        
+    def __init__(self, percentage):
         self.alea = processors.AleaValues(percentage)
         self.processor = processors.LinearRegression()
     
@@ -77,9 +71,7 @@ class LinearRegression(Worker):
 
 class MovingAveraging(XYWorker):
 
-    def __init__(self, step, dest, force):
-        XYWorker.__init__(self, dest, force)
-        
+    def __init__(self, step):
         self.step = max(1, int(step)) # 'step' is an integer greater than 1
         
         self.processor = processors.MovingAverage(self.step)       

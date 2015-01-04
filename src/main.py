@@ -1,4 +1,4 @@
-from controllers.factory import Factory
+from analysis.factory import Factory
 from models.db import DBSelector
 from models.cow import Cow
 

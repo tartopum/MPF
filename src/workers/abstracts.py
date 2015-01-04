@@ -1,19 +1,16 @@
-from models.serializer import Serializer
-
-
-
 class Worker:
 
-    def __init__(self, dest, force):
+    def __init__(self, dest="", force=False, serializer=None):
         self.data = None
         self.dest = dest
         self.force = force
         
-        self.serializer = Serializer()
+        self.serializer = serializer
     
     def cache(self):
         if not self.force: 
             cache = self.serializer.load(self.dest)
+            print(self.cache)
             
             if cache is not None:
                 print(self.dest + " exists.")
@@ -28,8 +25,8 @@ class Worker:
         
 class XYWorker(Worker):
 
-    def __init__(self, dest, force):
-        Worker.__init__(self, dest, force)
+    def __init__(self, dest="", force=False, serializer=None):
+        Worker.__init__(self, dest, force, serializer)
         
     def work(self, wg):
         cache = self.cache()

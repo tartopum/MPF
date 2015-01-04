@@ -1,4 +1,4 @@
-from utils.sql import ORM
+from models.sql import ORM
 from config import DATABASE_PATH
 
 class DBSelector:

@@ -1,7 +1,13 @@
 import sys
+from os.path import dirname, join, realpath
 import sqlite3
-from sql import SQLQuery
+
+sys.path.append(realpath(join(dirname(__file__), "..")))
+
+from models.sql import ORM
 from config import DATABASE_PATH
+
+
 
 def sanitize(line):
     line = line.replace(",", ".")
@@ -22,7 +28,7 @@ def check(line):
         return (cow, date, prod, cons, lac, lac_day)
 
 def main():
-    query = SQLQuery(sqlite3.connect(DATABASE_PATH))
+    query = ORM(DATABASE_PATH)
     q = "INSERT INTO CrudeData VALUES (?, ?, ?, ?, ?, ?)"
     
     lines = sys.stdin.read().split("\n")
