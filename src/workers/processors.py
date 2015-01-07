@@ -1,5 +1,6 @@
 from random import randint
 import numpy as np
+import statistics
 
 
 
@@ -170,7 +171,39 @@ class MovingAverage:
         y = average_y
         
         return x, y
+        
+#
+# Statistics
+#
+class Statistics:
+
+    mean = statistics.mean
+    median = statistics.median
+    mode = statistics.mode
+    variance = statistics.variance
     
+    def __init__(self, functions={}):
+        if functions == {}:
+            self.functions = {
+                "mean": Statistics.mean,
+                "median": Statistics.median,
+                "mode": Statistics.mode,
+                "variance": Statistics.variance
+            }
+        else:
+            self.functions = functions
+    
+    def work(self, data):
+        res = {}
+        
+        for name, fn in self.functions.items():
+            try:
+                res[name] = fn(data)
+            except statistics.StatisticsError:
+                res[name] = None
+            
+        return res
+        
 
 if __name__ == "__main__":
     alea = AleaValues(100)

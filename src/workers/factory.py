@@ -1,9 +1,6 @@
 from os.path import join
 
-from workers.workers import Difference 
-from workers.workers import Identity
-from workers.workers import LinearRegression
-from workers.workers import MovingAveraging
+from workers import workers
 from workers.working_group import WorkingGroup
 
 
@@ -22,22 +19,27 @@ class Factory:
         return obj
 
     def Difference(self, dest, force=False):
-        obj = Difference()
+        obj = workers.Difference()
         
         return self.get_worker(obj, dest, force)
 
     def Identity(self, dest, force=False):
-        obj = Identity()
+        obj = workers.Identity()
         
         return self.get_worker(obj, dest, force)
 
     def LinearRegression(self, percentage, dest, force=False):
-        obj = LinearRegression(percentage)
+        obj = workers.LinearRegression(percentage)
         
         return self.get_worker(obj, dest, force)
 
     def MovingAveraging(self, step, dest, force=False):
-        obj = MovingAveraging(step)
+        obj = workers.MovingAveraging(step)
+        
+        return self.get_worker(obj, dest, force)
+    
+    def Statistics(self, dest, key, force=False):
+        obj = workers.Statistics(key)
         
         return self.get_worker(obj, dest, force)
         

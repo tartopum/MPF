@@ -26,3 +26,6 @@ class WorkingGroup:
                 series.data[key] = getter(self.cow, name)
             
             self.series.append(series)
+            
+    def clear_series(self):
+        self.series = []

@@ -10,7 +10,6 @@ class Worker:
     def cache(self):
         if not self.force: 
             cache = self.serializer.load(self.dest)
-            print(self.cache)
             
             if cache is not None:
                 print(self.dest + " exists.")
@@ -39,7 +38,11 @@ class XYWorker(Worker):
             
             x, y = self.processor.work(x, y)
             
-            wg.view.add(x, y, series.name)
+            wg.view.add({
+                "x": x, 
+                "y": y, 
+                "name": series.name
+            })
         
         wg.view.save(self.dest)
         self.serializer.save(wg, self.dest)

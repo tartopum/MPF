@@ -61,7 +61,15 @@ class LinearRegression(Worker):
             diff = self.processor.compare(A, X, B)
             series.data["diff"] = diff
             
-            wg.view.add
+            wg.view.add({
+                "A": A,
+                "B": B,
+                "A_alea": A_alea,
+                "B_alea": B_alea,
+                "X": X,
+                "diff": diff,
+                "name": series.name
+            })
         
         wg.view.save(self.dest)    
         self.serializer.save(wg, self.dest)
@@ -76,3 +84,27 @@ class MovingAveraging(XYWorker):
         
         self.processor = processors.MovingAverage(self.step)       
     
+    
+class Statistics(Worker):
+
+    def __init__(self, key):
+        self.key = key
+        
+        self.processor = processors.Statistics()
+        
+    def work(self, wg):
+        cache = self.cache()
+        if cache is not None: return cache
+        
+        data = [series.data[self.key] for series in wg.series]
+        measures = self.processor.work(data)
+        
+        series.data.update(measures)
+        
+        wg.view.add(measures)
+        
+        wg.view.save(self.dest)    
+        self.serializer.save(wg, self.dest)
+        
+        return wg
+                

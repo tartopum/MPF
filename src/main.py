@@ -13,7 +13,9 @@ def main():
         factory.prod_by_day(cow)
         factory.prod_diff(cow)
         factory.prod_by_cons(cow)
-        # factory.linear_reg(cow)
+        factory.linear_reg(cow)
+        factory.linear_reg_stats(cow)
+        break
 
 
 if __name__ == "__main__":
