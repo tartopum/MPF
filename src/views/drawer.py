@@ -15,7 +15,15 @@ class Drawer:
         self.Y_INDEX = 1
         self.TITLE_INDEX = 2
         
-    def add(self, x, y, title=""):
+    def add(self, data):
+        x = data["x"]
+        y = data["y"]
+        
+        try:
+            title = data["title"]
+        except KeyError:
+            title = ""
+            
         self.data.append((x, y, title))
     
     def clear(self):
