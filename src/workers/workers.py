@@ -35,46 +35,40 @@ class LinearRegression(Worker):
             A.append(line)
             
         return A
-        
-    def work(self, wg):
-        cache = self.cache()
-        if cache is not None: return cache
-        
+    
+    @Worker.cache    
+    def work(self, datagroup):
         # Build data
-        for series in wg.series:
-            cons = series.data["cons"]
-            lact_days = series.data["lact_days"]
-            lact = [series.id for i in range(len(cons))]
-            
-            B = series.data["prods"]
-            A = self.build_A([cons, lact_days, lact])
+        for dataset in datagroup.datasets:
+            B = dataset.contents["B"]
+            A = self.build_A(dataset.contents["A-data"])
             
             A_alea, B_alea = self.alea.work([A, B])
             
-            series.data["A"] = A
-            series.data["B_alea"] = B_alea
-            series.data["A_alea"] = A_alea
+            dataset.contents["A"] = A
+            dataset.contents["B-alea"] = B_alea
+            dataset.contents["A-alea"] = A_alea
             
             X = self.processor.work(A_alea, B_alea)
-            series.data["X"] = X
+            dataset.contents["X"] = X
             
-            diff = self.processor.compare(A, X, B)
-            series.data["diff"] = diff
+            error = self.processor.compare(A, X, B)
+            dataset.contents["error"] = error
             
-            wg.view.add({
+            self.view.add({
                 "A": A,
                 "B": B,
-                "A_alea": A_alea,
-                "B_alea": B_alea,
+                "A-alea": A_alea,
+                "B-alea": B_alea,
                 "X": X,
-                "diff": diff,
-                "name": series.name
+                "error": error,
+                "name": dataset.name
             })
         
-        wg.view.save(self.dest)    
-        self.serializer.save(wg, self.dest)
+        self.view.save(self.dest)    
+        self.serializer.save(datagroup, self.dest)
         
-        return wg
+        return datagroup
 
 
 class MovingAveraging(XYWorker):

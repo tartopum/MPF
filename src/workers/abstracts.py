@@ -1,50 +1,65 @@
-class Worker:
+import copy
 
-    def __init__(self, dest="", force=False, serializer=None):
-        self.data = None
-        self.dest = dest
-        self.force = force
+
+
+class Worker:
+    """
+        TODO
+    """
+
+    def __init__(self):
+        self.dest = ""
+        self.force = False
         
-        self.serializer = serializer
+        self.serializer = None
+        self.view = None
     
-    def cache(self):
-        if not self.force: 
-            cache = self.serializer.load(self.dest)
+    @classmethod
+    def cache(cls, func):
+        def wrapper(obj, datagroup, *args):
+            if not obj.force: 
+                cache = obj.serializer.load(obj.dest)
+                
+                if cache is not None:
+                    print(obj.dest + " exists.")
+                    
+                    return cache
             
-            if cache is not None:
-                print(self.dest + " exists.")
-                
-                return cache
-                
-        return None
+            # Do not alter args
+            datagroup = copy.deepcopy(datagroup)
+        
+            func(obj, datagroup, *args)
+            
+        return wrapper
         
     def work(self):
         raise RuntimeError("'work' method must be implemented.")
         
         
 class XYWorker(Worker):
+    """
+        TODO
+    """
 
-    def __init__(self, dest="", force=False, serializer=None):
-        Worker.__init__(self, dest, force, serializer)
-        
-    def work(self, wg):
-        cache = self.cache()
-        if cache is not None: return cache
-        
+    def __init__(self):
+        pass
+    
+    @Worker.cache  
+    def work(self, datagroup):
         # Build data
-        for series in wg.series:
-            x = series.data["x"]
-            y = series.data["y"]
+        for dataset in datagroup.datasets:
+            x = dataset.contents["x"]
+            y = dataset.contents["y"]
             
             x, y = self.processor.work(x, y)
             
-            wg.view.add({
+            self.view.add({
                 "x": x, 
                 "y": y, 
-                "name": series.name
+                "name": dataset.name
             })
         
-        wg.view.save(self.dest)
-        self.serializer.save(wg, self.dest)
+        self.view.save(self.dest)
+        self.serializer.save(datagroup, self.dest)
         
-        return wg
+        return datagroup

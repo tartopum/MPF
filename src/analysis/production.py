@@ -1,105 +1,105 @@
 from os.path import join
 
+from analysis.abstracts import XYAnalysis
+from views.linedrawer import LineDrawer
+import workers.workers as workers
 
 
-def by_cons(cow, selector, Drawer, factory, force=False):
-    # Drawer
-    xlabel = "consumption (kg)"
-    ylabel = "production (L)"
-    
-    drawer = Drawer("", xlabel, ylabel, plot_style="bo")
-    
-    # Working group
-    wg = factory.WorkingGroup(cow, drawer)
-    namer = {
-        "prefix": "lactation ",
-        "suffix": "",
-        "getter": selector.lacts
-    }
-    getters = {
-        "x": selector.cons, 
-        "y": selector.prods
-    }
-    wg.fill(namer, getters)
-    
-    # Crude data
-    dest = join("productions", "by-cons", str(cow))
-    
-    title = str(cow) + "\n\n"
-    title += "prod = f(cons)"
-    drawer.title = title
-    
-    wg = factory.Identity(dest, force).work(wg)
-    
 
-def by_day(cow, selector, Drawer, factory, force=False):
-    # Drawer
-    xlabel = "day"
-    ylabel = "production (L)"
-    
-    drawer = Drawer("", xlabel, ylabel)
-    
-    # Working group
-    wg = factory.WorkingGroup(cow, drawer)
-    namer = {
-        "prefix": "lactation ",
-        "suffix": "",
-        "getter": selector.lacts
-    }
-    getters = {
-        "x": selector.lact_days, 
-        "y": selector.prods
-    }
-    wg.fill(namer, getters)
-    
-    # Crude data
-    dest = join("productions", "by-day", str(cow))
-    
-    title = str(cow) + "\n\n"
-    title += "prod = f(day)"
-    drawer.title = title
-    
-    wg = factory.Identity(dest, force).work(wg)
-    
-    # Moving averaging
-    steps = [2]
-    
-    for step in steps:
-        dest = join("productions", "by-day", "moving-averaging", str(cow) + ".step-" + str(step))
+class ByCons(XYAnalysis):
+    """
+        TODO
+    """
+
+    def __init__(self, cow, selector):
+        xgetter = selector.cons
+        ygetter = selector.prods
         
-        title = str(cow) + "\n\n"
-        title += "prod = f(day)" + "\n\n"
-        title += "MA: step = " + str(step)
-        drawer.title = title
+        XYAnalysis.__init__(self, cow, xgetter, ygetter)
         
-        wg = factory.MovingAveraging(step, dest, force).work(wg)
+    def work(self, force=False):
+        # Crude data
+        self.factory.produce(
+            worker = workers.Identity(),
+            dest = join("productions", "by-cons", str(self.datagroup.name)),
+            view = LineDrawer(
+                title = str(self.datagroup.name) + "\n\nprod = f(cons)", 
+                xlabel = "consumption (kg)", 
+                ylabel = "production (L)", 
+                plot_style = "bo"
+            ),
+            force = force
+        ).work(self.datagroup)
+    
+
+class ByDay(XYAnalysis):
+    """
+        TODO
+    """
+
+    def __init__(self, cow, selector):
+        xgetter = selector.lact_days
+        ygetter = selector.prods
+        
+        XYAnalysis.__init__(self, cow, xgetter, ygetter)
+        
+    def work(self, force=False):
+        self.factory.produce(
+            worker = workers.Identity(),
+            dest = join("productions", "by-day", str(self.datagroup.name)),
+            view = LineDrawer(
+                title = str(self.datagroup.name) + "\n\nprod = f(day)", 
+                xlabel = "day", 
+                ylabel = "production (L)"
+            ),
+            force = force
+        ).work(self.datagroup)
         
 
-def difference(cow, selector, Drawer, factory, force=False):    
-    # Drawer
-    xlabel = "day"
-    ylabel = "diff (L)"
-    
-    drawer = Drawer("", xlabel, ylabel)
-    
-    # Working group
-    wg = factory.WorkingGroup(cow, drawer)
-    namer = {
-        "prefix": "lactation ",
-        "suffix": "",
-        "getter": selector.lacts
-    }
-    getters = {
-        "x": selector.lact_days, 
-        "y": selector.prods
-    }
-    wg.fill(namer, getters)
-    
-    # Crude data
-    dest = join("productions", "diff", str(cow))
-    
-    title = str(cow) + "\n\n"
-    title += "y = prod(day + 1) - prod(day)"
-    drawer.title = title
-    
-    wg = factory.Difference(dest, force).work(wg)
+class ByDayMA(ByDay):
+    """
+        TODO
+    """
+
+    def __init__(self, cow, selector):
+        ByDay.__init__(self, cow, selector)
+        
+    def work(self, force=False):
+        steps = [2]
+        
+        for step in steps:
+            self.factory.produce(
+                worker = workers.MovingAveraging(step),
+                dest = join("productions", "by-day", "moving-averaging", str(self.datagroup.name) + ".step-" + str(step)),
+                view = LineDrawer(
+                    title = str(self.datagroup.name) + "\n\nprod = f(day)\n\nMA: step = " + str(step), 
+                    xlabel = "day", 
+                    ylabel = "production (L)"
+                ),
+                force = force
+            ).work(self.datagroup)
+
+
+class Difference(XYAnalysis):  
+    """
+        TODO
+    """
+
+    def __init__(self, cow, selector):
+        xgetter = selector.lact_days
+        ygetter = selector.prods
+        
+        XYAnalysis.__init__(self, cow, xgetter, ygetter)
+        
+    def work(self, force=False):
+        # Crude data
+        self.factory.produce(
+            worker = workers.Difference(),
+            dest = join("productions", "diff", str(self.datagroup.name)),
+            view = LineDrawer(
+                title = str(self.datagroup.name) + "\n\ny = prod(day + 1) - prod(day)", 
+                xlabel = "day", 
+                ylabel = "difference (L)"
+            ),
+            force = force
+        ).work(self.datagroup)

@@ -1,6 +1,6 @@
 from random import randint
 import numpy as np
-import statistics
+# import statistics
 
 
 
@@ -175,6 +175,7 @@ class MovingAverage:
 #
 # Statistics
 #
+"""
 class Statistics:
 
     mean = statistics.mean
@@ -203,7 +204,7 @@ class Statistics:
                 res[name] = None
             
         return res
-        
+"""       
 
 if __name__ == "__main__":
     alea = AleaValues(100)
