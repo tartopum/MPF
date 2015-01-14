@@ -17,6 +17,6 @@ class JSONWriter:
         dest += ".json"
         
         with open(dest, "w") as f:
-            json.dump(self.data, f, indent = 4)
+            json.dump(self.data, f, indent=4, sort_keys=True)
             
         print(dest + " saved.")
