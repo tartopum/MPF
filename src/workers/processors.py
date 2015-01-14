@@ -1,6 +1,7 @@
 from random import randint
 import numpy as np
-# import statistics
+from scipy.optimize import leastsq
+import statistics
 
 
 
@@ -87,7 +88,7 @@ class Identity:
         return x, y        
 
 #
-# Linear regression
+# Alea values
 #
 class AleaValues:
 
@@ -122,27 +123,37 @@ class AleaValues:
         data = self.data_from_indexes(data, indexes)
         
         return data
-    
+        
+
+#
+# Linear regression
+#  
 class LinearRegression:
     # http://adventuresinoptimization.blogspot.fr/2011/02/data-fitting-part-2-very-very-simple.html
     
     def __init__(self):
         pass
     
-    def compare(self, A, X, B):
-        # ||B - AX||
+    def compare(self, X, A, B):
         B = np.array(B)
         A = np.vstack(A)
         X = np.array(X)
         
-        return np.linalg.norm(B - A.dot(X)).tolist()
+        return B - A.dot(X)
+    
+    def error(self, X, A, B):
+        # ||A||
+        return np.linalg.norm(self.compare(X, A, B))
     
     def work(self, A, B):
         # B = AX
         B = np.array(B)
         A = np.vstack(A)
         
-        return np.linalg.lstsq(A, B)[0].tolist() # X
+        X0 = np.zeros(A.shape[1])
+        args = (A, B)
+        
+        return leastsq(self.compare, X0, args)[0] # X
     
 #
 # Moving average
@@ -175,7 +186,6 @@ class MovingAverage:
 #
 # Statistics
 #
-"""
 class Statistics:
 
     mean = statistics.mean
@@ -204,18 +214,18 @@ class Statistics:
                 res[name] = None
             
         return res
-"""       
+    
 
 if __name__ == "__main__":
     alea = AleaValues(100)
     
     A = [
-        [1, 9, 9**2, 4, 4**2, 9, 9**2],
-        [1, 8, 8**2, 6, 6**2, 4, 4**2],
-        [1, 9, 9**2, 4, 4**2, 8, 8**2],
-        [1, 3, 3**2, 7, 7**2, 9, 9**2],
-        [1, 6, 6**2, 8, 8**2, 5, 5**2],
-        [1, 4, 4**2, 5, 5**2, 3, 3**2]
+        [1, 9, 9**2, 4, 4**2],
+        [1, 8, 8**2, 6, 6**2],
+        [1, 9, 9**2, 4, 4**2],
+        [1, 3, 3**2, 7, 7**2],
+        [1, 6, 6**2, 8, 8**2],
+        [1, 4, 4**2, 5, 5**2]
     ]
     B = [9, 10, 2, 4, 2, 10]
     
@@ -224,9 +234,7 @@ if __name__ == "__main__":
     linear_reg = LinearRegression()
     
     X = linear_reg.work(A_alea, B_alea)
+    
     print(X)
     print("")
-    
-    diff = linear_reg.compare(A, X, B)
-    print(diff)
      

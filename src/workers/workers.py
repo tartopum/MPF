@@ -52,7 +52,7 @@ class LinearRegression(Worker):
             X = self.processor.work(A_alea, B_alea)
             dataset.contents["X"] = X
             
-            error = self.processor.compare(A, X, B)
+            error = self.processor.error(X, A, B)
             dataset.contents["error"] = error
             
             self.view.add({
@@ -60,7 +60,7 @@ class LinearRegression(Worker):
                 "B": B,
                 "A-alea": A_alea,
                 "B-alea": B_alea,
-                "X": X,
+                "X": X.tolist(),
                 "error": error,
                 "name": dataset.name
             })
