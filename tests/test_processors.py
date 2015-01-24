@@ -3,6 +3,7 @@ from mpf.processors import Difference
 from mpf.processors import ImFourierTransform, ReFourierTransform
 from mpf.processors import LinearRegression
 from mpf.processors import MovingAveraging
+from mpf.processors import Statistics
 
 
 
@@ -59,4 +60,24 @@ def test_linreg():
     X = linreg.work(A=A, B=B)
     error = linreg.error(X=X, A=A, B=B)
     
+    
+# Statistics
+def test_stats():
+    functions = {
+        "mean": Statistics.mean,
+        "median": Statistics.median,
+        "mode": Statistics.mode,
+        "variance": Statistics.variance
+    }
+    
+    stats = Statistics(functions=functions)
+    
+    data = [1, 2, 3, 4, 4]
+    
+    assert stats.work(data=data) == {
+                                        "mean": 2.8,
+                                        "median": 3,
+                                        "mode": 4,
+                                        "variance": 1.7
+                                    }
     
