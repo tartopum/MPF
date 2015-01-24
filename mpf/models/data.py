@@ -15,30 +15,6 @@ class DataDict(dict):
         and the parameters for the callable
         
         :type getters: list
-        
-        :Example:
-        
-        .. code-block:: python
-        
-            def callable(a, b):
-                return [a, b]
-                
-            data = DataDict()
-            
-            # data is {}
-            
-            a = "a"
-            b = "b"
-            
-            getters = [{
-                "key": "key",
-                "callable": callable,
-                "params": (a, b)
-            }]
-            
-            data.get(getters)
-            
-            # data is {"key": ["a", "b"]}
         """
         
         for getter in getters:
