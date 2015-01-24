@@ -1,6 +1,7 @@
 from mpf.processors import AleaValues
 from mpf.processors import Difference 
 from mpf.processors import ImFourierTransform, ReFourierTransform
+from mpf.processors import LinearRegression
 from mpf.processors import MovingAveraging
 
 
@@ -38,3 +39,24 @@ def test_ma():
     
     assert ma.work(x=x, y=y) == ([2, 3, 4, 5], [(10+15+8)/d, (15+8+3)/d, 
                                                (8+3+14)/d, (3+14+7)/d])
+                                               
+                                               
+# LinearRegression
+def test_linreg():
+    linreg = LinearRegression()
+    
+    A = [
+        [1, 9, 9**2, 4, 4**2],
+        [1, 8, 8**2, 6, 6**2],
+        [1, 9, 9**2, 4, 4**2],
+        [1, 3, 3**2, 7, 7**2],
+        [1, 6, 6**2, 8, 8**2],
+        [1, 4, 4**2, 5, 5**2]
+    ]
+    
+    B = [9, 10, 2, 4, 2, 10]
+    
+    X = linreg.work(A=A, B=B)
+    error = linreg.error(X=X, A=A, B=B)
+    
+    
