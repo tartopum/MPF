@@ -4,7 +4,7 @@ import sqlite3
 
 sys.path.append(realpath(join(dirname(__file__), "..")))
 
-from models.sql import ORM
+from mpf.models.sql import ORM
 from config import DATABASE_PATH
 
 
