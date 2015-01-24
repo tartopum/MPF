@@ -1,6 +1,7 @@
 from mpf.processors import AleaValues
 from mpf.processors import Difference 
 from mpf.processors import ImFourierTransform, ReFourierTransform
+from mpf.processors import MovingAveraging
 
 
 
@@ -23,3 +24,17 @@ def test_alea_values():
     data = [[1, 2, 3]]
     
     a.work(data=data)
+    
+    
+# MovingAveraging
+def test_ma():
+    step = 1
+    d = 2*step + 1
+    
+    ma = MovingAveraging(step=step)
+    
+    x = [1, 2, 3, 4, 5, 6]
+    y = [10, 15, 8, 3, 14, 7]
+    
+    assert ma.work(x=x, y=y) == ([2, 3, 4, 5], [(10+15+8)/d, (15+8+3)/d, 
+                                               (8+3+14)/d, (3+14+7)/d])
