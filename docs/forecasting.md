@@ -1,8 +1,6 @@
-# Introduction
+# Les méthodes de prévision
 
-## Les analyses
-
-KESAKO ?
+## De la prévision en général 
 
 Suite à quelques recherches, deux pistes principales se dégagent :
 
@@ -31,6 +29,15 @@ les courbes - avec une moyenne mobile notamment - semble être judicieux.
 * [Méthodes de prévision](http://drupal.mgi.polymtl.ca/?q=book/export/html/19)
 * [Notions de base](http://unt-ori2.crihan.fr/unspf/2010_Limoges_Vignoles_StatsDescriptives/co/03-4-4%20interpolation-extrapolation.html)
 
-## Le code
+## Régression linéaire
 
+### Sources
 
+* [Présentation](http://fr.wikipedia.org/wiki/R%C3%A9gression_%28statistiques%29)
+
+## Modèle ARMA
+
+### Sources
+
+* [Présentation](http://fr.wikipedia.org/wiki/ARMA)
+* [Séries temporelles](http://www.itl.nist.gov/div898/handbook/pmc/section4/pmc4.htm)
