@@ -1,0 +1,6 @@
+include *.md
+
+recursive-include mpf *.py
+
+recursive-exclude test *
+recursive-exclude utils *

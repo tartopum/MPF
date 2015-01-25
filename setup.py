@@ -20,13 +20,7 @@ class Tox(TestCommand):
  
 
 
-packages = [
-    "mpf",
-    "mpf.models",
-    "mpf.processors",
-    "mpf.views",
-    "mpf.workers"
-]
+packages = ["mpf"]
 
 classifiers = [
     "Programming Language :: Python"
@@ -41,6 +35,7 @@ setup(
     long_description="",
     license="MIT",
     classifiers=classifiers,
+    include_package_data=True,
     tests_require=['tox'],
     cmdclass = {'test': Tox}
 )
