@@ -19,3 +19,6 @@ lib
 lib64
 __pycache__
 MANIFEST
+
+# Test
+.tox
