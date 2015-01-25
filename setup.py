@@ -25,8 +25,7 @@ packages = [
     "mpf.models",
     "mpf.processors",
     "mpf.views",
-    "mpf.workers",
-    "utils"
+    "mpf.workers"
 ]
 
 classifiers = [
