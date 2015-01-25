@@ -1,17 +1,30 @@
 import matplotlib.pyplot as plt
 
-from views.drawer import Drawer
+from mpf.views.drawer import Drawer
+
+
+
+__all__ = ["LineDrawer"]
 
 
 
 class LineDrawer(Drawer):
+    """TODO"""
 
     def __init__(self, title="", xlabel="x", ylabel="y", plot_style=""):
+        """
+        TODO
+        """
+        
         Drawer.__init__(self, title, xlabel, ylabel)
         
         self.plot_style = plot_style
         
     def draw(self):
+        """
+        TODO
+        """
+        
         l = len(self.data)
         
         fig = plt.figure(figsize=(4, 2.5*(l+1)))
@@ -33,14 +46,3 @@ class LineDrawer(Drawer):
             plt.title(title, fontstyle="italic")
         
         fig.tight_layout() # To space subplots
-        
-if __name__ == "__main__":
-    x = [list(range(5)), list(range(2)), list(range(5)), list(range(5)), list(range(5)), list(range(5))]
-    y = [list(range(5)), list(range(1, 4, 2)), list(range(3, 8)), list(range(3, 8)), list(range(3, 8)), list(range(3, 8))]
-    
-    drawer = LineDrawer("TITLE\nTITLE\nTITLE")
-    
-    for i in range(len(x)):
-        drawer.add(x[i], y[i], "Plot {}".format(i))
-        
-    drawer.save("./test")

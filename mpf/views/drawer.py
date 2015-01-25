@@ -1,10 +1,23 @@
 import matplotlib.pyplot as plt
 
+from mpf.views.abstracts import View
 
 
-class Drawer:
+
+__all__ = ["Drawer"]
+
+
+
+class Drawer(View):
+    """TODO"""
 
     def __init__(self, title="", xlabel="x", ylabel="y"):
+        """
+        TODO
+        """
+        
+        self.ext = ".png"
+        
         self.title = title
         self.xlabel = xlabel
         self.ylabel = ylabel
@@ -16,6 +29,10 @@ class Drawer:
         self.TITLE_INDEX = 2
         
     def add(self, data):
+        """
+        TODO
+        """
+        
         x = data["x"]
         y = data["y"]
         
@@ -27,6 +44,10 @@ class Drawer:
         self.data.append((x, y, title))
     
     def clear(self):
+        """
+        TODO
+        """
+        
         plt.close()
         
         self.data = []
@@ -35,7 +56,11 @@ class Drawer:
         raise RuntimeError("'draw' method must be implemented.")
     
     def save(self, dest):
-        dest += ".png"
+        """
+        TODO
+        """
+        
+        dest = self._add_ext(dest)
         
         plt.clf()
         
@@ -46,6 +71,10 @@ class Drawer:
         self.clear()
         
     def show(self):
+        """
+        TODO
+        """
+        
         plt.clf()
         
         self.draw()
