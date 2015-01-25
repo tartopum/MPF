@@ -1,5 +1,7 @@
 import pickle
 
+from mpf.tools import add_ext
+
 
 
 __all__ = ["Serializer"]
@@ -9,31 +11,19 @@ __all__ = ["Serializer"]
 class Serializer:
     """TODO"""
     
-    def __init__(self, ext=".data"):
+    def __init__(self, ext=""):
         """
         TODO
         """
         
         self.set_ext(ext)
     
-    def _add_ext(self, path):
-        """
-        TODO
-        """
-        
-        try:
-            assert src[len(path)-len(self.ext):] == self.ext
-        except AssertionError:
-            path += self.ext
-        
-        return path
-    
     def load(self, src):
         """
         TODO
         """
         
-        src = self._add_ext(src)
+        src = add_ext(src, self.ext)
             
         try:    
             f = open(src, "rb")
@@ -50,7 +40,7 @@ class Serializer:
         TODO
         """
         
-        dest = self._add_ext(dest)
+        dest = add_ext(dest)
         
         with open(dest, "wb") as f:
             pickle.dump(data, f)
@@ -58,9 +48,16 @@ class Serializer:
         print(dest + " saved.")
         
     def set_ext(self, ext):
-        try:
-            assert str(ext)[0] == "."
-        except AssertionError:
-            self.ext = "." + str(ext)
+        """
+        TODO
+        """
+        
+        if ext == "":
+            self.ext = ext
         else:
-            self.ext = str(ext)
+            try:
+                assert str(ext)[0] == "."
+            except AssertionError:
+                self.ext = "." + str(ext)
+            else:
+                self.ext = str(ext)
