@@ -36,7 +36,9 @@ linéaire.
 On représentera les analyses par un graphe orienté et acyclique. On obtient 
 cela :
 
-TODO
+<p align="center">
+    <img src="img/detailed-analysis.png" alt="Analyse détaillée" />
+</p>
 
 On se rend alors compte que la structure des données à la fin d'une analyse 
 doit être compréhensible pour l'analyse suivante. En pratique cela n'a pas 
