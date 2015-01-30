@@ -1,6 +1,4 @@
-matplotlib==1.4.2
 nose==1.3.4
-numpy==1.9.1
 ordered-set==1.3
 py==1.4.26
 PyLaTeX==0.6.1
