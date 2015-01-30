@@ -1,5 +1,4 @@
 matplotlib==1.4.2
--e git+https://github.com/Vayel/MPF@c7e2e1380df92194a4384f3e6b52534c8512e88d#egg=mpf-master
 nose==1.3.4
 numpy==1.9.1
 ordered-set==1.3
