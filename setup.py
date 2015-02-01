@@ -1,3 +1,4 @@
+import os
 import sys
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
@@ -18,7 +19,14 @@ class Tox(TestCommand):
         errcode = tox.cmdline(self.test_args)
         sys.exit(errcode)
  
+def strip_comments(l):
+    return l.split('#', 1)[0].strip()
 
+def reqs(*f):
+    return list(filter(None, [strip_comments(l) for l in open(os.path.join(os.getcwd(), *f)).readlines()]))
+
+
+install_requires = reqs("requirements.txt")
 
 packages = ["mpf"]
 
@@ -35,6 +43,7 @@ setup(
     long_description="",
     license="MIT",
     classifiers=classifiers,
+    install_requires=install_requires,
     include_package_data=True,
     tests_require=['tox'],
     cmdclass = {'test': Tox}
