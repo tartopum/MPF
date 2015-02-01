@@ -44,7 +44,5 @@ setup(
     license="MIT",
     classifiers=classifiers,
     install_requires=install_requires,
-    include_package_data=True,
-    tests_require=['tox'],
-    cmdclass = {'test': Tox}
+    include_package_data=True
 )
