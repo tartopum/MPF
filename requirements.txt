@@ -1,2 +1,1 @@
-matplotlib==1.4.2
 PyLaTeX==0.6.1
