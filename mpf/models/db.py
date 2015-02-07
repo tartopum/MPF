@@ -1,4 +1,4 @@
-from .sql import ORM
+from mpf.models.sql import ORM
 
 
 
@@ -19,12 +19,31 @@ class DBSelector:
         
         return self.orm.execute(q, params)
     
+    def cow(self, cow):
+        """
+        TODO
+        """
+        
+        q = "SELECT * FROM CrudeData WHERE cow = ?" 
+        data = self.query(q, (int(cow),))
+    
+        d = {}
+        
+        for lact in self.lacts(cow):
+            d[lact] = {
+                "days": self.days(cow, lact),
+                "prods": self.prods(cow, lact),
+                "cons": self.cons(cow, lact)
+            }
+            
+        return d
+    
     def cons(self, cow, lact):
         """
         TODO
         """
         
-        q = "SELECT cons FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY lact_day" 
+        q = "SELECT cons FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY day" 
         data = self.query(q, (int(cow), lact))
         
         return [line[0] for line in data]
@@ -39,12 +58,12 @@ class DBSelector:
         
         return [line[0] for line in data]
     
-    def lact_days(self, cow, lact):
+    def days(self, cow, lact):
         """
         TODO
         """
         
-        q = "SELECT lact_day FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY lact_day" 
+        q = "SELECT day FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY day" 
         data = self.query(q, (int(cow), lact))
         
         return [line[0] for line in data]
@@ -64,7 +83,7 @@ class DBSelector:
         TODO
         """
         
-        q = "SELECT prod FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY lact_day" 
+        q = "SELECT prod FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY day" 
         data = self.query(q, (int(cow), lact))
         
         return [line[0] for line in data]

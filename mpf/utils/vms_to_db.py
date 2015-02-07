@@ -2,10 +2,8 @@ import sys
 from os.path import dirname, join, realpath
 import sqlite3
 
-sys.path.append(realpath(join(dirname(__file__), "..")))
-
 from mpf.models.sql import ORM
-from config import DATABASE_PATH
+from mpf.config import DATABASE_PATH
 
 
 
@@ -21,17 +19,18 @@ def check(line):
         prod = float(line[1])
         cons = float(line[2])
         lac = int(line[5])
-        lac_day = int(line[4])
+        day = int(line[4])
     except:
         return None
     else:
-        return (cow, date, prod, cons, lac, lac_day)
+        return (cow, date, prod, cons, lac, day)
 
-def main():
+def main(path):
     query = ORM(DATABASE_PATH)
     q = "INSERT INTO CrudeData VALUES (?, ?, ?, ?, ?, ?)"
     
-    lines = sys.stdin.read().split("\n")
+    with open(path, "r") as f:
+        lines = f.readlines()
     
     for line in lines:
         data = sanitize(line).split("\t")
@@ -46,4 +45,4 @@ def main():
                 print(data)
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1])

@@ -3,9 +3,7 @@ from os import remove
 from os.path import dirname, join, isfile, realpath
 import subprocess
 
-sys.path.append(realpath(join(dirname(__file__), "..")))
-
-from config import DATABASE_PATH, SQL_PATH
+from mpf.config import DATABASE_PATH, SQL_PATH
 
 
 
