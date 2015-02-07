@@ -3,48 +3,43 @@ import copy
 
 
 class Worker:
-    """
-        TODO
-    """
+    """An abstract worker."""
 
     def __init__(self):
-        self.dest = ""
         self.force = False
-        
         self.serializer = None
         self.view = None
+        self.getter = None
     
     @classmethod
-    def cache(cls, func):
+    def work(cls, worker):
         def wrapper(obj, datagroup, *args):
             if not obj.force: 
-                cache = obj.serializer.load(obj.dest)
+                cache = obj.serializer.load()
                 
                 if cache is not None:
-                    print(obj.dest + " exists.")
-                    
                     return cache
             
             # Do not alter args
             datagroup = copy.deepcopy(datagroup)
-        
-            return func(obj, datagroup, *args)
+            datagroup = worker(obj, datagroup, *args)
+            
+            # Save
+            obj.view.save()    
+            obj.serializer.save(datagroup)
+            
+            return datagroup
             
         return wrapper
         
-    def work(self):
-        raise RuntimeError("'work' method must be implemented.")
-        
         
 class XYWorker(Worker):
-    """
-        TODO
-    """
+    """A worker working with data as x and y."""
 
     def __init__(self):
         pass
     
-    @Worker.cache  
+    @Worker.work  
     def work(self, datagroup):
         # Build data
         for dataset in datagroup.datasets:
@@ -58,8 +53,5 @@ class XYWorker(Worker):
                 "y": y, 
                 "name": dataset.name
             })
-        
-        self.view.save(self.dest)
-        self.serializer.save(datagroup, self.dest)
         
         return datagroup

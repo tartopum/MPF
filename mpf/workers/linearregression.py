@@ -1,18 +1,6 @@
-from workers.abstracts import Worker, XYWorker
-import workers.processors as processors
+from mpf.workers.abstracts import Worker
+import mpf.processors as processors
 
-
-
-class Difference(XYWorker):
-
-    def __init__(self):
-        self.processor = processors.Difference()
-
-
-class Identity(XYWorker):
-
-    def __init__(self):
-        self.processor = processors.Identity()
 
 
 class LinearRegression(Worker):
@@ -65,39 +53,4 @@ class LinearRegression(Worker):
                 "name": dataset.name
             })
         
-        self.view.save(self.dest)    
-        self.serializer.save(datagroup, self.dest)
-        
         return datagroup
-
-
-class MovingAveraging(XYWorker):
-
-    def __init__(self, step):
-        self.step = max(1, int(step)) # 'step' is an integer greater than 1
-        
-        self.processor = processors.MovingAverage(self.step)       
-    
-    
-class Statistics(Worker):
-
-    def __init__(self, key):
-        self.key = key
-        
-        self.processor = processors.Statistics()
-    
-    @Worker.cache
-    def work(self, datagroup):
-        # Build data
-        data = [dataset.contents[self.key] for dataset in datagroup.datasets]
-        measures = self.processor.work(data)
-        datagroup.metadata.update(measures)
-        
-        measures["name"] = str(datagroup.name)
-        self.view.add(measures)
-        
-        self.view.save(self.dest)    
-        self.serializer.save(datagroup, self.dest)
-        
-        return datagroup
-         
