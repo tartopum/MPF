@@ -41,7 +41,6 @@ Une vue devra être générée pour chaque résultat, sous quelque forme que ce 
 (graphe, texte...), afin qu'il soit simple de faire des déductions. De plus, 
 comme calculer prend du temps, un système de cache devra être mis en place.
 
-
 ## Structure des données
 
 Les données sont cumulatives. Autrement dit, au fur et à mesure des analyses, 
@@ -153,6 +152,102 @@ changée au cours du temps. Par exemple :
 
 Les données d'origine seront récupérées en interrogeant une base de données, 
 avec de simples requêtes SQL.
+
+### Un exemple
+
+<p align="center">
+    <img src="img/analysis-graph-example.png" alt="Exemple de graphe d'analyses" />
+</p>
+
+1. **Vache X, lact Y :** productions journalières pendant la lactation Y de la 
+vache X.
+2. **1. Vache 1, lact 1, identité :** uniquement pour bénéficier des effets de bord 
+tels que la vue et le cache.
+3. **Vache 1, lact 1, moyenne mobile :** on applique une moyenne mobile aux 
+données.
+4. **Vache 1, lact 1, régression linéaire :** on effectue une régression 
+linéaire des données. On ajoute alors à ces dernières l'erreur obtenue ainsi 
+que les matrices A et X (B = AX, B étant les productions).
+5. **Vache 1, lact 2, identité :** comme 2.
+6. **Vache 1, lact 2, régression linéaire :** comme 4.
+7. **Vache 2, lact 1, identité :** comme 2.
+8. **Vache 2, lact 1, régression linéaire :** comme 4.
+9. **Vache 1, fusion :** on fusionne les données reçues des régressions afin de 
+mener des mesures statistiques dessus.
+10. **Vache 1, statistiques :** on calcule la moyenne des erreurs obtenues lors 
+des régressions.
+11. **Vaches 1 et 2, fusion :** comme 9.
+12. **Vaches 1 et 2, statistiques :** comme 10.
+
+L'idéal serait d'en déduire un code comme ça (cf : [facteur]
+(https://github.com/Vayel/Facteur)), en ce qui concerne la vache 1 :
+
+```python
+# Create nodes
+id_node_lact1 = Node(
+    worker = identity, 
+    collector = ["origin"], 
+    key_out = "identity_1"
+)
+
+id_node_lact2 = Node(
+    worker = identity, 
+    collector = ["origin"], 
+    key_out = "identity_2"
+)
+
+ma_node_lact1 = Node(
+    worker = moving_averaging, 
+    collector = ["origin"], 
+    key_out = "ma_1"
+)
+
+linreg_node_lact1 = Node(
+    worker = linear_regression, 
+    collector = ["identity_1"], 
+    key_out = "linreg_1"
+)
+
+linreg_node_lact2 = Node(
+    worker = linear_regression, 
+    collector = ["identity_2"], 
+    key_out = "linreg_2"
+)
+
+stats_node = Node(
+    worker = statistics, 
+    collector = ["linreg_1", "linreg_2"], 
+    key_out = "stats"
+)
+
+# Connect nodes
+id_node_lact1 >> linreg_node_lact1 >> stats_node
+id_node_lact2 >> linreg_node_lact2 >> stats_node
+
+# Launch
+original_data = {
+    "cow": "0001",
+    "lact-1": {
+        "lact": 1,
+        "days": [1, 2, 3, ..., 350],
+        "prods": [30, 25, 40, ..., 33],
+        "cons": [11, 9, ...]
+    },
+    "lact-2": {
+        "lact": 2,
+        "days": [1, 2, 3, ..., 343],
+        "prods": [14, 21, 37, ..., 25],
+        "cons": [12, 8, 9]
+    }
+}
+
+id_node.collect({"origin": original_data})
+
+ma_node.collect({"origin": original_data})
+```
+
+Même s'il faut améliorer le fait de devoir créer deux fois le même noeud (par 
+exemple, `id_node_lact1` et `id_node_lact2`).
 
 ## Structure des analyses
 
