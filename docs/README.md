@@ -161,23 +161,31 @@ avec de simples requêtes SQL.
 
 1. **Vache X, lact Y :** productions journalières pendant la lactation Y de la 
 vache X.
-2. **1. Vache 1, lact 1, identité :** uniquement pour bénéficier des effets de bord 
-tels que la vue et le cache.
+2. **1. Vache 1, lact 1, identité :** uniquement pour bénéficier des effets de 
+bord tels que la vue et le cache.
 3. **Vache 1, lact 1, moyenne mobile :** on applique une moyenne mobile aux 
 données.
 4. **Vache 1, lact 1, régression linéaire :** on effectue une régression 
-linéaire des données. On ajoute alors à ces dernières l'erreur obtenue ainsi 
-que les matrices A et X (B = AX, B étant les productions).
+linéaire des données associées à la lactation 1 de la vache 1. On ajoute alors 
+à ces dernières l'erreur obtenue ainsi que les matrices A et X (B = AX, B étant 
+les productions).
 5. **Vache 1, lact 2, identité :** comme 2.
-6. **Vache 1, lact 2, régression linéaire :** comme 4.
+6. **Vache 1, lact 2, régression linéaire :** on effectue une régression 
+linéaire des données associées à la lactation 2 de la vache 1. On ajoute alors 
+à ces dernières l'erreur obtenue ainsi que les matrices A et X (B = AX, B étant 
+les productions).
 7. **Vache 2, lact 1, identité :** comme 2.
-8. **Vache 2, lact 1, régression linéaire :** comme 4.
+8. **Vache 2, lact 1, régression linéaire :** on effectue une régression 
+linéaire des données associées à la lactation 1 de la vache 2. On ajoute alors 
+à ces dernières l'erreur obtenue ainsi que les matrices A et X (B = AX, B étant 
+les productions).
 9. **Vache 1, fusion :** on fusionne les données reçues des régressions afin de 
 mener des mesures statistiques dessus.
 10. **Vache 1, statistiques :** on calcule la moyenne des erreurs obtenues lors 
-des régressions.
+des régressions pour toutes les lactations de la vache 1.
 11. **Vaches 1 et 2, fusion :** comme 9.
-12. **Vaches 1 et 2, statistiques :** comme 10.
+12. **Vaches 1 et 2, statistiques :** comme 10, mais pour toutes les lactations 
+de toutes les vaches.
 
 L'idéal serait d'en déduire un code comme ça (cf : [facteur]
 (https://github.com/Vayel/Facteur)), en ce qui concerne la vache 1 :
@@ -224,7 +232,7 @@ stats_node = Node(
 id_node_lact1 >> linreg_node_lact1 >> stats_node
 id_node_lact2 >> linreg_node_lact2 >> stats_node
 
-# Launch
+# Collect data
 original_data = {
     "cow": "0001",
     "lact-1": {
@@ -242,7 +250,6 @@ original_data = {
 }
 
 id_node.collect({"origin": original_data})
-
 ma_node.collect({"origin": original_data})
 ```
 
