@@ -1,9 +1,5 @@
-from os.path import join
-
-import mpf.processors as processors
+from mpf import processors
 from mpf.analysis.production import LinearRegression
-
-from config import DATA_PATH
 
 
 
@@ -17,9 +13,9 @@ class LinRegErrors:
         
         for proportion in LinearRegression.proportions:
             key = ("linreg", "error", proportion)
-            data = [lact.data[key] for lact in self.cow.get_lacts()]
+            errors = [lact.data[key] for lact in self.cow.get_lacts()]
             
-            measures = stats.work(data)
+            measures = stats.work(errors)
             
             for k, v in measures.items():
-                self.cow.add_key(("linreg", "error", proportion, k), v)
+                self.cow.add_key(("linreg", "errors", proportion, k), v)

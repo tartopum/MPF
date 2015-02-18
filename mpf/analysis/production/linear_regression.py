@@ -1,8 +1,4 @@
-from os.path import join
-
-import mpf.processors as processors
-
-from config import DATA_PATH
+from mpf import processors
 
 
 
@@ -15,10 +11,22 @@ class LinearRegression:
     
     @staticmethod
     def format_A(data):
-        A = []
-        l = len(data[0])
+        """
+        data = [
+            [day1, day2, day3],
+            [cons1, cons2, cons3]
+        ]
         
-        for i in range(l):
+        A = [
+            [1, day1, day1**2, cons1, cons1**2],
+            [1, day2, day2**2, cons2, cons2**2],
+            [1, day3, day3**2, cons3, cons3**2]
+        ]
+        """
+        
+        A = []
+        
+        for i in range(len(data[0])):
             line = [1] # Offset
             
             for series in data:
@@ -28,19 +36,11 @@ class LinearRegression:
             A.append(line)
             
         return A
-    
-    def get_dest(self, proportion):
-        dest = join(DATA_PATH, "production", "linear-regression")
-        dest = join(dest, str(self.cow) + "." + str(proportion))
-        
-        return dest
         
     def work(self):
         linreg = processors.LinearRegression()
         
         for proportion in LinearRegression.proportions:
-            dest = self.get_dest(proportion)
-            
             aleavals = processors.AleaValues(proportion)
             
             for lact in self.cow.get_lacts():
