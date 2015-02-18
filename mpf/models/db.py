@@ -1,4 +1,5 @@
 from mpf.models.sql import ORM
+from mpf.models.data import Cow, Data, Lact
 
 
 
@@ -19,25 +20,6 @@ class DBSelector:
         
         return self.orm.execute(q, params)
     
-    def cow(self, cow):
-        """
-        TODO
-        """
-        
-        q = "SELECT * FROM CrudeData WHERE cow = ?" 
-        data = self.query(q, (int(cow),))
-    
-        d = {}
-        
-        for lact in self.lacts(cow):
-            d[lact] = {
-                "days": self.days(cow, lact),
-                "prods": self.prods(cow, lact),
-                "cons": self.cons(cow, lact)
-            }
-            
-        return d
-    
     def cons(self, cow, lact):
         """
         TODO
@@ -47,6 +29,17 @@ class DBSelector:
         data = self.query(q, (int(cow), lact))
         
         return [line[0] for line in data]
+    
+    def cow(self, cow_num):
+        q = "SELECT * FROM CrudeData WHERE cow = ?" 
+        data = self.query(q, (int(cow_num),))
+    
+        cow = Cow(cow_num)
+        
+        for lact_num in self.lacts(cow_num):
+            cow.add_lact(lact_num, self.lact(cow_num, lact_num))
+            
+        return cow
         
     def cows(self):
         """
@@ -58,6 +51,14 @@ class DBSelector:
         
         return [line[0] for line in data]
     
+    def data(self):
+        data = Data()
+        
+        for num in self.cows():
+            data.add_cow(num, self.cow(num))
+        
+        return data
+    
     def days(self, cow, lact):
         """
         TODO
@@ -67,6 +68,10 @@ class DBSelector:
         data = self.query(q, (int(cow), lact))
         
         return [line[0] for line in data]
+    
+    def lact(self, cow_num, lact_num):
+        return Lact(lact_num, self.days(cow_num, lact_num), 
+                    self.prods(cow_num, lact_num), self.cons(cow_num, lact_num))
         
     def lacts(self, cow):
         """

@@ -25,8 +25,10 @@ class LinearRegression:
         TODO
         """
         
-        # ||A||
-        return np.linalg.norm(self._compare(X, A, B))
+        try:
+            return np.linalg.norm(self._compare(X, A, B)) # ||A||
+        except ValueError:
+            return -1
     
     def work(self, A, B):
         """
@@ -40,4 +42,7 @@ class LinearRegression:
         X0 = np.zeros(A.shape[1])
         args = (A, B)
         
-        return leastsq(self._compare, X0, args)[0] # X
+        try:
+            return leastsq(self._compare, X0, args)[0] # X
+        except TypeError:
+            return []
