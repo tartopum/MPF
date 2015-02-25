@@ -9,12 +9,16 @@ from mpf.config import DATABASE_PATH
 def main():
     data = DBSelector(DATABASE_PATH).data()
     
+    ma = production.MovingAveraging()
+    linreg = production.LinearRegression()
+    linreg_errors = production.LinRegErrors()
+    
     for cow in data.get_cows():
-        production.MovingAveraging(cow).work()
+        ma.work(cow)
         
-        production.LinearRegression(cow).work()
+        linreg.work(cow)
         
-        production.LinRegErrors(cow).work()
+        linreg_errors.work(cow)
         
         # Views
         

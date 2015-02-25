@@ -1,13 +1,12 @@
 from mpf import processors
 
+__all__ = ("LinearRegression")
+
 
 
 class LinearRegression:
     
     proportions = [80]
-    
-    def __init__(self, cow):
-        self.cow = cow
     
     @staticmethod
     def format_A(data):
@@ -37,13 +36,13 @@ class LinearRegression:
             
         return A
         
-    def work(self):
+    def work(self, cow):
         linreg = processors.LinearRegression()
         
         for proportion in LinearRegression.proportions:
             aleavals = processors.AleaValues(proportion)
             
-            for lact in self.cow.get_lacts():
+            for lact in cow.get_lacts():
                 B = lact.prods
                 A = LinearRegression.format_A([
                     lact.days,
