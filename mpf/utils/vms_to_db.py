@@ -27,7 +27,7 @@ def check(line):
 
 def main(path):
     query = ORM(DATABASE_PATH)
-    q = "INSERT INTO CrudeData VALUES (?, ?, ?, ?, ?, ?)"
+    q = "INSERT INTO CrudeData VALUES (NULL, ?, ?, ?, ?, ?, ?)"
     
     with open(path, "r") as f:
         lines = f.readlines()

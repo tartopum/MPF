@@ -5,6 +5,5 @@ ROOT = normpath(join(realpath(__file__), "../.."))
 
 DATA_PATH = join(ROOT, "data")
 
-DATABASE_PATH = join(DATA_PATH, "database", "mpf.db")
-
-SQL_PATH = join(DATA_PATH, "database", "sql")
+DATABASE_DIR = join(DATA_PATH, "db")
+DATABASE_PATH = join(DATABASE_DIR, "mpf.db")

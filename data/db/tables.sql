@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS CrudeData(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cow INTEGER NOT NULL,
+    date DATE NOT NULL,
+    prod REAL NOT NULL, -- L
+    cons REAL NOT NULL, -- kg
+    lact INTEGER NOT NULL,
+    day INTEGER NOT NULL
+);
