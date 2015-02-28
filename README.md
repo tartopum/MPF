@@ -1,5 +1,7 @@
 # MPF - Milk Production Forecast
 
+![Build Status](https://travis-ci.org/Vayel/MPF.svg?branch=master)
+
 Les producteurs de lait ont des **quotas** à respecter, c'est-à-dire une 
 **quantité maximale** de lait à produire par année (la campagne laitière dure 
 du 1er avril au 31 mars) : en dessous de cette limite, ils effectuent moins de 
