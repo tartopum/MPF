@@ -30,13 +30,7 @@ with open("README.md", "r") as f:
 
 # Packages
 packages = [
-    "mpf",
-    "mpf.analysis",
-    "mpf.models",
-    "mpf.processors",
-    "mpf.utils",
-    "mpf.views",
-    "mpf.workers"
+    "mpf"
 ]
 
 # Requirements
