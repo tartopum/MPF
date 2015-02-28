@@ -1,5 +1,5 @@
 from mpf.models.sql import ORM
-from mpf.models.data import Cow, Data, Lact
+from mpf.models.data import DataDict
 
 
 
@@ -31,13 +31,11 @@ class DBSelector:
         return [line[0] for line in data]
     
     def cow(self, cow_num):
-        q = "SELECT * FROM CrudeData WHERE cow = ?" 
-        data = self.query(q, (int(cow_num),))
-    
-        cow = Cow(cow_num)
+        cow = DataDict()
         
         for lact_num in self.lacts(cow_num):
-            cow.add_lact(lact_num, self.lact(cow_num, lact_num))
+            key = (DataDict.lact_label, lact_num)
+            cow[key] = self.lact(cow_num, lact_num)
             
         return cow
         
@@ -52,10 +50,11 @@ class DBSelector:
         return [line[0] for line in data]
     
     def data(self):
-        data = Data()
+        data = DataDict()
         
         for num in self.cows():
-            data.add_cow(num, self.cow(num))
+            key = (DataDict.cow_label, num)
+            data[key] = self.cow(num)
         
         return data
     
@@ -70,8 +69,14 @@ class DBSelector:
         return [line[0] for line in data]
     
     def lact(self, cow_num, lact_num):
-        return Lact(lact_num, self.days(cow_num, lact_num), 
-                    self.prods(cow_num, lact_num), self.cons(cow_num, lact_num))
+        cow_key = key = (DataDict.cow_label, cow_num)
+        lact = DataDict(cow_key)
+        
+        lact["cons"] = self.cons(cow_num, lact_num)
+        lact["days"] = self.days(cow_num, lact_num)
+        lact["prods"] = self.prods(cow_num, lact_num)
+            
+        return lact
         
     def lacts(self, cow):
         """

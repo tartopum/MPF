@@ -8,6 +8,18 @@ class LinearRegression:
     
     proportions = [80]
     
+    label = "linreg"
+    error_label = "error"
+    X_label = "X"
+    
+    @staticmethod
+    def get_key(t, proportion):
+        return (
+            LinearRegression.label,
+            t,
+            proportion
+        )
+    
     @staticmethod
     def format_A(data):
         """
@@ -42,17 +54,29 @@ class LinearRegression:
         for proportion in LinearRegression.proportions:
             aleavals = processors.AleaValues(proportion)
             
-            for lact in cow.get_lacts():
-                B = lact.prods
+            for lact_key in cow.get_lact_keys():
+                lact = cow[lact_key]
+                
+                B = lact["prods"]
                 A = LinearRegression.format_A([
-                    lact.days,
-                    lact.cons,
-                    [lact.num] * len(lact.days)
+                    lact["days"],
+                    lact["cons"],
+                    [DataDict.get_num(lact)] * len(lact["days"])
                 ])
                 
                 A_alea, B_alea = aleavals.work([A, B])
                 X = linreg.work(A_alea, B_alea)
                 error = linreg.error(X, A, B)
                 
-                lact.add_key(("linreg", "error", proportion), error)
-                lact.add_key(("linreg", "X", proportion), X)
+                error_key = LinearRegression.get_key(
+                    LinearRegression.error_label,
+                    proportion
+                )
+                
+                X_key = LinearRegression.get_key(
+                    LinearRegression.X_label,
+                    proportion
+                )
+                
+                lact[error_key] = error
+                lact[X_key] = X
