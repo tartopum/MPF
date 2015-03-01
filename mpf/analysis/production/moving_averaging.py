@@ -1,12 +1,11 @@
+from mpf.analysis import AbstractAnalysis
 from mpf import processors
 
 __all__ = ("MovingAveraging")
 
 
 
-class MovingAveraging:
-
-    steps = [2]
+class MovingAveraging(AbstractAnalysis):
     
     label = "ma"
     days_label = "days"
@@ -20,17 +19,16 @@ class MovingAveraging:
             step
         )
         
-    def work(self, cow):
-        for step in MovingAveraging.steps:
-            ma = processors.MovingAveraging(step)
+    def work(self, cow, step, force=False):
+        ma = processors.MovingAveraging(step)
+        
+        for lact_key in cow.get_lact_keys():
+            lact = cow[lact_key]
             
-            for lact_key in cow.get_lact_keys():
-                lact = cow[lact_key]
-                
-                days_ma, prods_ma = ma.work(lact["days"], lact["prods"])
-                
-                days_key = MovingAveraging.get_key(MovingAveraging.days_label, step)
-                prods_key = MovingAveraging.get_key(MovingAveraging.prods_label, step)
-                
-                lact[days_key] = days_ma
-                lact[prods_key] = prods_ma
+            days_ma, prods_ma = ma.work(lact["days"], lact["prods"])
+            
+            days_key = MovingAveraging.get_key(MovingAveraging.days_label, step)
+            prods_key = MovingAveraging.get_key(MovingAveraging.prods_label, step)
+            
+            lact[days_key] = days_ma
+            lact[prods_key] = prods_ma

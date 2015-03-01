@@ -6,8 +6,6 @@ __all__ = ("LinearRegression")
 
 class LinearRegression:
     
-    proportions = [80]
-    
     label = "linreg"
     error_label = "error"
     X_label = "X"
@@ -48,35 +46,33 @@ class LinearRegression:
             
         return A
         
-    def work(self, cow):
+    def work(self, cow, proportion):
         linreg = processors.LinearRegression()
+        aleavals = processors.AleaValues(proportion)
         
-        for proportion in LinearRegression.proportions:
-            aleavals = processors.AleaValues(proportion)
+        for lact_key in cow.get_lact_keys():
+            lact = cow[lact_key]
             
-            for lact_key in cow.get_lact_keys():
-                lact = cow[lact_key]
-                
-                B = lact["prods"]
-                A = LinearRegression.format_A([
-                    lact["days"],
-                    lact["cons"],
-                    [DataDict.get_num(lact)] * len(lact["days"])
-                ])
-                
-                A_alea, B_alea = aleavals.work([A, B])
-                X = linreg.work(A_alea, B_alea)
-                error = linreg.error(X, A, B)
-                
-                error_key = LinearRegression.get_key(
-                    LinearRegression.error_label,
-                    proportion
-                )
-                
-                X_key = LinearRegression.get_key(
-                    LinearRegression.X_label,
-                    proportion
-                )
-                
-                lact[error_key] = error
-                lact[X_key] = X
+            B = lact["prods"]
+            A = LinearRegression.format_A([
+                lact["days"],
+                lact["cons"],
+                [DataDict.get_num(lact)] * len(lact["days"])
+            ])
+            
+            A_alea, B_alea = aleavals.work([A, B])
+            X = linreg.work(A_alea, B_alea)
+            error = linreg.error(X, A, B)
+            
+            error_key = LinearRegression.get_key(
+                LinearRegression.error_label,
+                proportion
+            )
+            
+            X_key = LinearRegression.get_key(
+                LinearRegression.X_label,
+                proportion
+            )
+            
+            lact[error_key] = error
+            lact[X_key] = X

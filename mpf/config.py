@@ -7,3 +7,5 @@ DATA_PATH = join(ROOT, "data")
 
 DATABASE_DIR = join(DATA_PATH, "db")
 DATABASE_PATH = join(DATABASE_DIR, "mpf.db")
+
+CACHE_DIR = join(DATA_PATH, "cache")

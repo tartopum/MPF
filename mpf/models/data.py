@@ -1,6 +1,4 @@
-__all__ = [
-    "DataDict"
-]
+__all__ = ("DataDict")
 
 
 
@@ -33,7 +31,7 @@ class DataDict(dict):
         keys = [self.key]
         parent = self.parent
         
-        while parent is not None:
+        while parent.key is not None:
             keys.append(parent.key)
             
             parent = parent.parent

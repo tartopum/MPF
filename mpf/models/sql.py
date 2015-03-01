@@ -1,8 +1,7 @@
 import sqlite3
 
 
-
-__all__ = ["ORM"]
+__all__ = ("ORM")
 
 
 

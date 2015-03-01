@@ -2,8 +2,7 @@ from mpf.models.sql import ORM
 from mpf.models.data import DataDict
 
 
-
-__all__ = ["DBSelector"]
+__all__ = ("DBSelector")
 
 
 

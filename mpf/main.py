@@ -14,11 +14,11 @@ def main():
     linreg_errors = production.LinRegErrors()
     
     for cow in data.get_cows():
-        ma.work(cow)
+        ma.work(cow, step=2)
         
-        linreg.work(cow)
+        linreg.work(cow, proportion=80)
         
-        linreg_errors.work(cow)
+        linreg_errors.work(cow, proportion=80)
         
         # Views
         
