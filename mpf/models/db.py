@@ -29,12 +29,12 @@ class DBSelector:
         
         return [line[0] for line in data]
     
-    def cow(self, cow_num):
-        cow = DataDict()
+    def cow(self, parent, cow_num):
+        cow = DataDict(key=(DataDict.cow_label, cow_num), parent=parent)
         
         for lact_num in self.lacts(cow_num):
             key = (DataDict.lact_label, lact_num)
-            cow[key] = self.lact(cow_num, lact_num)
+            cow[key] = self.lact(cow, cow_num, lact_num)
             
         return cow
         
@@ -49,11 +49,11 @@ class DBSelector:
         return [line[0] for line in data]
     
     def data(self):
-        data = DataDict()
+        data = DataDict(None, None)
         
         for num in self.cows():
             key = (DataDict.cow_label, num)
-            data[key] = self.cow(num)
+            data[key] = self.cow(data, num)
         
         return data
     
@@ -67,9 +67,9 @@ class DBSelector:
         
         return [line[0] for line in data]
     
-    def lact(self, cow_num, lact_num):
-        cow_key = key = (DataDict.cow_label, cow_num)
-        lact = DataDict(cow_key)
+    def lact(self, cow, cow_num, lact_num):
+        key = (DataDict.lact_label, lact_num)
+        lact = DataDict(key, cow)
         
         lact["cons"] = self.cons(cow_num, lact_num)
         lact["days"] = self.days(cow_num, lact_num)

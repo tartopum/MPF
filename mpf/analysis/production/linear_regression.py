@@ -1,10 +1,12 @@
+from mpf.analysis import AbstractAnalysis
 from mpf import processors
+from mpf.models import DataDict
 
 __all__ = ("LinearRegression")
 
 
 
-class LinearRegression:
+class LinearRegression(AbstractAnalysis):
     
     label = "linreg"
     error_label = "error"
@@ -47,32 +49,39 @@ class LinearRegression:
         return A
         
     def work(self, cow, proportion):
-        linreg = processors.LinearRegression()
+        linreg = LinearRegression()
         aleavals = processors.AleaValues(proportion)
+        
+        error_key = LinearRegression.get_key(
+            LinearRegression.error_label,
+            proportion
+        )
+        
+        X_key = LinearRegression.get_key(
+            LinearRegression.X_label,
+            proportion
+        )
         
         for lact_key in cow.get_lact_keys():
             lact = cow[lact_key]
             
-            B = lact["prods"]
-            A = LinearRegression.format_A([
-                lact["days"],
-                lact["cons"],
-                [DataDict.get_num(lact)] * len(lact["days"])
-            ])
+            X = self.cache.get_data(lact, X_key)
+            error = self.cache.get_data(lact, error_key)
             
-            A_alea, B_alea = aleavals.work([A, B])
-            X = linreg.work(A_alea, B_alea)
-            error = linreg.error(X, A, B)
-            
-            error_key = LinearRegression.get_key(
-                LinearRegression.error_label,
-                proportion
-            )
-            
-            X_key = LinearRegression.get_key(
-                LinearRegression.X_label,
-                proportion
-            )
-            
+            if X is None or error is None:
+                B = lact["prods"]
+                A = LinearRegression.format_A([
+                    lact["days"],
+                    lact["cons"],
+                    [DataDict.get_num(lact_key)] * len(lact["days"])
+                ])
+                
+                A_alea, B_alea = aleavals.work([A, B])
+                X = linreg.work(A_alea, B_alea)
+                error = linreg.error(X, A, B)
+                
             lact[error_key] = error
             lact[X_key] = X
+            
+            self.cache.save_data(lact, X_key, X)
+            self.cache.save_data(lact, error_key, error)

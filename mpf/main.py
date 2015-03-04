@@ -13,7 +13,9 @@ def main():
     linreg = production.LinearRegression()
     linreg_errors = production.LinRegErrors()
     
-    for cow in data.get_cows():
+    for cow_key in data.get_cow_keys():
+        cow = data[cow_key]
+        
         ma.work(cow, step=2)
         
         linreg.work(cow, proportion=80)

@@ -11,7 +11,7 @@ class DataDict(dict):
     def get_num(key):
         return key[1]
     
-    def __init__(self, key=None, parent=None):
+    def __init__(self, key, parent):
         self.key = key
         self.parent = parent
 
@@ -30,6 +30,11 @@ class DataDict(dict):
     def get_parent_keys(self):
         keys = [self.key]
         parent = self.parent
+        
+        if self.key is None:
+            return []
+        elif parent is None:
+            return keys
         
         while parent.key is not None:
             keys.append(parent.key)
