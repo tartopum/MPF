@@ -19,7 +19,7 @@ class MovingAveraging(AbstractAnalysis):
             step
         )
         
-    def work(self, cow, step, force=False):
+    def analyze(self, cow, step, force=False):
         ma = processors.MovingAveraging(step)
         days_key = MovingAveraging.get_key(MovingAveraging.days_label, step)
         prods_key = MovingAveraging.get_key(MovingAveraging.prods_label, step)
@@ -31,7 +31,7 @@ class MovingAveraging(AbstractAnalysis):
             prods_ma = self.cache.get_data(lact, prods_key)
             
             if days_ma is None or prods_ma is None:
-                days_ma, prods_ma = ma.work(lact["days"], lact["prods"])
+                days_ma, prods_ma = ma.process(lact["days"], lact["prods"])
             
             lact[days_key] = days_ma
             lact[prods_key] = prods_ma

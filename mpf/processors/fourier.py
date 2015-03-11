@@ -18,7 +18,7 @@ class FourierTransform:
         self.real = real
         self.timestep = timestep
     
-    def work(self, data):
+    def process(self, data):
         """
         TODO
         """
@@ -45,7 +45,7 @@ class ImFourierTransform(FourierTransform):
         
         FourierTransform.__init__(self, real=real, timestep=timestep)
         
-    def work(self, data):
+    def process(self, data):
         """
         TODO
         """
@@ -66,7 +66,7 @@ class ReFourierTransform(FourierTransform):
         
         FourierTransform.__init__(self, real=real, timestep=timestep)
         
-    def work(self, data):
+    def process(self, data):
         """
         TODO
         """

@@ -4,7 +4,7 @@ class Difference:
     def __init__(self):
         pass
         
-    def work(self, data):
+    def process(self, data):
         """Process the difference between an element in the `data` list and the 
         next one.
         

@@ -1,4 +1,5 @@
 from mpf import processors
+from .linear_regression import LinearRegression
 
 __all__ = ("LinRegErrors")
 
@@ -17,7 +18,7 @@ class LinRegErrors:
             k
         )
 
-    def work(self, cow, proportion):
+    def analyze(self, cow, proportion):
         stats = processors.Statistics()
         
         key = LinearRegression.get_key(
@@ -25,9 +26,9 @@ class LinRegErrors:
             proportion
         )
         
-        errors = [lact[key] for lact in cow.get_lacts()]
+        errors = [cow[lact_key][key] for lact_key in cow.get_lact_keys()]
         
-        measures = stats.work(errors)
+        measures = stats.process(errors)
         
         for k, v in measures.items():
             cow[LinRegErrors.get_key(proportion, k)] = v

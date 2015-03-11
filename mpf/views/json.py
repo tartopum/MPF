@@ -1,42 +1,21 @@
 import json
 
-from mpf.views.abstracts import View
 
 
-
-__all__ = ["JSONWriter"]
-
-
-
-class JSON(View):
-    """TODO"""
+class JSON:
+    """A class representing data as JSON."""
     
-    def __init__(self):
-        self.data = {}
-        self.ext = ".json"
+    @staticmethod    
+    def dump(f, data, indent=False):
+        """Save data in ``f``."""
         
-    def add(self, d):
-        """
-        TODO
-        """
+        json.dump(JSON.dumps(data), f, indent=indent)
         
-        self.data.update(d)
+    @staticmethod
+    def dumps(data):
+        """Convert ``data`` into JSON."""
         
-    def show(self):
-        """
-        TODO
-        """
+        if not isinstance(data, dict):
+            return data
         
-        print(self.data)
-        
-    def save(self, dest):
-        """
-        TODO
-        """
-        
-        dest = self._add_ext(dest)
-        
-        with open(dest, "w") as f:
-            json.dump(self.data, f, indent=4, sort_keys=True)
-            
-        print(dest + " saved.")
+        return {str(k): JSON.dumps(v) for k, v in data.items()}

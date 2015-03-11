@@ -8,7 +8,7 @@ class MovingAveraging:
         
         self.step = step
     
-    def work(self, x, y):
+    def process(self, x, y):
         """
         TODO
         """

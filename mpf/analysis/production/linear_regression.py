@@ -48,8 +48,8 @@ class LinearRegression(AbstractAnalysis):
             
         return A
         
-    def work(self, cow, proportion):
-        linreg = LinearRegression()
+    def analyze(self, cow, proportion):
+        linreg = processors.LinearRegression()
         aleavals = processors.AleaValues(proportion)
         
         error_key = LinearRegression.get_key(
@@ -76,8 +76,8 @@ class LinearRegression(AbstractAnalysis):
                     [DataDict.get_num(lact_key)] * len(lact["days"])
                 ])
                 
-                A_alea, B_alea = aleavals.work([A, B])
-                X = linreg.work(A_alea, B_alea)
+                A_alea, B_alea = aleavals.process([A, B])
+                X = linreg.process(A_alea, B_alea)
                 error = linreg.error(X, A, B)
                 
             lact[error_key] = error

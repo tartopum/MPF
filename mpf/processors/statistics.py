@@ -25,7 +25,7 @@ class Statistics:
         else:
             self.functions = functions
     
-    def work(self, data):
+    def process(self, data):
         """
         TODO
         """

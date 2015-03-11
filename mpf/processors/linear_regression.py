@@ -6,9 +6,6 @@ from scipy.optimize import leastsq
 class LinearRegression:
     """TODO"""
     
-    def __init__(self):
-        pass
-    
     def _compare(self, X, A, B):
         """
         TODO
@@ -30,7 +27,7 @@ class LinearRegression:
         except ValueError:
             return -1
     
-    def work(self, A, B):
+    def process(self, A, B):
         """
         TODO
         """
@@ -43,6 +40,6 @@ class LinearRegression:
         args = (A, B)
         
         try:
-            return leastsq(self._compare, X0, args)[0] # X
+            return list(leastsq(self._compare, X0, args)[0]) # X
         except TypeError:
             return []

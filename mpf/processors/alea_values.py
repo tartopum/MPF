@@ -40,7 +40,7 @@ class AleaValues:
         
         return [[line[i] for i in range(l) if i in indexes] for line in data]
         
-    def work(self, data):
+    def process(self, data):
         """
         TODO
         """
