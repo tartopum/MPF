@@ -1,1 +1,1 @@
-from mpf.views.json import JSON
+from mpf.views.latex import LaTeX
