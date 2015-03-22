@@ -13,7 +13,7 @@ def test_difference():
     
     data = [1, 2, 3, 4, 5]
     
-    assert difference.work(data=data) == [2-1, 3-2, 4-3, 5-4]
+    assert difference.process(data=data) == [2-1, 3-2, 4-3, 5-4]
     
 
 # Fourier transform
@@ -25,7 +25,7 @@ def test_alea_values():
     
     data = [[1, 2, 3]]
     
-    a.work(data=data)
+    a.process(data=data)
     
     
 # MovingAveraging
@@ -38,7 +38,7 @@ def test_ma():
     x = [1, 2, 3, 4, 5, 6]
     y = [10, 15, 8, 3, 14, 7]
     
-    assert ma.work(x=x, y=y) == ([2, 3, 4, 5], [(10+15+8)/d, (15+8+3)/d, 
+    assert ma.process(x=x, y=y) == ([2, 3, 4, 5], [(10+15+8)/d, (15+8+3)/d, 
                                                (8+3+14)/d, (3+14+7)/d])
                                                
                                                
@@ -57,7 +57,7 @@ def test_linreg():
     
     B = [9, 10, 2, 4, 2, 10]
     
-    X = linreg.work(A=A, B=B)
+    X = linreg.process(A=A, B=B)
     error = linreg.error(X=X, A=A, B=B)
     
     
@@ -74,7 +74,7 @@ def test_stats():
     
     data = [1, 2, 3, 4, 4]
     
-    assert stats.work(data=data) == {
+    assert stats.process(data=data) == {
                                         "mean": 2.8,
                                         "median": 3,
                                         "mode": 4,
