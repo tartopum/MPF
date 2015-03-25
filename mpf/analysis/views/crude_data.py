@@ -19,7 +19,7 @@ class CrudeData:
         title = str(DataDict.get_num(cow.key))
         fname = join(self.root, title)
 
-        doc = Document(fname, title=title)
+        doc = Document(fname, title="Cow {}".format(title), maketitle=True)
         
         for lact_key in cow.get_lact_keys():
             lact = cow[lact_key]
