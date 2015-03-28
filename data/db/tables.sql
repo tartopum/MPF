@@ -5,5 +5,6 @@ CREATE TABLE IF NOT EXISTS CrudeData(
     prod REAL NOT NULL, -- L
     cons REAL NOT NULL, -- kg
     lact INTEGER NOT NULL,
-    day INTEGER NOT NULL
+    day INTEGER NOT NULL,
+    UNIQUE (cow, date)
 );
