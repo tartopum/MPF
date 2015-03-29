@@ -10,9 +10,9 @@ def main():
     data = {
         ("cow", 1): {
             ("lact", 1): {
-                "days": [1, 2, ...],
-                "prods": [20.4, 22.0, ...],
-                "cons": [11.2, 10.8, ...]
+                ("crude", "days"): [1, 2, ...],
+                ("crude", "prods"): [20.4, 22.0, ...],
+                ("crude", "cons"): [11.2, 10.8, ...]
             },
             ("lact", 2): {...}
         },
@@ -20,7 +20,7 @@ def main():
     }
     """
     
-    proce = production.MovingAveraging()
+    ma = production.MovingAveraging()
     linreg = production.LinearRegression()
 
     # Views
@@ -35,9 +35,9 @@ def main():
         data = {
             ("cow", 1): {
                 ("lact", 1): {
-                    "days": [1, 2, ...],
-                    "prods": [20.4, 22.0, ...],
-                    "cons": [11.2, 10.8, ...],
+                    ("crude", "days"): [1, 2, ...],
+                    ("crude", "prods"): [20.4, 22.0, ...],
+                    ("crude", "cons"): [11.2, 10.8, ...]
                     ("ma", "days", 2): [...],
                     ("ma", "prods", 2): [...]
                 },
@@ -53,9 +53,9 @@ def main():
         data = {
             ("cow", 1): {
                 ("lact", 1): {
-                    "days": [1, 2, ...],
-                    "prods": [20.4, 22.0, ...],
-                    "cons": [11.2, 10.8, ...],
+                    ("crude", "days"): [1, 2, ...],
+                    ("crude", "prods"): [20.4, 22.0, ...],
+                    ("crude", "cons"): [11.2, 10.8, ...]
                     ("ma", "days", 2): [...],
                     ("ma", "prods", 2): [...],
                     ("linreg", "prods", "X", 80): [...],
