@@ -4,16 +4,13 @@ __all__ = ("DataDict")
 
 class DataDict(dict):
     
-    cow_label = "cow"
-    lact_label = "lact"
-    
-    @staticmethod
-    def get_num(key):
-        return key[1]
-    
     def __init__(self, key, parent):
         self.key = key
         self.parent = parent
+
+    @staticmethod
+    def get_num(key):
+        return key[1]
 
     def add_child(self, key):
         data = DataDict(key, self)

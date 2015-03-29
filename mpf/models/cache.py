@@ -11,8 +11,8 @@ class Cache:
     def __init__(self, directory):
         self.directory = directory
         
-    def get_data(self, d, key):
-        filename = self.get_filename(d, key)
+    def get_data(self, datadict, key):
+        filename = self.get_filename(datadict, key)
         path = join(self.directory, filename)
         
         try:
@@ -30,15 +30,16 @@ class Cache:
         except TypeError as e: # Catch when for loop fails
             return str(arg) # Not a sequence so just return repr
     
-    def get_filename(self, d, key):
-        keys = list(reversed(d.get_parent_keys()))
+    def get_filename(self, datadict, key):
+        keys = list(reversed(datadict.get_parent_keys()))
         keys.append(key)
         
         return self.srepr(keys, "-")  
             
-    def save_data(self, d, key, data, force=False):
-        filename = self.get_filename(d, key)
+    def save_data(self, datadict, key, force=False):
+        filename = self.get_filename(datadict, key)
         path = join(self.directory, filename)
+        data = datadict[key]
         
         def save():
             with open(path, "wb") as f:
