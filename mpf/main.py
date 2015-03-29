@@ -9,6 +9,7 @@ from mpf.config import DATABASE_PATH, DATA_PATH
 def main():
     data = DBSelector(DATABASE_PATH).data()
     
+    # Analysis
     ma = production.MovingAveraging()
     linreg = production.LinearRegression()
     linreg_errors = production.LinRegErrors()
@@ -19,6 +20,7 @@ def main():
     for cow_key in data.get_cow_keys():
         cow = data[cow_key]
         
+        # Analysis
         ma.analyze(cow, step=2)
         
         linreg.analyze(cow, proportion=80)
@@ -29,6 +31,7 @@ def main():
         crude_data_view.save(cow)
 
         break
+    
     
 if __name__ == "__main__":
     main()
