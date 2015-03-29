@@ -1,4 +1,5 @@
-from mpf.models import DataDict, Cache
+from mpf.models import DataDict
+from mpf.models.cache import Cache
 
 
 

@@ -1,4 +1,4 @@
-from mpf.models import Cache
+from mpf.models.cache import Cache
 from mpf.config import CACHE_DIR
 
 __all__ = ("AbstractAnalysis")
