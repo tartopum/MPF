@@ -7,22 +7,16 @@ __all__ = ("MovingAveraging")
 
 class MovingAveraging(AbstractAnalysis):
     
-    label = "ma"
-    days_label = "days"
-    prods_label = "prods"
+    LBL = "ma"
     
-    @staticmethod
-    def get_key(t, step):
-        return (
-            MovingAveraging.label, 
-            t, 
-            step
-        )
-        
+    @classmethod
+    def get_key(cls, cat, step):
+        return (cls.LBL, cat, step)
+    
     def analyze(self, cow, step, force=False):
         ma = processors.MovingAveraging(step)
-        days_key = MovingAveraging.get_key(MovingAveraging.days_label, step)
-        prods_key = MovingAveraging.get_key(MovingAveraging.prods_label, step)
+        ma_days_key = self.get_key(self.DAYS_LBL, step)
+        ma_prods_key = self.get_key(self.PRODS_LBL, step)
         
         for lact_key in cow.get_lact_keys():
             lact = cow[lact_key]
@@ -31,10 +25,10 @@ class MovingAveraging(AbstractAnalysis):
             prods_ma = self.cache.get_data(lact, prods_key)
             
             if days_ma is None or prods_ma is None:
-                days_ma, prods_ma = ma.process(lact["days"], lact["prods"])
+                days_ma, prods_ma = ma.process(lact[self.DAYS_KEY], lact[self.PRODS_KEY])
             
-            lact[days_key] = days_ma
-            lact[prods_key] = prods_ma
+            lact[ma_days_key] = days_ma
+            lact[ma_prods_key] = prods_ma
             
-            self.cache.save_data(lact, days_key, days_ma)
-            self.cache.save_data(lact, prods_key, prods_ma)
+            self.cache.save_data(lact, ma_days_key, days_ma)
+            self.cache.save_data(lact, ma_prods_key, prods_ma)

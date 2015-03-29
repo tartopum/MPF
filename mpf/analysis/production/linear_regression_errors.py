@@ -1,15 +1,15 @@
 from mpf import processors
 from .linear_regression import LinearRegression
 
-__all__ = ("LinRegErrors")
+__all__ = ("LinRegErrorStats")
 
 
 
-class LinRegErrors:
+class LinRegErrorStats:
 
-    label = "errors"
+    LBL = "errors"
 
-    @staticmethod
+    @classmethod
     def get_key(proportion, k):
         return (
             LinearRegression.label, 

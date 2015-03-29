@@ -8,10 +8,6 @@ class DataDict(dict):
         self.key = key
         self.parent = parent
 
-    @staticmethod
-    def get_num(key):
-        return key[1]
-
     def add_child(self, key):
         data = DataDict(key, self)
         self[key] = data

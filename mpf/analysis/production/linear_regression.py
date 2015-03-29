@@ -1,6 +1,5 @@
 from mpf.analysis import AbstractAnalysis
 from mpf import processors
-from mpf.models import DataDict
 
 __all__ = ("LinearRegression")
 
@@ -8,17 +7,13 @@ __all__ = ("LinearRegression")
 
 class LinearRegression(AbstractAnalysis):
     
-    label = "linreg"
-    error_label = "error"
-    X_label = "X"
+    LBL = "linreg"
+    ERROR_LBL = "error"
+    X_LBL = "X"
     
-    @staticmethod
-    def get_key(t, proportion):
-        return (
-            LinearRegression.label,
-            t,
-            proportion
-        )
+    @classmethod
+    def get_key(cls, cat, val, proportion):
+        return (cls.LBL, cat, val, proportion)
     
     @staticmethod
     def format_A(data):
@@ -52,15 +47,8 @@ class LinearRegression(AbstractAnalysis):
         linreg = processors.LinearRegression()
         aleavals = processors.AleaValues(proportion)
         
-        error_key = LinearRegression.get_key(
-            LinearRegression.error_label,
-            proportion
-        )
-        
-        X_key = LinearRegression.get_key(
-            LinearRegression.X_label,
-            proportion
-        )
+        error_key = self.get_key(self.PRODS_LBL, self.ERROR_LBL, proportion)
+        X_key = linreg_X_key(self.PRODS_LBL, self.X_LBL, proportion)
         
         for lact_key in cow.get_lact_keys():
             lact = cow[lact_key]
@@ -69,11 +57,11 @@ class LinearRegression(AbstractAnalysis):
             error = self.cache.get_data(lact, error_key)
             
             if X is None or error is None:
-                B = lact["prods"]
+                B = lact[self.PRODS_KEY]
                 A = LinearRegression.format_A([
-                    lact["days"],
-                    lact["cons"],
-                    [DataDict.get_num(lact_key)] * len(lact["days"])
+                    lact[self.CONS_KEY],
+                    lact[self.DAYS_KEY],
+                    [self.get_key_num(lact_key)] * len(lact[self.DAYS_KEY])
                 ])
                 
                 A_alea, B_alea = aleavals.process([A, B])
