@@ -1,3 +1,4 @@
+from mpf.analysis import AbstractAnalysis
 from mpf import processors
 from .linear_regression import LinearRegression
 
@@ -5,15 +6,15 @@ __all__ = ("LinRegErrorStats")
 
 
 
-class LinRegErrorStats:
+class LinRegErrorStats(AbstractAnalysis):
 
     LBL = "errors"
 
     @classmethod
-    def get_key(proportion, k):
+    def get_key(cls, proportion, k):
         return (
-            LinearRegression.label, 
-            LinRegErrors.label, 
+            LinearRegression.LBL, 
+            cls.LBL, 
             proportion, 
             k
         )
@@ -22,7 +23,8 @@ class LinRegErrorStats:
         stats = processors.Statistics()
         
         key = LinearRegression.get_key(
-            LinearRegression.error_label, 
+            self.PRODS_LBL,
+            LinearRegression.ERROR_LBL, 
             proportion
         )
         
@@ -31,4 +33,4 @@ class LinRegErrorStats:
         measures = stats.process(errors)
         
         for k, v in measures.items():
-            cow[LinRegErrors.get_key(proportion, k)] = v
+            cow[self.get_key(proportion, k)] = v

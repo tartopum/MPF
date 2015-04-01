@@ -1,6 +1,7 @@
 import sqlite3
 
 from mpf.analysis import AbstractAnalysis
+from mpf.models.data import DataDict
 
 __all__ = ("DBSelector")
 

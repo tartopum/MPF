@@ -21,8 +21,8 @@ class MovingAveraging(AbstractAnalysis):
         for lact_key in cow.get_lact_keys():
             lact = cow[lact_key]
             
-            days_ma = self.cache.get_data(lact, days_key)
-            prods_ma = self.cache.get_data(lact, prods_key)
+            days_ma = self.cache.get_data(lact, ma_days_key)
+            prods_ma = self.cache.get_data(lact, ma_prods_key)
             
             if days_ma is None or prods_ma is None:
                 days_ma, prods_ma = ma.process(lact[self.DAYS_KEY], lact[self.PRODS_KEY])

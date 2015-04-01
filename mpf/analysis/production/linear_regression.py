@@ -48,7 +48,7 @@ class LinearRegression(AbstractAnalysis):
         aleavals = processors.AleaValues(proportion)
         
         error_key = self.get_key(self.PRODS_LBL, self.ERROR_LBL, proportion)
-        X_key = linreg_X_key(self.PRODS_LBL, self.X_LBL, proportion)
+        X_key = self.get_key(self.PRODS_LBL, self.X_LBL, proportion)
         
         for lact_key in cow.get_lact_keys():
             lact = cow[lact_key]

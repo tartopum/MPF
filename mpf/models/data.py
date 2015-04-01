@@ -1,3 +1,5 @@
+from mpf.analysis import AbstractAnalysis
+
 __all__ = ("DataDict")
 
 
@@ -15,10 +17,10 @@ class DataDict(dict):
         return data
 
     def get_cow_keys(self):
-        return [key for key in self.keys() if DataDict.cow_label in key]
+        return [key for key in self.keys() if AbstractAnalysis.COW_LBL in key]
 
     def get_lact_keys(self):
-        return [key for key in self.keys() if DataDict.lact_label in key]
+        return [key for key in self.keys() if AbstractAnalysis.LACT_LBL in key]
         
     def get_parent_keys(self):
         keys = [self.key]

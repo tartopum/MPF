@@ -1,3 +1,3 @@
 from mpf.analysis.production.moving_averaging import MovingAveraging
 from mpf.analysis.production.linear_regression import LinearRegression
-from mpf.analysis.production.linear_regression_errors import LinRegErrors
+from mpf.analysis.production.linear_regression_error_stats import LinRegErrorStats

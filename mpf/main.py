@@ -12,7 +12,7 @@ def main():
     # Analysis
     ma = production.MovingAveraging()
     linreg = production.LinearRegression()
-    linreg_errors = production.LinRegErrors()
+    linreg_error_stats = production.LinRegErrorStats()
 
     # Views
     crude_data_view = views.CrudeData(join(DATA_PATH, "prod"))
@@ -25,12 +25,10 @@ def main():
         
         linreg.analyze(cow, proportion=80)
         
-        linreg_errors.analyze(cow, proportion=80)
+        linreg_error_stats.analyze(cow, proportion=80)
         
         # Views
-        crude_data_view.save(cow)
-
-        break
+        # crude_data_view.save(cow)
     
     
 if __name__ == "__main__":
