@@ -26,7 +26,7 @@ class DBSelector:
     def cons(self, cow, lact):
         """TODO"""
         
-        q = "SELECT cons FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY day" 
+        q = "SELECT cons FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY date" 
         data = self.query(q, (cow, lact))
         
         return [line[0] for line in data]
@@ -52,27 +52,25 @@ class DBSelector:
                 lact_key = (AbstractAnalysis.LACT_LBL, lact_num)
                 lact = cow.add_child(lact_key)
                 
-                lact[(
-                    AbstractAnalysis.CRUDE_LBL, 
-                    AbstractAnalysis.CONS_LBL
-                )] = self.cons(cow_num, lact_num)
-                
-                lact[(
-                    AbstractAnalysis.CRUDE_LBL, 
-                    AbstractAnalysis.DAYS_LBL
-                )] = self.days(cow_num, lact_num)
-                
-                lact[(
-                    AbstractAnalysis.CRUDE_LBL, 
-                    AbstractAnalysis.PRODS_LBL
-                )] = self.prods(cow_num, lact_num)
+                lact[AbstractAnalysis.CONS_KEY] = self.cons(cow_num, lact_num)
+                lact[AbstractAnalysis.DATES_KEY] = self.dates(cow_num, lact_num)
+                lact[AbstractAnalysis.DAYS_KEY] = self.days(cow_num, lact_num)
+                lact[AbstractAnalysis.PRODS_KEY] = self.prods(cow_num, lact_num)
         
         return data
     
+    def dates(self, cow, lact):
+        """TODO"""
+        
+        q = "SELECT date FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY date" 
+        data = self.query(q, (cow, lact))
+        
+        return [line[0] for line in data]
+
     def days(self, cow, lact):
         """TODO"""
         
-        q = "SELECT day FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY day" 
+        q = "SELECT day FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY date" 
         data = self.query(q, (cow, lact))
         
         return [line[0] for line in data]
@@ -88,7 +86,7 @@ class DBSelector:
     def prods(self, cow, lact):
         """TODO"""
         
-        q = "SELECT prod FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY day" 
+        q = "SELECT prod FROM CrudeData WHERE cow = ? AND lact = ? ORDER BY date" 
         data = self.query(q, (cow, lact))
         
         return [line[0] for line in data]
