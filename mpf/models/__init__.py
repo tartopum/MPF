@@ -1,2 +1,2 @@
-from mpf.models.db import DBSelector
-from mpf.models.data import DataDict
+from .db import DBSelector
+from .data import DataDict

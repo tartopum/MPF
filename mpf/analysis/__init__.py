@@ -1,1 +1,1 @@
-from mpf.analysis.abstracts import AbstractAnalysis
+from .abstracts import AbstractAnalysis
