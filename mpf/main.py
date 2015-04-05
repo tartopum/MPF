@@ -1,19 +1,24 @@
-from os.path import join
+import os
+
 from mpf.models.db import DBSelector
 from mpf.analysis import production, AbstractAnalysis
 
-from mpf.config import DATABASE_PATH, DATA_PATH
+import mpf.config as config 
 
 
 
 def main():
-    data = DBSelector(DATABASE_PATH).data()
-    
+    data = DBSelector(config.DATABASE_PATH).data()
+
+    # Create folder
+    if not os.path.isdir(config.PROD_DIR):
+        os.makedirs(config.PROD_DIR)
+
     # Production 
     prod_ma = production.MovingAveraging()
     prod_linreg = production.LinearRegression()
     prod_linreg_stats = production.LinRegErrorStats()
-    prod_view = production.View(join(DATA_PATH, "production"))
+    prod_view = production.View(config.PROD_DIR)
     
     for cow_key in data.get_cow_keys():
         cow = data[cow_key]
@@ -29,7 +34,7 @@ def main():
             "days": AbstractAnalysis.DAYS_KEY,
             "prods": AbstractAnalysis.PRODS_KEY
         })
-        prod_view.plot(cow, "Smoothed data", {
+        prod_view.plot(cow, "Smoothed data - step = 2", {
             "dates": prod_ma.get_dates_key(2),
             "days": prod_ma.get_days_key(2),
             "prods": prod_ma.get_prods_key(2)
