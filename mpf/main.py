@@ -41,8 +41,6 @@ def main():
         })
         prod_view.save()
 
-        break
-    
     
 if __name__ == "__main__":
     main()
