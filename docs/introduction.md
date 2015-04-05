@@ -1,11 +1,17 @@
-# Les méthodes de prévision
+# Introduction 
+
+L'objectif des analyses des données est double :
+
+* Prévoir la production future sur court terme (un mois)
+* Etudier l'influence de certains paramètres sur la production (âge, 
+consommation...)
 
 ## De la prévision en général 
 
 Suite à quelques recherches, deux pistes principales se dégagent :
 
-* Régression
-* Modèle ARMA
+* La régression linéaire
+* Les séries temporelles
 
 Plus de détails 
 [ici](http://zestedesavoir.com/forums/sujet/1514/prevoir-une-evolution-a-partir-de-courbes/).
@@ -23,21 +29,3 @@ En outre, on pourra au préalable éliminer le bruit des données, c'est-à-dire
 faire en sorte que les évènements aléatoires et peu représentatifs - 
 la vache était malade par exemple - n'influencent pas trop l'analyse. Lisser 
 les courbes - avec une moyenne mobile notamment - semble être judicieux.
-
-### Sources
-
-* [Méthodes de prévision](http://drupal.mgi.polymtl.ca/?q=book/export/html/19)
-* [Notions de base](http://unt-ori2.crihan.fr/unspf/2010_Limoges_Vignoles_StatsDescriptives/co/03-4-4%20interpolation-extrapolation.html)
-
-## Régression linéaire
-
-### Sources
-
-* [Présentation](http://fr.wikipedia.org/wiki/R%C3%A9gression_%28statistiques%29)
-
-## Modèle ARMA
-
-### Sources
-
-* [Présentation](http://fr.wikipedia.org/wiki/ARMA)
-* [Séries temporelles](http://www.itl.nist.gov/div898/handbook/pmc/section4/pmc4.htm)

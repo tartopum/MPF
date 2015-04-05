@@ -1,4 +1,4 @@
-# Concepts et généralités
+# Le code
 
 Tout se déroule à partir du `main.py` :
 
@@ -70,3 +70,8 @@ def main():
         # Views
         crude_data_view.save(cow)
 ```
+
+## Les tests
+
+Le code est testé avec des tests unitaires, contenus dans le dossier `test`. 
+TravisCI est employé comme outil d'intégration continue.
