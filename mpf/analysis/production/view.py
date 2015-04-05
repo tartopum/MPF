@@ -66,7 +66,7 @@ class View:
         plt.ylabel(self.PROD_LABEL)
         plt.legend()
 
-        self.add_plot("Lactations")
+        self.add_plot("All lactations")
 
     def draw_production(self, cow, getters):
         date_pattern = '%Y-%m-%d'
@@ -89,7 +89,7 @@ class View:
 
         plt.gcf().autofmt_xdate()
 
-        self.add_plot("The whole production")
+        self.add_plot("All production")
 
     def plot(self, cow, title, getters):
         with self.doc.create(Section(title)):
