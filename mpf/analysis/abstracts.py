@@ -12,6 +12,8 @@ class AbstractAnalysis:
     CONS_LBL = "cons"
     COW_LBL = "cow"
     CRUDE_LBL = "crude"
+    DATES_KEY = ("crude", "dates")
+    DATES_LBL = "dates"
     DAYS_KEY = ("crude", "days")
     DAYS_LBL = "days"
     LACT_LBL = "lact"
