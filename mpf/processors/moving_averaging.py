@@ -1,33 +1,15 @@
-class MovingAveraging:
-    """TODO"""
+__all__ = ("process")
 
-    def __init__(self, step):
-        """
-        TODO
-        """
-        
-        self.step = step
+
+def process(data, step):
+    """TODO"""
     
-    def process(self, x, y):
-        """
-        TODO
-        """
+    smoothed_data = []
+    
+    for k in range(step, len(data)-step):
+        s = sum(data[k-step:k+step+1])
         
-        # Not to alter args
-        x = x + []
-        y = y + []
+        average = float(s) / (2*step + 1)
+        smoothed_data.append(average) 
         
-        x = x[self.step:len(x) - self.step]
-        average_y = []
-        
-        for k in range(self.step, len(y)-self.step):
-            # Sum 'step' y before and after the current one,
-            # which is y[k]
-            s = sum(y[k-self.step:k+self.step+1])
-            
-            average = float(s) / (2*self.step + 1)
-            average_y.append(average) 
-            
-        y = average_y
-        
-        return x, y
+    return smoothed_data

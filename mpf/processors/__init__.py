@@ -1,6 +1,5 @@
-from mpf.processors.alea_values import AleaValues
-from mpf.processors.difference import Difference
-from mpf.processors.fourier import ImFourierTransform, ReFourierTransform
-from mpf.processors.linear_regression import LinearRegression
-from mpf.processors.moving_averaging import MovingAveraging
-from mpf.processors.statistics import Statistics
+from . import alea_values as alea
+from . import difference as diff
+from . import linear_regression as linreg
+from . import moving_averaging as ma
+from . import statistics as stats

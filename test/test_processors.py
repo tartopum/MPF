@@ -1,51 +1,31 @@
-from mpf.processors import AleaValues
-from mpf.processors import Difference 
-from mpf.processors import ImFourierTransform, ReFourierTransform
-from mpf.processors import LinearRegression
-from mpf.processors import MovingAveraging
-from mpf.processors import Statistics
-
+from mpf.processors import alea, diff, linreg, ma, stats 
 
 
 # Difference
 def test_difference():
-    difference = Difference()
-    
     data = [1, 2, 3, 4, 5]
+    assert diff.process(data=data) == [2-1, 3-2, 4-3, 5-4]
     
-    assert difference.process(data=data) == [2-1, 3-2, 4-3, 5-4]
-    
-
-# Fourier transform
-
 
 # Alea values
 def test_alea_values():
-    a = AleaValues(percentage=80)
+    data = [[1, 2, 3], [4, 5, 6]]
     
-    data = [[1, 2, 3]]
-    
-    a.process(data=data)
+    alea.process(data=data, percentage=80)
     
     
 # MovingAveraging
 def test_ma():
     step = 1
     d = 2*step + 1
+    data = [10, 15, 8, 3, 14, 7]
     
-    ma = MovingAveraging(step=step)
-    
-    x = [1, 2, 3, 4, 5, 6]
-    y = [10, 15, 8, 3, 14, 7]
-    
-    assert ma.process(x=x, y=y) == ([2, 3, 4, 5], [(10+15+8)/d, (15+8+3)/d, 
-                                               (8+3+14)/d, (3+14+7)/d])
+    assert ma.process(data=data, step=step) == [(10+15+8)/d, (15+8+3)/d, 
+                                               (8+3+14)/d, (3+14+7)/d]
                                                
                                                
 # LinearRegression
 def test_linreg():
-    linreg = LinearRegression()
-    
     A = [
         [1, 9, 9**2, 4, 4**2],
         [1, 8, 8**2, 6, 6**2],
@@ -63,15 +43,6 @@ def test_linreg():
     
 # Statistics
 def test_stats():
-    functions = {
-        "mean": Statistics.mean,
-        "median": Statistics.median,
-        "mode": Statistics.mode,
-        "variance": Statistics.variance
-    }
-    
-    stats = Statistics(functions=functions)
-    
     data = [1, 2, 3, 4, 4]
     
     assert stats.process(data=data) == {

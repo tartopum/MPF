@@ -20,8 +20,6 @@ class LinRegErrorStats(AbstractAnalysis):
         )
 
     def analyze(self, cow, proportion):
-        stats = processors.Statistics()
-        
         key = LinearRegression.get_key(
             self.PRODS_LBL,
             LinearRegression.ERROR_LBL, 
@@ -30,7 +28,7 @@ class LinRegErrorStats(AbstractAnalysis):
         
         errors = [cow[lact_key][key] for lact_key in cow.get_lact_keys()]
         
-        measures = stats.process(errors)
+        measures = processors.stats.process(errors)
         
         for k, v in measures.items():
             cow[self.get_key(proportion, k)] = v

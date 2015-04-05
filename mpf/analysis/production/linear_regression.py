@@ -4,7 +4,6 @@ from mpf import processors
 __all__ = ("LinearRegression")
 
 
-
 class LinearRegression(AbstractAnalysis):
     
     LBL = "linreg"
@@ -44,9 +43,6 @@ class LinearRegression(AbstractAnalysis):
         return A
         
     def analyze(self, cow, proportion):
-        linreg = processors.LinearRegression()
-        aleavals = processors.AleaValues(proportion)
-        
         error_key = self.get_key(self.PRODS_LBL, self.ERROR_LBL, proportion)
         X_key = self.get_key(self.PRODS_LBL, self.X_LBL, proportion)
         
@@ -64,9 +60,9 @@ class LinearRegression(AbstractAnalysis):
                     [self.get_key_num(lact_key)] * len(lact[self.DAYS_KEY])
                 ])
                 
-                A_alea, B_alea = aleavals.process([A, B])
-                X = linreg.process(A_alea, B_alea)
-                error = linreg.error(X, A, B)
+                A_alea, B_alea = processors.alea.process([A, B], proportion)
+                X = processors.linreg.process(A_alea, B_alea)
+                error = processors.linreg.error(X, A, B)
                 
             lact[error_key] = error
             lact[X_key] = X
