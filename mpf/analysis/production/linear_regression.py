@@ -52,7 +52,7 @@ class LinearRegression(AbstractAnalysis):
             X = self.cache.get_data(lact, X_key)
             error = self.cache.get_data(lact, error_key)
             
-            if X is None or error is None:
+            if X is None:
                 B = lact[self.PRODS_KEY]
                 A = LinearRegression.format_A([
                     lact[self.CONS_KEY],
@@ -62,10 +62,13 @@ class LinearRegression(AbstractAnalysis):
                 
                 A_alea, B_alea = processors.alea.process([A, B], proportion)
                 X = processors.linreg.process(A_alea, B_alea)
+                
+                self.cache.save_data(lact, X_key, X)
+            if error is None:
                 error = processors.linreg.error(X, A, B)
+
+                self.cache.save_data(lact, error_key, error)
                 
             lact[error_key] = error
             lact[X_key] = X
             
-            self.cache.save_data(lact, X_key, X)
-            self.cache.save_data(lact, error_key, error)
