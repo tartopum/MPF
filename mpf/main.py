@@ -1,33 +1,26 @@
-import os
-
 from mpf.models.db import DBSelector
-from mpf.analysis import production, AbstractAnalysis
-
+from mpf.analysis import production
 import mpf.config as config 
-
 
 
 def main():
     data = DBSelector(config.DATABASE_PATH).data()
 
-    # Create folder
-    if not os.path.isdir(config.PROD_DIR):
-        os.makedirs(config.PROD_DIR)
-
     # Production 
-    prod_ma = production.MovingAveraging()
-    prod_linreg = production.LinearRegression()
-    prod_linreg_stats = production.LinRegErrorStats()
-    prod_view = production.View(config.PROD_DIR)
+    crude_prod_view = production.views.crude.View()
     
     for cow_key in data.get_cow_keys():
         cow = data[cow_key]
         
         # Production 
-        prod_ma.analyze(cow, step=2)
-        prod_linreg.analyze(cow, proportion=80)
-        prod_linreg_stats.analyze(cow, proportion=80)
-
+        production.ma.analyze(cow, step=2)
+        production.linreg.analyze(cow, proportion=80)
+        production.linreg_stats.analyze(cow, proportion=80)
+        
+        crude_prod_view.create_doc(cow)
+        crude_prod_view.plot(cow)
+        crude_prod_view.save()
+        """
         prod_view.create_doc(cow)
         prod_view.plot(cow, "Crude data", {
             "dates": AbstractAnalysis.DATES_KEY,
@@ -40,6 +33,9 @@ def main():
             "prods": prod_ma.get_prods_key(2)
         })
         prod_view.save()
+        """
+
+        break
 
     
 if __name__ == "__main__":

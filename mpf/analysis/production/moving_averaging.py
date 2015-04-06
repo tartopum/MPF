@@ -36,16 +36,18 @@ class MovingAveraging(AbstractAnalysis):
             days_ma = self.cache.get_data(lact, ma_days_key)
             prods_ma = self.cache.get_data(lact, ma_prods_key)
             
-            if dates_ma is None or days_ma is None or prods_ma is None:
-                l = len(lact[self.DATES_KEY])
+            l = len(lact[self.DATES_KEY])
+            
+            if dates_ma is None:
                 dates_ma = lact[self.DATES_KEY][step:l-step]
+                self.cache.save_data(lact, ma_dates_key, dates_ma)
+            if days_ma is None: 
                 days_ma = lact[self.DAYS_KEY][step:l-step]
+                self.cache.save_data(lact, ma_days_key, days_ma)
+            if prods_ma is None:
                 prods_ma = processors.ma.process(lact[self.PRODS_KEY], step)
+                self.cache.save_data(lact, ma_prods_key, prods_ma)
             
             lact[ma_dates_key] = dates_ma
             lact[ma_days_key] = days_ma
             lact[ma_prods_key] = prods_ma
-            
-            self.cache.save_data(lact, ma_dates_key, dates_ma)
-            self.cache.save_data(lact, ma_days_key, days_ma)
-            self.cache.save_data(lact, ma_prods_key, prods_ma)
