@@ -23,6 +23,12 @@ def test_ma():
     assert ma.process(data=data, step=step) == [(10+15+8)/d, (15+8+3)/d, 
                                                (8+3+14)/d, (3+14+7)/d]
                                                
+def test_truncate():
+    step = 2
+    data = [1, 2, 3, 4, 5, 6, 7]
+    
+    assert ma.truncate(data=data, step=step) == [3, 4, 5]
+                                               
                                                
 # LinearRegression
 def test_linreg():
