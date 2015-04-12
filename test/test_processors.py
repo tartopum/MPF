@@ -15,12 +15,12 @@ def test_alea_values():
     
     
 # MovingAveraging
-def test_ma():
+def test_smooth():
     step = 1
     d = 2*step + 1
     data = [10, 15, 8, 3, 14, 7]
     
-    assert ma.process(data=data, step=step) == [(10+15+8)/d, (15+8+3)/d, 
+    assert ma.smooth(data=data, step=step) == [(10+15+8)/d, (15+8+3)/d, 
                                                (8+3+14)/d, (3+14+7)/d]
                                                
 def test_truncate():

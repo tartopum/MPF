@@ -1,4 +1,4 @@
-__all__ = ("process", "truncate")
+__all__ = ("smooth", "truncate")
 
 
 def truncate(data, step):
@@ -6,7 +6,7 @@ def truncate(data, step):
     
     return data[step:-step]
     
-def process(data, step):
+def smooth(data, step):
     """TODO"""
     
     width = 2*step + 1
