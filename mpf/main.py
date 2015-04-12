@@ -1,26 +1,44 @@
 from mpf.models.db import DBSelector
-from mpf.analysis import production
-import mpf.config as config 
+from mpf import analysis
+from mpf import config 
 
 
 def main():
     data = DBSelector(config.DATABASE_PATH).data()
 
     # Production 
-    crude_prod_view = production.views.crude.View()
+    # crude_prod_view = production.views.crude.View()
     
-    for cow_key in data.get_cow_keys():
-        cow = data[cow_key]
-        
-        # Production 
-        production.ma.analyze(cow, step=2)
-        production.linreg.analyze(cow, proportion=80)
-        production.linreg_stats.analyze(cow, proportion=80)
-        
-        crude_prod_view.create_doc(cow)
-        crude_prod_view.plot(cow)
-        crude_prod_view.save()
+    for cow in data.get_cows():
+        for lact in cow.get_lacts():
+            # Moving averaging
+            ## X
+            analysis.ma.Truncate(lact, key=config.DATES_KEY, step=2)
+            analysis.ma.Truncate(lact, key=config.DAYS_KEY, step=2)
+            
+            ## Y
+            analysis.ma.Smooth(lact, key=config.PRODS_KEY, step=2)
+            
+            # Linear regression
+            ## Prods
+            key = config.PRODS_LBL
+            A = [
+                lact[config.CONS_KEY],
+                lact[config.DAYS_KEY],
+                [lact.get_key_num()] * len(lact[config.DAYS_KEY])
+            ]
+            B = lact[config.PRODS_KEY]
+            
+            analysis.linreg.ParamVector(lact, key=key, proportion=80, A=A, B=B)
+            analysis.linreg.Error(lact, key=key, proportion=80, A=A, B=B)
+            
+        # analysis.linreg_stats.Stats(cow, proportion=80)
+            
         """
+        if crude_prod_view.create_doc(cow):
+            crude_prod_view.plot(cow)
+            crude_prod_view.save()
+        
         prod_view.create_doc(cow)
         prod_view.plot(cow, "Crude data", {
             "dates": AbstractAnalysis.DATES_KEY,
@@ -34,8 +52,6 @@ def main():
         })
         prod_view.save()
         """
-
-        break
 
     
 if __name__ == "__main__":

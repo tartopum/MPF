@@ -1,7 +1,7 @@
 import sqlite3
 
-from mpf.analysis import AbstractAnalysis
 from mpf.models.data import DataDict
+from mpf import config
 
 __all__ = ("DBSelector")
 
@@ -45,17 +45,17 @@ class DBSelector:
         data = DataDict(None, None)
         
         for cow_num in self.cows():
-            cow_key = (AbstractAnalysis.COW_LBL, cow_num)
+            cow_key = (config.COW_LBL, cow_num)
             cow = data.add_child(cow_key)
             
             for lact_num in self.lacts(cow_num):
-                lact_key = (AbstractAnalysis.LACT_LBL, lact_num)
+                lact_key = (config.LACT_LBL, lact_num)
                 lact = cow.add_child(lact_key)
                 
-                lact[AbstractAnalysis.CONS_KEY] = self.cons(cow_num, lact_num)
-                lact[AbstractAnalysis.DATES_KEY] = self.dates(cow_num, lact_num)
-                lact[AbstractAnalysis.DAYS_KEY] = self.days(cow_num, lact_num)
-                lact[AbstractAnalysis.PRODS_KEY] = self.prods(cow_num, lact_num)
+                lact[config.CONS_KEY] = self.cons(cow_num, lact_num)
+                lact[config.DATES_KEY] = self.dates(cow_num, lact_num)
+                lact[config.DAYS_KEY] = self.days(cow_num, lact_num)
+                lact[config.PRODS_KEY] = self.prods(cow_num, lact_num)
         
         return data
     
