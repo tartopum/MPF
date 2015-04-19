@@ -1,6 +1,8 @@
 from os.path import isfile, join
 import pickle
 
+from mpf.config import FORCE_CACHE
+
 __all__ = ("Cache")
 
 
@@ -36,7 +38,7 @@ class Cache:
         
         return self.srepr(keys, "-")  
             
-    def save_data(self, datadict, key, force=False):
+    def save_data(self, datadict, key):
         filename = self.get_filename(datadict, key)
         path = join(self.directory, filename)
         data = datadict[key]
@@ -47,5 +49,5 @@ class Cache:
                 
                 print("{} saved.".format(path))
                 
-        if isfile(path) and force or not isfile(path):
+        if isfile(path) and FORCE_CACHE or not isfile(path):
             save()
