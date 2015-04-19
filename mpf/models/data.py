@@ -10,6 +10,12 @@ class DataDict(dict):
         self.key = key
         self.parent = parent
 
+    def __gt__(self, other):
+        return self.key > other.key
+            
+    def __lt__(self, other):
+        return self.key < other.key
+
     def add_child(self, key):
         data = DataDict(key, self)
         self[key] = data
