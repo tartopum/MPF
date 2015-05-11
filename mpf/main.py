@@ -31,6 +31,7 @@ def main():
             analysis.linreg.Error(lact, key=key, proportion=80, A=A, B=B)
             
         views.production.Crude(cow)
+        views.production.MovingAveraging(cow, step=2)
 
     
 if __name__ == "__main__":

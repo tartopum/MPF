@@ -7,8 +7,12 @@ __all__ = ("Crude")
 
 
 class Crude(AbstractPlotView):
-    DATES_GETTER = config.DATES_KEY
-    DAYS_GETTER = config.DAYS_KEY
-    PRODS_GETTER = config.PRODS_KEY
-    FNAME_PATTERN = join(config.CRUDE_PROD_VIEWS_DIR, "{}")
-    TITLE = "Crude production"
+    
+    def __init__(self, cow):
+        self.DATES_GETTER = config.DATES_KEY
+        self.DAYS_GETTER = config.DAYS_KEY
+        self.PRODS_GETTER = config.PRODS_KEY
+        self.FNAME_PATTERN = join(config.CRUDE_PROD_VIEWS_DIR, "{}")
+        self.TITLE = "Crude production"
+        
+        AbstractPlotView.__init__(self, cow)

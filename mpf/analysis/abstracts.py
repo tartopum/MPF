@@ -13,6 +13,6 @@ class Analysis:
         
         if data is None:
             data = self.process(lact, *args, **kwargs)
-            lact[key_out] = data
-            
             self.cache.save_data(lact, key_out)
+            
+        lact[key_out] = data

@@ -17,9 +17,11 @@ class AbstractPlotView(AbstractView):
     DAY_LABEL = "Day"
     PROD_LABEL = "Production (L)"
     
-    def __init__(self, cow, *args, **kwargs):
+    def __init__(self, cow):
+        AbstractView.__init__(self)
+        
         if self.create_doc(cow):
-            self.plot(cow, *args, **kwargs)
+            self.plot(cow)
             self.save()
     
     def draw_lact(self, lact):
@@ -71,7 +73,7 @@ class AbstractPlotView(AbstractView):
         with self.doc.create(pylatex.Section("Production")):
             self.add_plot()
 
-    def plot(self, cow, *args):
+    def plot(self, cow):
         self.draw_production(cow)
         plt.clf()
     
