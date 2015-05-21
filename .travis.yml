@@ -18,9 +18,8 @@ install:
   - conda install --yes numpy=$NUMPY scipy=$SCIPY matplotlib pip
   - pip install setuptools
   - pip install -r requirements-dev.txt
-  - git clone https://github.com/Vayel/PyLaTeX
+  - git clone https://github.com/JelteF/PyLaTeX
   - cd PyLaTeX
-  - git checkout outputdir
   - python setup.py install 
     
 script: 
