@@ -1,3 +1,4 @@
+import os.path
 import datetime
 
 import matplotlib.pyplot as plt
@@ -19,6 +20,8 @@ class AbstractPlotView(AbstractView):
     
     def __init__(self, cow):
         AbstractView.__init__(self)
+
+        self.fname_pattern = os.path.join(self.fname_pattern, "production")
         
         if self.create_doc(cow):
             self.plot(cow)

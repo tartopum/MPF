@@ -10,12 +10,7 @@ DATABASE_DIR = join(DATA_DIR, "db")
 DATABASE_PATH = join(DATABASE_DIR, "mpf.db")
 
 CACHE_DIR = join(DATA_DIR, "cache")
-
 VIEWS_DIR = join(DATA_DIR, "views")
-PROD_VIEWS_DIR = join(VIEWS_DIR, "production")
-CRUDE_PROD_VIEWS_DIR = join(PROD_VIEWS_DIR, "crude")
-SMOOTHED_PROD_VIEWS_DIR = join(PROD_VIEWS_DIR, "smoothed")
-LINREG_PROD_VIEWS_DIR = join(PROD_VIEWS_DIR, "linreg")
 
 
 # Labels/keys

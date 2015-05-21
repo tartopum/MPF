@@ -1,10 +1,9 @@
 import os
 
 import matplotlib.pyplot as plt
-
 import pylatex
 
-from mpf.config import FORCE_VIEW
+from mpf import config
 
 __all__ = ("AbstractView")
 
@@ -14,10 +13,7 @@ class AbstractView:
     EXT = "pdf"
     
     def __init__(self):
-        root = os.path.dirname(self.FNAME_PATTERN)
-
-        if not os.path.isdir(root):
-            os.makedirs(root)
+        self.fname_pattern = config.VIEWS_DIR
 
     def add_plot(self):
         self.doc.append(pylatex.command.Command('nobreak'))
@@ -26,9 +22,13 @@ class AbstractView:
             plot.add_plot(plt, width=r'\textwidth')
 
     def create_doc(self, cow):
-        fname = self.FNAME_PATTERN.format(cow.get_key_num())
+        fname = self.fname_pattern.format(cow.get_key_num())
+        dirname  = os.path.dirname(fname)
 
-        if os.path.isfile("{}.{}".format(fname, self.EXT)) and not FORCE_VIEW: 
+        if not os.path.isdir(dirname):
+            os.makedirs(dirname)
+
+        if os.path.isfile("{}.{}".format(fname, self.EXT)) and not config.FORCE_VIEW: 
             return False
 
         self.doc = pylatex.Document(fname, title="Cow {} - {}".format(
