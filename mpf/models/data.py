@@ -1,4 +1,4 @@
-from mpf.config import COW_LBL, LACT_LBL
+from mpf import config
 
 __all__ = ("DataDict")
 
@@ -22,11 +22,16 @@ class DataDict(dict):
         
         return data
 
+    def concatenate_lacts(self, key):
+        lact_keys = sorted(self.get_lact_keys())
+
+        return [val for lact_key in lact_keys for val in self[lact_key][key]]
+
     def get_cows(self):
         return [self[key] for key in self.get_cow_keys()]
 
     def get_cow_keys(self):
-        return [key for key in self.keys() if COW_LBL in key]
+        return [key for key in self.keys() if config.COW_LBL in key]
 
     def get_key_num(self):
         return self.key[1]
@@ -35,7 +40,7 @@ class DataDict(dict):
         return [self[key] for key in self.get_lact_keys()]
 
     def get_lact_keys(self):
-        return [key for key in self.keys() if LACT_LBL in key]
+        return [key for key in self.keys() if config.LACT_LBL in key]
         
     def get_parent_keys(self):
         keys = [self.key]

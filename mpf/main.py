@@ -30,6 +30,10 @@ def main():
             analysis.linreg.ParamVector(lact, key=key, proportion=80, A=A, B=B)
             analysis.linreg.Error(lact, key=key, proportion=80, A=A, B=B)
             
+        # Differencing
+        analysis.diff.Difference(cow, key= config.PRODS_KEY, label=config.PRODS_LBL)
+
+        # Views
         views.production.Crude(cow)
         views.production.MovingAveraging(cow, step=2)
 
