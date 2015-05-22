@@ -18,10 +18,8 @@ class AbstractPlotView(AbstractView):
     DAY_LABEL = "Day"
     PROD_LABEL = "Production (L)"
     
-    def __init__(self, cow):
-        AbstractView.__init__(self)
-
-        self.fname_pattern = os.path.join(self.fname_pattern, "production")
+    def __init__(self, cow, fname_pattern):
+        AbstractView.__init__(self, os.path.join("production", fname_pattern))
         
         if self.create_doc(cow):
             self.plot(cow)

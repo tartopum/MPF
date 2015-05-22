@@ -12,8 +12,8 @@ class AbstractView:
     
     EXT = "pdf"
     
-    def __init__(self):
-        self.fname_pattern = config.VIEWS_DIR
+    def __init__(self, fname_pattern):
+        self.fname_pattern = os.path.join(config.VIEWS_DIR, fname_pattern)
 
     def add_plot(self):
         self.doc.append(pylatex.command.Command('nobreak'))

@@ -15,6 +15,4 @@ class MovingAveraging(AbstractPlotView):
         self.PRODS_GETTER = ma.MAAnalysis.get_key(key=config.PRODS_KEY, step=step)
         self.TITLE = "Smoothed data - step = {}".format(step)
        
-        self.fname_pattern = join(self.fname_pattern, "smoothed", "{}")
-
-        AbstractPlotView.__init__(self, cow)
+        AbstractPlotView.__init__(self, cow, join("smoothed", "{}"))

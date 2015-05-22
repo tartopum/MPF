@@ -14,6 +14,4 @@ class Crude(AbstractPlotView):
         self.PRODS_GETTER = config.PRODS_KEY
         self.TITLE = "Crude production"
         
-        AbstractPlotView.__init__(self, cow)
-
-        self.fname_pattern = join(self.fname_pattern, "crude", "{}")
+        AbstractPlotView.__init__(self, cow, join("crude", "{}"))
