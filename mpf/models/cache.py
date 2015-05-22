@@ -38,10 +38,9 @@ class Cache:
         
         return self.srepr(keys, "-")  
             
-    def save_data(self, datadict, key):
+    def save_data(self, datadict, key, data):
         filename = self.get_filename(datadict, key)
         path = join(self.directory, filename)
-        data = datadict[key]
         
         def save():
             with open(path, "wb") as f:
