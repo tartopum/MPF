@@ -34,8 +34,9 @@ def main():
         analysis.diff.Difference(cow, key= config.PRODS_KEY, label=config.PRODS_LBL)
 
         # Views
-        views.production.Crude(cow)
-        views.production.MovingAveraging(cow, step=2)
+        views.Crude(cow)
+        views.MovingAveraging(cow, step=2)
+        views.Differencing(cow)
 
     
 if __name__ == "__main__":
