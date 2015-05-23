@@ -1,4 +1,4 @@
-__all__ = ("smooth", "truncate")
+__all__ = ('smooth', 'truncate')
 
 
 def truncate(data, step):
@@ -12,7 +12,7 @@ def smooth(data, step):
     width = 2*step + 1
     smoothed_data = []
     
-    for k in range(len(data)-2*step):
+    for k in range(len(data) - 2*step):
         s = sum(data[k:k+width])
         
         average = float(s) / width
