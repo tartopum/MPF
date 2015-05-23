@@ -1,8 +1,8 @@
 import sys
-from os.path import dirname, join, realpath
+from os.path import join
 import sqlite3
 
-from mpf.models.sql import ORM
+from mpf.models.db import DBSelector
 from mpf.config import DATABASE_PATH
 
 
@@ -26,7 +26,7 @@ def check(line):
         return (cow, date, prod, cons, lac, day)
 
 def main(path):
-    query = ORM(DATABASE_PATH)
+    db = DBSelector(DATABASE_PATH)
     q = "INSERT INTO CrudeData VALUES (NULL, ?, ?, ?, ?, ?, ?)"
     
     with open(path, "r") as f:
@@ -38,7 +38,7 @@ def main(path):
         
         if data is not None:
             try:
-                query.execute(q, data)
+                db.query.execute(q, data)
             except sqlite3.IntegrityError: # If the line already exists
                 pass
             else:
