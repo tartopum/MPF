@@ -53,23 +53,21 @@ class AbstractPlotView(AbstractView):
             self.add_plot()
 
     def draw_production(self, cow):
-        date_pattern = '%Y-%m-%d'
-        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter(date_pattern))
-        plt.gca().xaxis.set_major_locator(mdates.AutoDateLocator())
-
-        plt.xlabel(self.DATE_LABEL)
-        plt.ylabel(self.PROD_LABEL)
+        curr_day = 0
 
         for lact in sorted(cow.get_lacts()):
+            prods = lact[self.PRODS_GETTER]
+            n = len(prods)
+
             plt.plot(   
-                [
-                    datetime.datetime.strptime(date, date_pattern).date() 
-                    for date in lact[self.DATES_GETTER]
-                ],
-                lact[self.PRODS_GETTER]
+                list(range(curr_day, curr_day + n)),
+                prods
             )
 
-        plt.gcf().autofmt_xdate()
+            curr_day += n
+
+        plt.xlabel(self.DAY_LABEL)
+        plt.ylabel(self.PROD_LABEL)
 
         with self.doc.create(pylatex.Section("Production")):
             self.add_plot()
