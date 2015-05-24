@@ -17,3 +17,11 @@ CREATE TABLE IF NOT EXISTS SmoothedData(
     FOREIGN KEY(fid) REFERENCES CrudeData(id),
     UNIQUE (fid, step)
 );
+
+CREATE TABLE IF NOT EXISTS DifferencedData(
+    fid INTEGER, -- foreign id
+    prod REAL NOT NULL,
+    degree INTEGER,
+    FOREIGN KEY(fid) REFERENCES CrudeData(id),
+    UNIQUE (fid, degree)
+);

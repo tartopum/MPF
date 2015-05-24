@@ -1,20 +1,59 @@
-from mpf.analysis.abstracts import Analysis
-from mpf import processors
-from mpf import config
+"""Contain the class for differencing data."""
 
-__all__ = ("Difference")
+from mpf import processors as proc
+from mpf import settings as stg
 
 
-class Difference(Analysis):
-    
-    LBL = "diff"
-    
-    @classmethod
-    def get_key(cls, *args, **kwargs):
-        return (cls.LBL, kwargs["label"])
+__all__ = ('Differencing')
 
-    @classmethod
-    def process(cls, cow, *args, **kwargs):
-        data = cow.concatenate_lacts(kwargs["key"])
 
-        return processors.diff.process(data)
+class Differencing:
+    """Difference data."""
+
+    def __init__(self, cow, degree):
+        """
+        :param cow: The cow the production of to be differenced.
+        :param degree: The number of differencings.
+
+        :type cow: int
+        :type degree: int
+        """
+
+        self.cow = cow
+        self.degree = degree
+
+    def save(self, dates, prods):
+        """Save the result of the analysis.
+
+        :param dates: The dates corresponding to the differenced productions.
+        :param prods: The differenced productions.
+
+        :type dates: list
+        :type prods: list
+        """
+
+        params = []
+        
+        for i in range(len(dates)):
+            date = dates[i]
+            prod = prods[i]
+
+            q_select = 'SELECT id FROM CrudeData WHERE cow = ? AND date = ?'
+            fid = stg.model.query(q_select, (self.cow, date))[0][0]
+
+            params.append((fid, prod, self.degree))
+
+        q_insert = 'INSERT INTO DifferencedData VALUES (?, ?, ?)'
+        stg.model.querymany(q_insert, params)
+
+    def work(self):
+        """Run the analysis."""
+
+        dates = stg.model.dates(self.cow)
+        prods = stg.model.prods(self.cow)
+
+        for _ in range(self.degree):
+            dates = proc.diff.truncate(dates)
+            prods = proc.diff.difference(prods)
+
+        self.save(dates, prods)

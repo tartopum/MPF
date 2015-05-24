@@ -1,17 +1,21 @@
+"""Contain the class for smoothing data."""
+
 from mpf import processors as proc
-from mpf import settings as stg 
+from mpf import settings as stg
 
 
 __all__ = ('MovingAveraging')
 
 
 class MovingAveraging:
-    
-    def __init__(self, step):
+    """Apply a moving average on data."""
+
+    def __init__(self, cow, step):
+        self.cow = cow
         self.step = step
 
-    def save(self, cow, dates, prods):
-        """Save the result of the analysis of ``cow``."""
+    def save(self, dates, prods):
+        """Save the result of the analysis."""
 
         params = []
 
@@ -20,20 +24,20 @@ class MovingAveraging:
             prod = prods[i]
 
             q_select = 'SELECT id FROM CrudeData WHERE cow = ? AND date = ?'
-            fid = stg.model.query(q_select, (cow, date))[0][0]
+            fid = stg.model.query(q_select, (self.cow, date))[0][0]
 
             params.append((fid, prod, self.step))
-            
+
         q_insert = 'INSERT INTO SmoothedData VALUES (?, ?, ?)'
         stg.model.querymany(q_insert, params)
 
-    def work(self, cow):
-        """Run the analysis of ``cow``."""
+    def work(self):
+        """Run the analysis."""
 
-        dates = stg.model.dates(cow)
+        dates = stg.model.dates(self.cow)
         dates = proc.ma.truncate(dates, self.step)
 
-        prods = stg.model.prods(cow)
+        prods = stg.model.prods(self.cow)
         prods = proc.ma.smooth(prods, self.step)
 
-        self.save(cow, dates, prods)
+        self.save(dates, prods)

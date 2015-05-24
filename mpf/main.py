@@ -1,4 +1,4 @@
-"""The starting point of the code. Run it to make the analysis work."""
+"""The entry point of the code. Run it to make the analysis work."""
 
 import sqlite3
 
@@ -11,14 +11,22 @@ def main():
     """Launch the analysis."""
 
     for cow in stg.model.cows():
-        try:
-            views.Crude().render(cow)
+        views.Crude(cow).render()
 
-            analysis.MovingAveraging(step=2).work(cow)
-            analysis.MovingAveraging(step=4).work(cow)
-            views.MovingAveraging().render(cow, [2, 4])
+        try:
+            analysis.MovingAveraging(cow, step=2).work()
+            analysis.MovingAveraging(cow, step=4).work()
         except sqlite3.IntegrityError:
             pass # TODO: cache
+        
+        views.MovingAveraging(cow).render([2, 4])
+
+        try:
+            analysis.Differencing(cow, degree=1).work()
+        except sqlite3.IntegrityError:
+            pass # TODO: cache
+
+        views.Differencing(cow).render([1])
 
 
 if __name__ == '__main__':
