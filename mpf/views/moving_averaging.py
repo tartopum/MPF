@@ -1,18 +1,62 @@
-from os.path import join
+"""Contain the class to generate a view for smoothed data."""
 
-from mpf.views.abstracts import AbstractGallery
-from mpf.analysis import ma
-from mpf import config
+import matplotlib.pyplot as plt
+import pylatex
 
-__all__ = ("MovingAveraging")
+from mpf.views.abstracts import View
+from mpf import tools
+from mpf import settings as stg
 
 
-class MovingAveraging(AbstractGallery):
+__all__ = ('MovingAveraging')
 
-    def __init__(self, cow, step):
-        self.DATES_GETTER = ma.MAAnalysis.get_key(key=config.DATES_KEY, step=step)
-        self.DAYS_GETTER = ma.MAAnalysis.get_key(key=config.DAYS_KEY, step=step)
-        self.PRODS_GETTER = ma.MAAnalysis.get_key(key=config.PRODS_KEY, step=step)
-        self.TITLE = "Smoothed data - step = {}".format(step)
-       
-        AbstractGallery.__init__(self, cow, join("smoothed", "{}"))
+
+class MovingAveraging(View):
+    """Provide a view for smoothed data."""
+
+    def __init__(self, cow):
+        """
+        :param cow: The cow the view of is generated.
+        :type cow: int
+        """
+
+        super().__init__('smoothed')
+
+        self.title = 'Smoothed production'
+        self.cow = cow
+
+    def generate(self, steps):
+        """Generate the view of smoothed production.
+
+        :param steps: The steps with which the data have been smoothed.
+        :type steps: list
+        """
+
+        for step in steps:
+            self.plot(step)
+            plt.clf()
+
+    def plot(self, step):
+        """Add the plot of smoothed data with the step ``step``.
+
+        :param step: The step with which the data have been smoothed.
+        :type step: int
+        """
+
+        data = stg.model.query(
+            'SELECT SmoothedData.prod FROM SmoothedData '
+            'INNER JOIN CrudeData ON SmoothedData.fid = CrudeData.id '
+            'WHERE CrudeData.cow = ? AND SmoothedData.step = ? '
+            'ORDER BY CrudeData.date',
+            (self.cow, step)
+        )
+
+        y = tools.flatten(data)
+        x = list(range(step, step + len(y)))
+
+        plt.plot(x, y)
+        plt.xlabel(self.DAY_LABEL)
+        plt.ylabel(self.PROD_LABEL)
+
+        with self.doc.create(pylatex.Section('Step: {}'.format(step))):
+            self.add_plot()

@@ -1,3 +1,7 @@
-from . import differencing as diff
-from . import linear_regression as linreg
-from . import moving_averaging as ma
+"""
+Contain classes to analyze data: load them if they exist, else generate them
+ and save them.
+"""
+
+from .differencing import Differencing
+from .moving_averaging import MovingAveraging

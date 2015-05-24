@@ -1,43 +1,43 @@
-from mpf.analysis.abstracts import Analysis
-from mpf import processors
-from mpf import config
+"""Contain the class for smoothing data."""
 
-__all__ = ("Smooth", "Truncate")
-
-
-class MAAnalysis(Analysis):
-    
-    LBL = "ma"
-    
-    @classmethod
-    def get_keys(cls, step):
-        def get_key(cat):
-            return (cls.LBL, cat, step)
-            
-        return {
-            config.DATES_KEY: get_key(config.DATES_LBL),
-            config.DAYS_KEY: get_key(config.DAYS_LBL),
-            config.PRODS_KEY: get_key(config.PRODS_LBL),
-            config.CONS_KEY: get_key(config.CONS_LBL)
-        }
-    
-    @classmethod
-    def get_key(cls, *args, **kwargs):
-        return cls.get_keys(kwargs["step"])[kwargs["key"]]
-
-    @classmethod
-    def process(cls, lact, *args, **kwargs):
-        key = kwargs["key"]
-        step = kwargs["step"]
-        
-        return cls.processor(lact[key], step)
+from mpf import processors as proc
+from mpf import settings as stg
 
 
-class Smooth(MAAnalysis):
+__all__ = ('MovingAveraging')
 
-    processor = processors.ma.smooth
-    
 
-class Truncate(MAAnalysis):
+class MovingAveraging:
+    """Apply a moving average on data."""
 
-    processor = processors.ma.truncate
+    def __init__(self, cow, step):
+        self.cow = cow
+        self.step = step
+
+    def save(self, dates, prods):
+        """Save the result of the analysis."""
+
+        params = []
+
+        for i in range(len(dates)):
+            date = dates[i]
+            prod = prods[i]
+
+            q_select = 'SELECT id FROM CrudeData WHERE cow = ? AND date = ?'
+            fid = stg.model.query(q_select, (self.cow, date))[0][0]
+
+            params.append((fid, prod, self.step))
+
+        q_insert = 'INSERT INTO SmoothedData VALUES (?, ?, ?)'
+        stg.model.querymany(q_insert, params)
+
+    def work(self):
+        """Run the analysis."""
+
+        dates = stg.model.dates(self.cow)
+        dates = proc.ma.truncate(dates, self.step)
+
+        prods = stg.model.prods(self.cow)
+        prods = proc.ma.smooth(prods, self.step)
+
+        self.save(dates, prods)
