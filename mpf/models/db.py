@@ -1,4 +1,8 @@
+"""Contain a class to interact with the database."""
+
 import sqlite3
+
+from mpf import tools
 
 
 __all__ = ('Database')
@@ -9,51 +13,44 @@ class Database:
 
     def __init__(self, path):
         self.connection = sqlite3.connect(path)
-    
-    """
-    def select(self, table, fields):
-        def work(params=tuple(), where=tuple(), orderby=tuple(), limit=-1):
-            where = where or {}
 
-            q = 'SELECT '
-            q += ', '.join(fields)
-            q += ' FROM {}'.format(table)
+    def query(self, sql_query, params=tuple()):
+        """Execute the query ``sql_query`` with the parameters ``params``.
 
-            if where:
-                q += ' WHERE '
-                q += ' AND '.join(['{} = ?'.format(field) for field in where])
+        :param sql_query: The SQL query to execute.
+        :param params: The parameters to pass to the query.
 
-            if orderby:
-                q += ' ORDER BY '
-                q += ', '.join(orderby)
+        :type sql_query: str
+        :type params: tuple
 
-            if limit > 0:
-                q += ' LIMIT {}'.format(limit)
+        :return: The data returned by the database.
+        :rtype: list
+        """
 
-            return self.query(q, params)
-
-        return work
-    """
-
-    def query(self, q, params=tuple()):
-        """Execute the query ``q`` with the parameters ``params``."""
-
-        print('{} | {}'.format(q, params))
+        print('{} | {}'.format(sql_query, params))
 
         cursor = self.connection.cursor()
-        data = [row for row in cursor.execute(q, params)]
+        data = [row for row in cursor.execute(sql_query, params)]
 
         self.connection.commit()
 
         return data
 
-    def querymany(self, q, params):
-        """Execute the query ``q`` with the parameters ``params``."""
+    def querymany(self, sql_query, params):
+        """Execute the query ``sql_query`` with the parameters ``params``
+        successively.
 
-        print('{} | {}'.format(q, params))
+        :param sql_query: The SQL query to execute.
+        :param params: A list of sets of parameters to pass to the query.
+
+        :type sql_query: str
+        :type params: tuple
+        """
+
+        print('{} | {}'.format(sql_query, params))
 
         cursor = self.connection.cursor()
-        cursor.executemany(q, params)
+        cursor.executemany(sql_query, params)
 
         self.connection.commit()
 
@@ -61,8 +58,8 @@ class Database:
         """Return the list of the cows."""
 
         data = self.query('SELECT DISTINCT cow FROM CrudeData')
- 
-        return [line[0] for line in data]
+
+        return tools.flatten(data)
 
     def dates(self, cow):
         """Return a list of the dates of ``cow``."""
@@ -72,7 +69,17 @@ class Database:
             (cow,)
         )
 
-        return [line[0] for line in data]
+        return tools.flatten(data)
+
+    def lacts(self, cow):
+        """Return the list of the lactations of ``cow``."""
+
+        data = self.query(
+            'SELECT DISTINCT lact FROM CrudeData WHERE cow = ? ORDER BY lact',
+            (cow,)
+        )
+
+        return tools.flatten(data)
 
     def prods(self, cow):
         """Return the production of ``cow``."""
@@ -82,4 +89,4 @@ class Database:
             (cow,)
         )
 
-        return [line[0] for line in data]
+        return tools.flatten(data)
