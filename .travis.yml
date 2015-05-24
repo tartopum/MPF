@@ -24,3 +24,4 @@ install:
     
 script: 
   - python setup.py test
+  - pylint
