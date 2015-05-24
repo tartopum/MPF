@@ -18,6 +18,6 @@ VIEWS_DIR = join(DATA_DIR, "views")
 
 # Settings
 FORCE_CACHE = False 
-FORCE_VIEW = True 
+FORCE_VIEW = False 
 
 model = Database(DATABASE_PATH)

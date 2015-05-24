@@ -45,7 +45,7 @@ class MovingAveraging(View):
 
         data = stg.model.query(
             'SELECT SmoothedData.prod FROM SmoothedData '
-            'INNER JOIN CrudeData ON SmoothedData.fid = CrudeData.id '
+            'INNER JOIN CrudeData ON SmoothedData.source = CrudeData.id '
             'WHERE CrudeData.cow = ? AND SmoothedData.step = ? '
             'ORDER BY CrudeData.date',
             (self.cow, step)

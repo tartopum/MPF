@@ -24,11 +24,11 @@ class MovingAveraging:
             prod = prods[i]
 
             q_select = 'SELECT id FROM CrudeData WHERE cow = ? AND date = ?'
-            fid = stg.model.query(q_select, (self.cow, date))[0][0]
+            source = stg.model.query(q_select, (self.cow, date))[0][0]
 
-            params.append((fid, prod, self.step))
+            params.append((source, prod, self.step))
 
-        q_insert = 'INSERT INTO SmoothedData VALUES (?, ?, ?)'
+        q_insert = 'INSERT INTO SmoothedData VALUES (NULL, ?, ?, ?)'
         stg.model.querymany(q_insert, params)
 
     def work(self):

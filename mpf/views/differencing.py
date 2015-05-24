@@ -45,7 +45,7 @@ class Differencing(View):
 
         data = stg.model.query(
             'SELECT DifferencedData.prod FROM DifferencedData '
-            'INNER JOIN CrudeData ON DifferencedData.fid = CrudeData.id '
+            'INNER JOIN CrudeData ON DifferencedData.source = CrudeData.id '
             'WHERE CrudeData.cow = ? AND DifferencedData.degree = ? '
             'ORDER BY CrudeData.date',
             (self.cow, degree)
