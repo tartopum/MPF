@@ -14,5 +14,6 @@ CREATE TABLE IF NOT EXISTS SmoothedData(
     fid INTEGER, -- foreign id
     prod REAL NOT NULL,
     step INTEGER,
-    FOREIGN KEY(fid) REFERENCES CrudeData(id)
+    FOREIGN KEY(fid) REFERENCES CrudeData(id),
+    UNIQUE (fid, step)
 );
