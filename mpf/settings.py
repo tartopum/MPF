@@ -2,7 +2,7 @@
 
 from os.path import join, normpath, realpath
 
-from mpf.models.db import Database
+from mpf.models.sqlite import Database
 
 
 # Paths

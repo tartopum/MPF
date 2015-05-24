@@ -14,43 +14,43 @@ class Database:
     def __init__(self, path):
         self.connection = sqlite3.connect(path)
 
-    def query(self, sql_query, params=tuple()):
-        """Execute the query ``sql_query`` with the parameters ``params``.
+    def query(self, q, params=tuple()):
+        """Execute the query ``q`` with the parameters ``params``.
 
-        :param sql_query: The SQL query to execute.
+        :param q: The SQL query to execute.
         :param params: The parameters to pass to the query.
 
-        :type sql_query: str
+        :type q: str
         :type params: tuple
 
         :return: The data returned by the database.
         :rtype: list
         """
 
-        print('{} | {}'.format(sql_query, params))
+        print('{} | {}'.format(q, params))
 
         cursor = self.connection.cursor()
-        data = [row for row in cursor.execute(sql_query, params)]
+        data = [row for row in cursor.execute(q, params)]
 
         self.connection.commit()
 
         return data
 
-    def querymany(self, sql_query, params):
-        """Execute the query ``sql_query`` with the parameters ``params``
+    def querymany(self, q, params):
+        """Execute the query ``q`` with the parameters ``params``
         successively.
 
-        :param sql_query: The SQL query to execute.
+        :param q: The SQL query to execute.
         :param params: A list of sets of parameters to pass to the query.
 
         :type sql_query: str
         :type params: tuple
         """
 
-        print('{} | {}'.format(sql_query, params))
+        print('{} | {}'.format(q, params))
 
         cursor = self.connection.cursor()
-        cursor.executemany(sql_query, params)
+        cursor.executemany(q, params)
 
         self.connection.commit()
 
