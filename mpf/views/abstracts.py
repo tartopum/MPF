@@ -27,6 +27,7 @@ class View:
 
         self.path_pattern = os.path.join(stg.VIEWS_DIR, relpath, '{}')
         self.title = ''
+        self.cow = -1
         self.doc = None
 
     def add_plot(self):
@@ -37,18 +38,15 @@ class View:
         with self.doc.create(pylatex.Plt(position="H")) as plot:
             plot.add_plot(plt, width=r'\textwidth')
 
-    def create(self, cow):
+    def create(self):
         """Create the LaTeX document.
-
-        :param cow: The cow we create the view of.
-        :type cow: int
 
         :return: ``True`` if the document can have been created, else
         ``False``.
         :rtype: bool
         """
 
-        path = self.path_pattern.format(cow)
+        path = self.path_pattern.format(self.cow)
         dirname = os.path.dirname(path)
 
         if not os.path.isdir(dirname):
@@ -58,8 +56,11 @@ class View:
                 not stg.FORCE_VIEW):
             return False
 
-        self.doc = pylatex.Document(path, title="Cow {} - {}".format(
-            cow, self.title), maketitle=True)
+        self.doc = pylatex.Document(
+            path, 
+            title="Cow {} - {}".format(self.cow, self.title), 
+            maketitle=True
+        )
 
         self.doc.packages.append(pylatex.Package('geometry', options=[
             'left=1cm', 'right=1cm', 'top=1cm', 'bottom=1cm']))
@@ -68,26 +69,19 @@ class View:
 
         return True
 
-    def generate(self, cow):
-        """Generate the view of ``cow``.
-
-        :param cow: The cow the view is generated of.
-        :type cow: int
+    def generate(self):
+        """Generate the view.
 
         :raise: NotImplementedError
         """
 
         raise NotImplementedError('The `generate` method must be overridden.')
 
-    def render(self, cow, *args, **kwargs):
-        """Generate and save the view of ``cow``.
+    def render(self, *args, **kwargs):
+        """Generate and save the view."""
 
-        :param cow: The cow to be rendered.
-        :type cow: int
-        """
-
-        if self.create(cow):
-            self.generate(cow, *args, **kwargs)
+        if self.create():
+            self.generate(*args, **kwargs)
             self.save()
 
     def save(self):

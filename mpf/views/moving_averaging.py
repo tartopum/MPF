@@ -14,32 +14,32 @@ __all__ = ('MovingAveraging')
 class MovingAveraging(View):
     """Provide a view for smoothed data."""
 
-    def __init__(self):
+    def __init__(self, cow):
+        """
+        :param cow: The cow the view of is generated.
+        :type cow: int
+        """
+
         super().__init__('smoothed')
 
         self.title = 'Smoothed production'
+        self.cow = cow
 
-    def generate(self, cow, steps):
-        """Generate the view of smoothed production of ``cow``.
+    def generate(self, steps):
+        """Generate the view of smoothed production.
 
-        :param cow: The cow the view of is generated.
         :param steps: The steps with which the data have been smoothed.
-
-        :type cow: int
         :type steps: list
         """
 
         for step in steps:
-            self.plot(cow, step)
+            self.plot(step)
             plt.clf()
 
-    def plot(self, cow, step):
+    def plot(self, step):
         """Add the plot of smoothed data with the step ``step``.
 
-        :param cow: The cow the view of is generated.
         :param step: The step with which the data have been smoothed.
-
-        :type cow: int
         :type step: int
         """
 
@@ -48,7 +48,7 @@ class MovingAveraging(View):
             'INNER JOIN CrudeData ON SmoothedData.fid = CrudeData.id '
             'WHERE CrudeData.cow = ? AND SmoothedData.step = ? '
             'ORDER BY CrudeData.date',
-            (cow, step)
+            (self.cow, step)
         )
 
         y = tools.flatten(data)

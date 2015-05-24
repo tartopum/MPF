@@ -16,42 +16,41 @@ class Crude(View):
 
     MIN_DAY_RANGE = 300
 
-    def __init__(self):
-        super().__init__('crude')
-
-        self.title = 'Crude production'
-
-    def generate(self, cow):
-        """Generate the view of ``cow``.
-
+    def __init__(self, cow):
+        """
         :param cow: The cow the view of is generated.
         :type cow: int
         """
 
-        self.production(cow)
+        super().__init__('crude')
+
+        self.title = 'Crude production'
+        self.cow = cow
+
+    def generate(self):
+        """Generate the view."""
+
+        self.production()
         plt.clf()
 
-        self.lactations(cow)
+        self.lactations()
         plt.clf()
 
-        for lact in stg.model.lacts(cow):
-            self.lactation(cow, lact)
+        for lact in stg.model.lacts(self.cow):
+            self.lactation(lact)
             plt.clf()
 
-    def lactation(self, cow, lact):
-        """Plot lactation ``lact`` of ``cow``.
+    def lactation(self, lact):
+        """Plot lactation ``lact``.
 
-        :param cow: The cow.
         :param lact: The lactation of the cow to be plotted.
-
-        :type cow: int
         :type lact: int
         """
 
         data = stg.model.query(
             'SELECT day, prod FROM CrudeData WHERE cow = ? AND lact = ? '
             'ORDER BY day',
-            (cow, lact)
+            (self.cow, lact)
         )
 
         x = tools.flatten(data, 0)
@@ -65,18 +64,14 @@ class Crude(View):
         with self.doc.create(pylatex.Section('Lactation {}'.format(lact))):
             self.add_plot()
 
-    def lactations(self, cow):
-        """Plot lactations of ``cow`` together.
+    def lactations(self):
+        """Plot lactations of ``cow`` together."""
 
-        :param cow: The cow the lactations of are plotted.
-        :type cow: int
-        """
-
-        for lact in sorted(stg.model.lacts(cow)):
+        for lact in sorted(stg.model.lacts(self.cow)):
             data = stg.model.query(
                 'SELECT day, prod FROM CrudeData WHERE cow = ? '
                 'AND lact = ? ORDER BY day',
-                (cow, lact)
+                (self.cow, lact)
             )
 
             x = tools.flatten(data, 0)
@@ -91,14 +86,10 @@ class Crude(View):
         with self.doc.create(pylatex.Section('Lactations')):
             self.add_plot()
 
-    def production(self, cow):
-        """Plot production of ``cow`` against days.
+    def production(self):
+        """Plot production against days."""
 
-        :param cow: The cow the production of is plotted.
-        :type cow: int
-        """
-
-        y = stg.model.prods(cow)
+        y = stg.model.prods(self.cow)
         x = list(range(len(y)))
 
         plt.plot(x, y)
