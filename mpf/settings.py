@@ -2,7 +2,7 @@
 
 from os.path import join, normpath, realpath
 
-from mpf.models.sqlite import Database
+from mpf.models.mongo import Database
 
 
 # Paths
@@ -16,8 +16,16 @@ DATABASE_PATH = join(DATABASE_DIR, "mpf.db")
 VIEWS_DIR = join(DATA_DIR, "views")
 
 
+# Analysis types
+IDENTITY = 0
+DIFFERENCED = 1
+SMOOTHED = 2
+ACF = 3
+PACF = 4
+
 # Settings
 FORCE_CACHE = False 
 FORCE_VIEW = False 
 
-model = Database(DATABASE_PATH)
+mongo = Database('localhost', 27017)
+db = mongo.db
