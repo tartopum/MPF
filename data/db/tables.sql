@@ -19,7 +19,7 @@ INSERT OR IGNORE INTO Tables (name) VALUES ('CrudeData');
 
 CREATE TABLE IF NOT EXISTS SmoothedData(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    source INTEGER NOT NULL,
+    source INTEGER NOT NULL, -- The corresponding line in the CrudeData table
     prod REAL NOT NULL,
     step INTEGER,
     FOREIGN KEY(source) REFERENCES CrudeData(id),
@@ -30,9 +30,9 @@ INSERT OR IGNORE INTO Tables (name) VALUES ('SmoothedData');
 
 CREATE TABLE IF NOT EXISTS DifferencedData(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    source INTEGER NOT NULL,
+    source INTEGER NOT NULL, -- The corresponding line in the CrudeData table
     prod REAL NOT NULL,
-    degree INTEGER,
+    degree INTEGER, -- How many times data have been differenced
     FOREIGN KEY(source) REFERENCES CrudeData(id),
     UNIQUE (source, degree)
 );
@@ -43,10 +43,20 @@ CREATE TABLE IF NOT EXISTS ACF(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     source INTEGER NOT NULL,
     cow INTEGER NOT NULL,
-    acf BLOB,
-    confint BLOB,
+    coefficients BLOB,
     FOREIGN KEY(source) REFERENCES Tables(id),
     UNIQUE (cow, source)
 );
 
 INSERT OR IGNORE INTO Tables (name) VALUES ('ACF');
+
+CREATE TABLE IF NOT EXISTS PACF(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    source INTEGER NOT NULL,
+    cow INTEGER NOT NULL,
+    coefficients BLOB,
+    FOREIGN KEY(source) REFERENCES Tables(id),
+    UNIQUE (cow, source)
+);
+
+INSERT OR IGNORE INTO Tables (name) VALUES ('PACF');

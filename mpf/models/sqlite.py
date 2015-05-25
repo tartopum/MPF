@@ -90,3 +90,20 @@ class Database:
         )
 
         return tools.flatten(data)
+
+    def tableid(self, table):
+        """Return the id of the table ``table``.
+
+        :param table: The name of the table.
+        :type table: str
+
+        :return: The id of the table.
+        :rtype: int
+        """
+
+        data = self.query(
+            'SELECT id FROM Tables WHERE name = ?',
+            (table,)
+        )
+
+        return data[0][0]

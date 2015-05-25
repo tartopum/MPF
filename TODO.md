@@ -1,2 +1,1 @@
-* Différence
-* Corrélogrammes
+* DB structure

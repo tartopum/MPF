@@ -28,6 +28,13 @@ def main():
 
         views.Differencing(cow).render([1])
 
+        try:
+            analysis.Correlogram(cow).work()
+        except sqlite3.IntegrityError:
+            pass # TODO: cache
+
+        views.Correlogram(cow).render()
+
 
 if __name__ == '__main__':
     main()

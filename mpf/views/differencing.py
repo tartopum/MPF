@@ -26,7 +26,7 @@ class Differencing(View):
         self.cow = cow
 
     def generate(self, degrees):
-        """Generate the view of smoothed production.
+        """Generate the view of differenced production.
 
         :param degrees: The degrees with which the data have been differenced.
         :type degrees: list
