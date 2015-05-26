@@ -2,6 +2,7 @@
 
 import pymongo
 
+from mpf.settings import TYPES
 from mpf import tools
 
 
@@ -29,7 +30,6 @@ class Database:
 
     def data(self, _id):
         """"""
-
         return self.db.analysis.find({'_id': _id})[0]['data']
 
     def dates(self, cow, lact=None):
@@ -41,6 +41,15 @@ class Database:
         """"""
 
         return self.select_on_cow(cow, lact, 'day', 'day') 
+
+    def identity(self, cow, label):
+        """"""
+
+        return self.db.analysis.find_one({
+            'type': TYPES['identity'],
+            'label': label,
+            'settings': {'cow': cow},
+        })
 
     def is_analysis(self, type_, label, parents, settings):
         """"""

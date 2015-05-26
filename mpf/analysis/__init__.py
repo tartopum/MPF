@@ -1,8 +1,15 @@
 """
 Contain classes to analyze data: load them if they exist, else generate them
  and save them.
+
+{
+    'type': int,
+    'label': int,
+    'parents': [ObjectId],
+    'settings': {},
+    'data': any
+}
 """
 
-from .correlogram import Correlogram
-from .differencing import Differencing
-from .moving_averaging import MovingAveraging
+from .abstracts import cache
+from .smoothing import smoothing
