@@ -5,7 +5,7 @@ import pylatex
 
 from mpf.views.abstracts import View
 from mpf import tools
-from mpf import settings as stg
+from mpf.settings import mongo
 
 
 __all__ = ('Crude')
@@ -36,7 +36,7 @@ class Crude(View):
         self.lactations()
         plt.clf()
 
-        for lact in stg.model.lacts(self.cow):
+        for lact in mongo.lacts(self.cow):
             self.lactation(lact)
             plt.clf()
 
@@ -47,19 +47,13 @@ class Crude(View):
         :type lact: int
         """
 
-        data = stg.model.query(
-            'SELECT day, prod FROM CrudeData WHERE cow = ? AND lact = ? '
-            'ORDER BY day',
-            (self.cow, lact)
-        )
-
-        x = tools.flatten(data, 0)
-        y = tools.flatten(data, 1)
-
-        plt.plot(x, y)
         plt.xlabel(self.DAY_LABEL)
         plt.ylabel(self.PROD_LABEL)
-        plt.xlim(xmax=max(self.MIN_DAY_RANGE, max(y)))
+        plt.xlim(xmax=self.MIN_DAY_RANGE)
+
+        prods = mongo.prods(self.cow, lact)
+        days = mongo.days(self.cow, lact)
+        plt.plot(days, prods)
 
         with self.doc.create(pylatex.Section('Lactation {}'.format(lact))):
             self.add_plot()
@@ -67,17 +61,11 @@ class Crude(View):
     def lactations(self):
         """Plot lactations of ``cow`` together."""
 
-        for lact in sorted(stg.model.lacts(self.cow)):
-            data = stg.model.query(
-                'SELECT day, prod FROM CrudeData WHERE cow = ? '
-                'AND lact = ? ORDER BY day',
-                (self.cow, lact)
-            )
+        for lact in sorted(mongo.lacts(self.cow)):
+            prods = mongo.prods(self.cow, lact)
+            days = mongo.days(self.cow, lact)
 
-            x = tools.flatten(data, 0)
-            y = tools.flatten(data, 1)
-
-            plt.plot(x, y, label="{}".format(lact))
+            plt.plot(days, prods, label="{}".format(lact))
 
         plt.xlabel(self.DAY_LABEL)
         plt.ylabel(self.PROD_LABEL)
@@ -89,10 +77,10 @@ class Crude(View):
     def production(self):
         """Plot production against days."""
 
-        y = stg.model.prods(self.cow)
-        x = list(range(len(y)))
+        prods = mongo.prods(self.cow)
+        days = list(range(len(prods)))
 
-        plt.plot(x, y)
+        plt.plot(days, prods)
         plt.xlabel(self.DAY_LABEL)
         plt.ylabel(self.PROD_LABEL)
 

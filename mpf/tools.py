@@ -6,12 +6,12 @@ import matplotlib.pyplot as plt
 __all__ = ('flatten')
 
 
-def flatten(l, i=0):
+def flatten(l, key=0):
     """Flatten the nested list ``l`` by collecting the ith element of its 
     children.
     """
     
-    return [line[i] for line in l]
+    return [line[key] for line in l]
 
 def plot_correlogram(k, ylabel):
     """Plot `k` as a correlogram.

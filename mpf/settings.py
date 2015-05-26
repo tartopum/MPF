@@ -28,4 +28,3 @@ FORCE_CACHE = False
 FORCE_VIEW = False 
 
 mongo = Database('localhost', 27017)
-db = mongo.db

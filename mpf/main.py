@@ -1,18 +1,18 @@
 """The entry point of the code. Run it to make the analysis work."""
 
-import sqlite3
-
 from mpf import analysis
 from mpf import views
-from mpf import settings as stg
+from mpf.settings import mongo
 
 
 def main():
     """Launch the analysis."""
 
-    for cow in stg.model.cows():
+    for cow in mongo.cows():
         views.Crude(cow).render()
+        break
 
+        """
         try:
             analysis.MovingAveraging(cow, step=2).work()
             analysis.MovingAveraging(cow, step=4).work()
@@ -34,6 +34,7 @@ def main():
             pass # TODO: cache
 
         views.Correlogram(cow).render()
+        """
 
 
 if __name__ == '__main__':
