@@ -2,8 +2,6 @@
 
 from os.path import join, normpath, realpath
 
-from mpf.models.mongo import Database
-
 
 # Paths
 ROOT = normpath(join(realpath(__file__), "../.."))
@@ -29,5 +27,3 @@ LABELS = {
 # Settings
 FORCE_CACHE = False 
 FORCE_VIEW = False 
-
-mongo = Database('localhost', 27017)

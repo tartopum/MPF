@@ -1,18 +1,23 @@
+"""Save VMS data in database."""
+
 import sys
-from os.path import join
 import datetime as dt
 
 import pymongo
 
-from mpf.settings import mongo
+from mpf.models import mongo
 
 
 def sanitize(line):
+    """Sanitize a line."""
+
     line = line.replace(',', '.')
-    
+
     return line
-    
+
 def check(line):
+    """Check if the line is complete."""
+
     try:
         cow = int(line[0])
         prod = float(line[1])
@@ -20,21 +25,21 @@ def check(line):
         date = dt.datetime.strptime(line[3], '%d/%m/%Y') # 02/01/2014
         day = int(line[4])
         lact = int(line[5])
-    except:
+    except (ValueError, TypeError):
         return None
     else:
         return (cow, date, prod, cons, lact, day)
 
 def main(path):
-    values = []
+    """Save the file ``path`` in database."""
 
     with open(path, 'r') as f:
         lines = f.readlines()
-    
+
     for line in lines:
         data = sanitize(line).split("\t")
         data = check(data)
-        
+
         if data is not None:
             try:
                 obj = {

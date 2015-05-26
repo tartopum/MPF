@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 import pylatex
 
 from mpf.views.abstracts import View
-from mpf import tools
-from mpf.settings import mongo
+from mpf.models import mongo
 
 
 __all__ = ('Crude')
