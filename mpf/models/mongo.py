@@ -15,10 +15,22 @@ class Database:
         self.client = pymongo.MongoClient(host, port)
         self.db = self.client.mpf
 
+    def analysis_type(self, name):
+        """"""
+
+        data = self.db.analysistypes.find({'name': name})
+
+        return tools.flatten(data, '_id')
+
     def cows(self):
         """Return the list of the cows."""
 
         return self.db.crudedata.find().distinct('cow')
+
+    def data(self, _id):
+        """"""
+
+        return self.db.analysis.find({'_id': _id})[0]['data']
 
     def dates(self, cow, lact=None):
         """Return a list with the dates of the cow."""
@@ -33,7 +45,11 @@ class Database:
     def lacts(self, cow):
         """Return the list of the lactations."""
 
-        return self.db.crudedata.find({'cow': cow}).distinct('lact')
+        data = self.db.crudedata.find(
+            {'cow': cow}, {'lact': 1, '_id': 0}
+        ).sort('lact').distinct('lact')
+
+        return data
 
     def prods(self, cow, lact=None):
         """Return a list with the productions of the cow."""
