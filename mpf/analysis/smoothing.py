@@ -1,4 +1,4 @@
-"""Contain the class for smoothing data."""
+"""Contain the tools for smoothing data."""
 
 from mpf import processors as proc
 from mpf.analysis import cache
@@ -10,9 +10,9 @@ __all__ = ('smoothing')
 
 @cache(TYPES['smoothing'])
 def smoothing(data, settings):
-    """"""
+    """Smooth data."""
 
     data = data['values']
-    smoothed = proc.ma.smooth(data, settings['step'])
+    values = proc.ma.smooth(data, settings['step'])
 
-    return {LABELS['values']: smoothed}
+    return {LABELS['values']: values}

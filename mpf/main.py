@@ -18,6 +18,12 @@ def main():
             {'step': 2}
         )
 
+        analysis.differencing(
+            [LABELS['values']],
+            {'values': mongo.identity(cow, LABELS['prods'])['_id']},
+            {'degree': 2}
+        )
+
 
 if __name__ == '__main__':
     main()
