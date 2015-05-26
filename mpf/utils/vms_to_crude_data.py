@@ -4,7 +4,7 @@ import datetime as dt
 
 import pymongo
 
-import mpf.settings as stg
+from mpf.settings import mongo
 
 
 def sanitize(line):
@@ -46,7 +46,7 @@ def main(path):
                     'day': data[5],
                 }
 
-                stg.db.crudedata.insert_one(obj)
+                mongo.db.crudedata.insert_one(obj)
             except pymongo.errors.DuplicateKeyError:
                 pass
             else:

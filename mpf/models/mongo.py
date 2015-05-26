@@ -42,6 +42,16 @@ class Database:
 
         return self.select_on_cow(cow, lact, 'day', 'day') 
 
+    def is_analysis(self, type_, label, parents, settings):
+        """"""
+
+        return self.db.analysis.find({
+            'type': type_,
+            'label': label,
+            'settings': settings,
+            'parents': sorted(parents) 
+        }).count()
+
     def lacts(self, cow):
         """Return the list of the lactations."""
 
