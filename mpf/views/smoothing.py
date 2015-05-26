@@ -4,25 +4,20 @@ import matplotlib.pyplot as plt
 import pylatex
 
 from mpf.views.abstracts import View
-from mpf import tools
-from mpf import settings as stg
+from mpf.models import mongo
 
 
-__all__ = ('MovingAveraging')
+__all__ = ('Smoothing')
 
 
-class MovingAveraging(View):
+class Smoothing(View):
     """Provide a view for smoothed data."""
 
-    def __init__(self, cow):
-        """
-        :param cow: The cow the view of is generated.
-        :type cow: int
-        """
-
+    def __init__(self, cow, _id):
         super().__init__('smoothed')
 
         self.title = 'Smoothed production'
+        self._id = _id
         self.cow = cow
 
     def generate(self, steps):
@@ -43,20 +38,12 @@ class MovingAveraging(View):
         :type step: int
         """
 
-        data = stg.model.query(
-            'SELECT SmoothedData.prod FROM SmoothedData '
-            'INNER JOIN CrudeData ON SmoothedData.source = CrudeData.id '
-            'WHERE CrudeData.cow = ? AND SmoothedData.step = ? '
-            'ORDER BY CrudeData.date',
-            (self.cow, step)
-        )
+        prods = mongo.select_field('analysis', {'_id': self._id}, 'data')[0]
+        days = list(range(step, step + len(prods)))
 
-        y = tools.flatten(data)
-        x = list(range(step, step + len(y)))
-
-        plt.plot(x, y)
+        plt.plot(days, prods)
         plt.xlabel(self.DAY_LABEL)
         plt.ylabel(self.PROD_LABEL)
 
-        with self.doc.create(pylatex.Section('Step: {}'.format(step))):
+        with self.doc.create(pylatex.Section('Step = {}:'.format(step))):
             self.add_plot()

@@ -12,7 +12,7 @@ __all__ = ('smoothing')
 def smoothing(data, settings):
     """Smooth data."""
 
-    data = data['values']
+    data = data['data']
     values = proc.ma.smooth(data, settings['step'])
 
     return {LABELS['values']: values}

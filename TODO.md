@@ -1,1 +1,1 @@
-* DB structure
+* Use id in views

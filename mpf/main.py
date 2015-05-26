@@ -12,11 +12,13 @@ def main():
     for cow in mongo.cows():
         views.Crude(cow).render()
 
-        analysis.smoothing(
+        smoothing_ids = analysis.smoothing(
             [LABELS['values']],
-            {'values': mongo.identity(cow, LABELS['prods'])['_id']},
+            {'data': mongo.identity(cow, LABELS['prods'])['_id']},
             {'step': 2}
         )
+
+        views.Smoothing(cow, smoothing_ids[LABELS['values']]).render([2])
 
         analysis.differencing(
             [LABELS['values']],
