@@ -1,11 +1,10 @@
-"""Contain the class to generate a view for smoothed data."""
+"""Contain the class to generate a view for differenced data."""
 
 import matplotlib.pyplot as plt
 import pylatex
 
 from mpf.views.abstracts import View
-from mpf import tools
-from mpf import settings as stg
+from mpf.models import mongo
 
 
 __all__ = ('Differencing')
@@ -14,15 +13,11 @@ __all__ = ('Differencing')
 class Differencing(View):
     """Provide a view for differenced data."""
 
-    def __init__(self, cow):
-        """
-        :param cow: The cow the view of is generated.
-        :type cow: int
-        """
-
+    def __init__(self, cow, _id):
         super().__init__('differenced')
 
         self.title = 'Differenced production'
+        self._id = _id
         self.cow = cow
 
     def generate(self, degrees):
@@ -43,20 +38,12 @@ class Differencing(View):
         :type degree: int
         """
 
-        data = stg.model.query(
-            'SELECT DifferencedData.prod FROM DifferencedData '
-            'INNER JOIN CrudeData ON DifferencedData.source = CrudeData.id '
-            'WHERE CrudeData.cow = ? AND DifferencedData.degree = ? '
-            'ORDER BY CrudeData.date',
-            (self.cow, degree)
-        )
+        prods = mongo.select_field('analysis', {'_id': self._id}, 'data')[0]
+        days = list(range(degree, degree + len(prods)))
 
-        y = tools.flatten(data)
-        x = list(range(degree, degree + len(y)))
-
-        plt.plot(x, y)
+        plt.plot(days, prods)
         plt.xlabel(self.DAY_LABEL)
         plt.ylabel(self.PROD_LABEL)
 
-        with self.doc.create(pylatex.Section('Degree: {}'.format(degree))):
+        with self.doc.create(pylatex.Section('Degree = {}'.format(degree))):
             self.add_plot()

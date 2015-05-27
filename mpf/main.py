@@ -6,6 +6,7 @@ from mpf.models import mongo
 from mpf.settings import LABELS
 
 
+# pylint: disable=too-many-function-args
 def main():
     """Launch the analysis."""
 
@@ -20,11 +21,13 @@ def main():
 
         views.Smoothing(cow, smoothing_ids[LABELS['values']]).render([2])
 
-        analysis.differencing(
+        differencing_ids = analysis.differencing(
             [LABELS['values']],
             {'values': mongo.identity(cow, LABELS['prods'])['_id']},
-            {'degree': 2}
+            {'degree': 1}
         )
+
+        views.Differencing(cow, differencing_ids[LABELS['values']]).render([1])
 
 
 if __name__ == '__main__':
