@@ -44,6 +44,10 @@ def main():
             'data': diff_ids[LABELS['values']]
         })
         
+        views.ACF(cow, acf_ids, {
+            '1': acf_diff_ids
+        }).render()
+
         pacf_ids = analysis.pacf({
             LABELS['values']: {},
             LABELS['confint']: {'alpha': 0.05}
@@ -57,6 +61,10 @@ def main():
         }, {
             'data': diff_ids[LABELS['values']]
         })
+
+        views.PACF(cow, pacf_ids, {
+            '1': pacf_diff_ids
+        }).render()
 
 
 if __name__ == '__main__':

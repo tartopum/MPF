@@ -30,13 +30,15 @@ class View:
         self.cow = -1
         self.doc = None
 
-    def add_plot(self):
+    def add_plot(self, fig=None):
         """Add a plot to the view."""
+
+        fig = fig or plt
 
         self.doc.append(pylatex.command.Command('nobreak'))
 
         with self.doc.create(pylatex.Plt(position="H")) as plot:
-            plot.add_plot(plt, width=r'\textwidth')
+            plot.add_plot(fig, width=r'\textwidth')
 
     def create(self):
         """Create the LaTeX document.
