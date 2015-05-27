@@ -13,7 +13,7 @@ def cache(type_):
     def decorator(func):
         """A decorator for caching the analysis ``func``."""
 
-        def wrapper(labels, sources, settings):
+        def wrapper(settings, sources):
             """Prepare the data for the analysis then run it and save it if
              necessary.
             """
@@ -23,22 +23,22 @@ def cache(type_):
             data = {name: mongo.data(_id) for name, _id in sources.items()}
 
             need_analysis = not all([
-                mongo.is_analysis(type_, label, parents, settings)
-                for label in labels
+                mongo.is_analysis(type_, label, parents, stg)
+                for label, stg in settings.items()
             ])
 
             if need_analysis or FORCE_CACHE:
                 data = func(data, settings)
 
-            for label in labels:
-                saved = mongo.is_analysis(type_, label, parents, settings)
+            for label, stg in settings.items():
+                saved = mongo.is_analysis(type_, label, parents, stg)
 
                 if not saved:
                     _id = mongo.db.analysis.insert_one({
                         'type': type_,
                         'label': label,
                         'parents': parents,
-                        'settings': settings,
+                        'settings': stg,
                         'data': data[label],
                     }).inserted_id
                 else:
@@ -46,7 +46,7 @@ def cache(type_):
                         'type': type_,
                         'label': label,
                         'parents': parents,
-                        'settings': settings,
+                        'settings': stg,
                     })['_id']
 
                     if FORCE_CACHE:

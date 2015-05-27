@@ -12,9 +12,9 @@ __all__ = ('differencing')
 def differencing(data, settings):
     """Difference data."""
 
-    values = data['values']
+    values = data['data']
 
-    for _ in range(settings['degree']):
+    for _ in range(settings[LABELS['values']]['degree']):
         values = proc.diff.difference(values)
 
     return {LABELS['values']: values}

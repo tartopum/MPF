@@ -13,6 +13,6 @@ def smoothing(data, settings):
     """Smooth data."""
 
     data = data['data']
-    values = proc.ma.smooth(data, settings['step'])
+    values = proc.ma.smooth(data, settings[LABELS['values']]['step'])
 
     return {LABELS['values']: values}

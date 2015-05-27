@@ -6,28 +6,43 @@ from mpf.models import mongo
 from mpf.settings import LABELS
 
 
-# pylint: disable=too-many-function-args
 def main():
     """Launch the analysis."""
 
     for cow in mongo.cows():
+        prod_id = mongo.identity(cow, LABELS['prods'])['_id']
+
         views.Crude(cow).render()
 
-        smoothing_ids = analysis.smoothing(
-            [LABELS['values']],
-            {'data': mongo.identity(cow, LABELS['prods'])['_id']},
-            {'step': 2}
-        )
+        smooth_ids = analysis.smoothing({
+            LABELS['values']: {'step': 2}
+        }, {
+            'data': prod_id
+        })
 
-        views.Smoothing(cow, smoothing_ids[LABELS['values']]).render([2])
+        views.Smoothing(cow, smooth_ids[LABELS['values']]).render([2])
 
-        differencing_ids = analysis.differencing(
-            [LABELS['values']],
-            {'values': mongo.identity(cow, LABELS['prods'])['_id']},
-            {'degree': 1}
-        )
+        diff_ids = analysis.differencing({
+            LABELS['values']: {'degree': 1}
+        }, {
+            'data': prod_id
+        })
 
-        views.Differencing(cow, differencing_ids[LABELS['values']]).render([1])
+        views.Differencing(cow, diff_ids[LABELS['values']]).render([1])
+
+        acf_ids = analysis.acf({
+            LABELS['values']: {},
+            LABELS['confint']: {'alpha': 0.05}
+        }, {
+            'data': prod_id
+        })
+
+        acf_diff_ids = analysis.acf({
+            LABELS['values']: {},
+            LABELS['confint']: {'alpha': 0.05}
+        }, {
+            'data': diff_ids[LABELS['values']]
+        })
 
 
 if __name__ == '__main__':
