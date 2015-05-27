@@ -14,4 +14,5 @@ Contain classes to analyze data: load them if they exist, else generate them
 from .abstracts import cache
 from .acf import acf 
 from .differencing import differencing
+from .pacf import pacf 
 from .smoothing import smoothing

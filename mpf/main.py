@@ -43,6 +43,20 @@ def main():
         }, {
             'data': diff_ids[LABELS['values']]
         })
+        
+        pacf_ids = analysis.pacf({
+            LABELS['values']: {},
+            LABELS['confint']: {'alpha': 0.05}
+        }, {
+            'data': prod_id
+        })
+
+        pacf_diff_ids = analysis.pacf({
+            LABELS['values']: {},
+            LABELS['confint']: {'alpha': 0.05}
+        }, {
+            'data': diff_ids[LABELS['values']]
+        })
 
 
 if __name__ == '__main__':
