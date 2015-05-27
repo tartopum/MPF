@@ -1,39 +1,62 @@
 """The entry point of the code. Run it to make the analysis work."""
 
-import sqlite3
-
 from mpf import analysis
 from mpf import views
-from mpf import settings as stg
+from mpf.models import mongo
+from mpf.settings import LABELS
 
 
 def main():
     """Launch the analysis."""
 
-    for cow in stg.model.cows():
+    for cow in mongo.cows():
+        prod_id = mongo.identity(cow, LABELS['prods'])['_id']
+
         views.Crude(cow).render()
 
-        try:
-            analysis.MovingAveraging(cow, step=2).work()
-            analysis.MovingAveraging(cow, step=4).work()
-        except sqlite3.IntegrityError:
-            pass # TODO: cache
+        smooth_ids = analysis.smoothing({
+            LABELS['values']: {'step': 2}
+        }, {
+            'data': prod_id
+        })
+
+        views.Smoothing(cow, smooth_ids[LABELS['values']]).render([2])
+
+        diff_ids = analysis.differencing({
+            LABELS['values']: {'degree': 1}
+        }, {
+            'data': prod_id
+        })
+
+        views.Differencing(cow, diff_ids[LABELS['values']]).render([1])
+
+        acf_ids = analysis.acf({
+            LABELS['values']: {},
+            LABELS['confint']: {'alpha': 0.05}
+        }, {
+            'data': prod_id
+        })
+
+        acf_diff_ids = analysis.acf({
+            LABELS['values']: {},
+            LABELS['confint']: {'alpha': 0.05}
+        }, {
+            'data': diff_ids[LABELS['values']]
+        })
         
-        views.MovingAveraging(cow).render([2, 4])
+        pacf_ids = analysis.pacf({
+            LABELS['values']: {},
+            LABELS['confint']: {'alpha': 0.05}
+        }, {
+            'data': prod_id
+        })
 
-        try:
-            analysis.Differencing(cow, degree=1).work()
-        except sqlite3.IntegrityError:
-            pass # TODO: cache
-
-        views.Differencing(cow).render([1])
-
-        try:
-            analysis.Correlogram(cow).work()
-        except sqlite3.IntegrityError:
-            pass # TODO: cache
-
-        views.Correlogram(cow).render()
+        pacf_diff_ids = analysis.pacf({
+            LABELS['values']: {},
+            LABELS['confint']: {'alpha': 0.05}
+        }, {
+            'data': diff_ids[LABELS['values']]
+        })
 
 
 if __name__ == '__main__':

@@ -1,1 +1,3 @@
 PyLaTeX
+statsmodels
+pymongo
