@@ -1,5 +1,7 @@
 """Contain the tools for differencing data."""
 
+import numpy as np
+
 from mpf import processors as proc
 from mpf.analysis import cache
 from mpf.settings import TYPES, LABELS
@@ -15,6 +17,6 @@ def differencing(data, settings):
     values = data['data']
 
     for _ in range(settings[LABELS['values']]['degree']):
-        values = proc.diff.difference(values)
+        values = np.diff(values)
 
-    return {LABELS['values']: values}
+    return {LABELS['values']: values.tolist()}

@@ -1,18 +1,7 @@
 """Test the processors."""
 
-from mpf.processors import diff, ma
+from mpf.processors import ma
 
-
-# Difference
-def test_diff_difference():
-    data = [1, 2, 3, 4, 5]
-
-    assert diff.difference(data=data) == [2-1, 3-2, 4-3, 5-4]
-    
-def test_diff_truncate():
-    data = [1, 2, 3, 4, 5]
-
-    assert diff.truncate(data=data) == [2, 3, 4, 5]
 
 # MovingAveraging
 def test_ma_smooth():
