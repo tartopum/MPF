@@ -16,6 +16,18 @@ class Database:
         self.client = pymongo.MongoClient(host, port)
         self.db = self.client.mpf
 
+    def analysis(self, _id):
+        return self.db.analysis.find({'_id': _id})[0]
+
+    def cow(self, _id):
+        while True:
+            stg = self.settings(_id)
+
+            try:
+                return stg['cow']
+            except KeyError:
+                _id = self.parents(_id)[0]
+
     def cows(self):
         """Return the list of the cows."""
 
@@ -24,7 +36,7 @@ class Database:
     def data(self, _id):
         """Return the data of the analysis ``_id``."""
 
-        return self.db.analysis.find({'_id': _id})[0]['data']
+        return self.analysis(_id)['data']
 
     def dates(self, cow, lact=None):
         """Return the list of the dates of the cow."""
@@ -64,6 +76,9 @@ class Database:
 
         return data
 
+    def parents(self, _id):
+        return self.analysis(_id)['parents']
+
     def prods(self, cow, lact=None):
         """Return a list with the productions of the cow."""
 
@@ -89,3 +104,6 @@ class Database:
             where['lact'] = lact
 
         return self.select_field('crudedata', where, *args, **kwargs)
+
+    def settings(self, _id):
+        return self.analysis(_id)['settings']

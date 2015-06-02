@@ -3,7 +3,7 @@
 from statsmodels.tsa.stattools import acf as sm_acf
 
 from mpf.analysis import cache
-from mpf.settings import TYPES, LABELS
+from mpf.settings import TYPES, LABELS, LONG_MAX_LAGS
 
 
 __all__ = ('acf')
@@ -15,12 +15,13 @@ def acf(data, settings):
 
     alpha = settings[LABELS['confint']]['alpha']
     data = data['data']
+    nlags = min(LONG_MAX_LAGS, len(data)-1)
 
     try:
-        values, confint = sm_acf(data, alpha=alpha)
+        values, confint = sm_acf(data, nlags=nlags, alpha=alpha)
         confint = [list(i) for i in confint]
     except ValueError:
-        values = sm_acf(data)
+        values = sm_acf(data, nlags=nlags)
         confint = []
 
     return {

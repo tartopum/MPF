@@ -5,6 +5,7 @@ import pylatex
 
 from mpf.views.abstracts import View
 from mpf.models import mongo
+from mpf import tools 
 
 
 __all__ = ('Crude')
@@ -14,17 +15,18 @@ class Crude(View):
     """Provide a view for crude data."""
 
     MIN_DAY_RANGE = 300
+    PERIODS = [2, 7, 14, 30]
 
-    def __init__(self, cow):
+    def __init__(self, _id):
         """
         :param cow: The cow the view of is generated.
         :type cow: int
         """
 
-        super().__init__('crude')
+        super().__init__('production')
 
         self.title = 'Crude production'
-        self.cow = cow
+        self.cow = mongo.cow(_id) 
 
     def generate(self):
         """Generate the view."""

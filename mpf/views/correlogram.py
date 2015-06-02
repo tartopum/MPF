@@ -1,5 +1,7 @@
 """Contain the class to generate a view for a correlogram.""" 
 
+from os.path import join
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pylatex
@@ -7,7 +9,7 @@ import pylatex
 from mpf.views.abstracts import View
 from mpf.models import mongo
 from mpf import tools
-from mpf.settings import LABELS
+from mpf.settings import LABELS, SHORT_MAX_LAGS
 
 
 __all__ = ('Correlogram')
@@ -16,23 +18,15 @@ __all__ = ('Correlogram')
 class Correlogram(View):
     """Provide a view for a correlogram."""
 
-    def __init__(self, cow, crude_id, diff_ids, title):
-        super().__init__(title.lower())
+    def __init__(self, path, title, _ids, type_):
+        super().__init__(join(path, type_))
 
         self.title = title
-        self.cow = cow
-        self.crude_id = crude_id
-        self.diff_ids = diff_ids
+        self._ids = _ids
+        self.cow = mongo.cow(_ids[0][LABELS['values']]) 
 
-    def get_data(self, _id):
-        return mongo.db.analysis.find_one({
-            '_id': _id 
-        })['data']
-        
     def get_confint(self, _id):
-        confint = mongo.db.analysis.find_one({
-            '_id': _id 
-        })['data']
+        confint = mongo.data(_id) 
 
         if not len(confint):
             return []
@@ -44,29 +38,26 @@ class Correlogram(View):
     def generate(self):
         """Generate the view of the correlogram."""
 
-        # Crude
-        data = self.get_data(self.crude_id[LABELS['values']])
-        confint = self.get_confint(self.crude_id[LABELS['confint']])
-        self.plot(data, confint, 'Crude data')
+        for _id in self._ids:
+            data = mongo.data(_id[LABELS['values']])
+            confint = self.get_confint(_id[LABELS['confint']])
+            
+            stg = mongo.settings(
+                mongo.parents(_id[LABELS['values']])[0]
+            )
+            title = ' - '.join(['{} = {}'.format(k, v) for k, v in stg.items()])
 
-        # Differenced
-        for degree in sorted(self.diff_ids.keys()):
-            ids = self.diff_ids[degree]
-
-            data = self.get_data(ids[LABELS['values']])
-            confint = self.get_confint(ids[LABELS['confint']])
-
-            title = 'Differenced data - degree = {}'.format(degree)
             self.plot(data, confint, title)
 
     def plot(self, data, confint, title):
-        tools.plot_correlogram(data, self.title)
-        
-        if len(confint):
-            plt.fill_between(range(len(data)), confint[:,0], confint[:,1], 
-                            alpha=0.25)
-
         with self.doc.create(pylatex.Section(title)):
-            self.add_plot()
-            plt.clf()
+            for end in (len(data), SHORT_MAX_LAGS):
+                dta = data[:end]
+                tools.plot_correlogram(dta, self.title)
         
+                if len(confint):
+                    plt.fill_between(range(len(dta)), confint[:,0][:end], 
+                                 confint[:,1][:end], alpha=0.25)
+
+                    self.add_plot()
+                    plt.clf()

@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 
 
-__all__ = ('flatten')
+__all__ = ('flatten', 'plot_correlogram')
 
 
 def flatten(l, key=0):

@@ -1,5 +1,7 @@
 """Contain the class to generate a view for smoothed data."""
 
+from os.path import join
+
 import matplotlib.pyplot as plt
 import pylatex
 
@@ -13,35 +15,36 @@ __all__ = ('Smoothing')
 class Smoothing(View):
     """Provide a view for smoothed data."""
 
-    def __init__(self, cow, _id):
-        super().__init__('smoothed')
+    def __init__(self, path, title, _ids):
+        super().__init__(join(path, 'smoothed'))
 
-        self.title = 'Smoothed production'
-        self._id = _id
-        self.cow = cow
+        self.title = title
+        self._ids = _ids
+        self.cow = mongo.cow(_ids[0])
 
-    def generate(self, steps):
-        """Generate the view of smoothed production.
+    def generate(self):
+        """Generate the view of smoothed production."""
 
-        :param steps: The steps with which the data have been smoothed.
-        :type steps: list
-        """
+        for _id in self._ids:
+            data = mongo.data(_id)
+            step = mongo.settings(_id)['step']
 
-        for step in steps:
-            self.plot(step)
+            self.plot(data, step)
             plt.clf()
 
-    def plot(self, step):
+    def plot(self, data, step):
         """Add the plot of smoothed data with the step ``step``.
 
+        :param data: 
         :param step: The step with which the data have been smoothed.
+        
+        :type data: list
         :type step: int
         """
 
-        prods = mongo.select_field('analysis', {'_id': self._id}, 'data')[0]
-        days = list(range(step, step + len(prods)))
+        x = list(range(step, step + len(data)))
 
-        plt.plot(days, prods)
+        plt.plot(x, data)
         plt.xlabel(self.DAY_LABEL)
         plt.ylabel(self.PROD_LABEL)
 

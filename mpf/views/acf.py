@@ -9,5 +9,5 @@ __all__ = ('ACF')
 class ACF(Correlogram):
     """Provide a view for the partial autocorrelation function."""
 
-    def __init__(self, cow, crude_id, diff_ids):
-        super().__init__(cow, crude_id, diff_ids, 'ACF')
+    def __init__(self, path, title, _ids):
+        super().__init__(path, title, _ids, 'acf')

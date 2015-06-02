@@ -1,5 +1,7 @@
 """Contain the class to generate a view for differenced data."""
 
+from os.path import join
+
 import matplotlib.pyplot as plt
 import pylatex
 
@@ -13,35 +15,36 @@ __all__ = ('Differencing')
 class Differencing(View):
     """Provide a view for differenced data."""
 
-    def __init__(self, cow, _id):
-        super().__init__('differenced')
+    def __init__(self, path, title, _ids):
+        super().__init__(join(path, 'differenced'))
 
-        self.title = 'Differenced production'
-        self._id = _id
-        self.cow = cow
+        self.title = title
+        self._ids = _ids
+        self.cow = mongo.cow(_ids[0])
 
-    def generate(self, degrees):
-        """Generate the view of differenced production.
+    def generate(self):
+        """Generate the view of differenced production."""
 
-        :param degrees: The degrees with which the data have been differenced.
-        :type degrees: list
-        """
-
-        for degree in degrees:
-            self.plot(degree)
+        for _id in self._ids:
+            data = mongo.data(_id)
+            degree = mongo.settings(_id)['degree']
+            
+            self.plot(data, degree)
             plt.clf()
 
-    def plot(self, degree):
+    def plot(self, data, degree):
         """Add the plot of differenced data with the degree ``degree``.
 
+        :param data: TODO
         :param degree: The degree with which the data have been differenced.
+
+        :type data: list
         :type degree: int
         """
 
-        prods = mongo.select_field('analysis', {'_id': self._id}, 'data')[0]
-        days = list(range(degree, degree + len(prods)))
+        days = list(range(degree, degree + len(data)))
 
-        plt.plot(days, prods)
+        plt.plot(days, data)
         plt.xlabel(self.DAY_LABEL)
         plt.ylabel(self.PROD_LABEL)
 
