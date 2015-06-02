@@ -1,20 +1,11 @@
 """The entry point of the code. Run it to make the analysis work."""
 
- # TODO
-import rpy2.robjects as robjects
-import rpy2.robjects.packages as rpackages
-import statsmodels.api as sm
-import matplotlib.pyplot as plt
-from time import sleep
+from os.path import join
 
 from mpf import analysis
 from mpf import views
 from mpf.models import mongo
 from mpf.settings import LABELS
-
-
-fcast = rpackages.importr('forecast')
-tseries = rpackages.importr('tseries')
 
 
 def smoothing(_id, step):
@@ -41,29 +32,6 @@ def main():
 
         views.Crude(_id).render()
 
-        # Smoothing
-        smooth_ids = []
-        steps = [7, 30]
-
-        for step in steps:
-            id_ = smoothing(_id, step)[LABELS['values']]
-            smooth_ids.append(id_)
-
-        views.Smoothing('production', 'Smoothed production', 
-                        smooth_ids).render()
-
-        # Differencing
-        diff_ids = []
-        degrees = [1]
-
-        for degree in degrees:
-            id_ = differencing(_id, degree)[LABELS['values']]
-            diff_ids.append(id_)
-            
-        views.Differencing('production', 'Differenced production', 
-                           diff_ids).render()
-
-        # ACF
         acf_ids = analysis.acf({
             LABELS['values']: {},
             LABELS['confint']: {'alpha': 0.05},
@@ -73,7 +41,6 @@ def main():
 
         views.ACF('production', 'ACF', [acf_ids]).render()
 
-        # PACF
         pacf_ids = analysis.pacf({
             LABELS['values']: {},
             LABELS['confint']: {'alpha': 0.05},
@@ -83,6 +50,53 @@ def main():
 
         views.PACF('production', 'PACF', [pacf_ids]).render()
 
+        # Smoothing
+        smooth_ids = []
+        steps = [7, 30]
+
+        for step in steps:
+            id_ = smoothing(_id, step)[LABELS['values']]
+            smooth_ids.append(id_)
+
+            # R: TODO
+            if step == 7:
+                sdta = mongo.data(id_)
+
+        views.Smoothing('production', 'Smoothed production', 
+                        smooth_ids).render()
+
+        # Differencing
+        diff_ids = []
+        acf_ids = []
+        pacf_ids = []
+        degrees = [1]
+
+        for degree in degrees:
+            id_ = differencing(_id, degree)[LABELS['values']]
+            diff_ids.append(id_)
+
+            acf_ids.append(analysis.acf({
+                LABELS['values']: {},
+                LABELS['confint']: {'alpha': 0.05},
+            }, {
+                'data': id_,
+            }))
+
+            pacf_ids.append(analysis.pacf({
+                LABELS['values']: {},
+                LABELS['confint']: {'alpha': 0.05},
+            }, {
+                'data': id_,
+            }))
+
+
+        views.Differencing('production', 'Differenced production', 
+                           diff_ids).render()
+
+        views.ACF(join('production', 'differenced'), 'ACF', acf_ids).render()
+
+        views.PACF(join('production', 'differenced'), 'PACF', pacf_ids).render()
+        
 
 if __name__ == '__main__':
     main()
